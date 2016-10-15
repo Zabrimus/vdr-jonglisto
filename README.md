@@ -25,8 +25,9 @@ There exist multiple possibilities to build and start the application.
 	> ./build.sh war
 	
 3.  Build a runnable (hybrid) war file which either can be deployed  (see 2.) or can be started as normal application.  
-	> ./buid.sh standaloneWar
-
+	> ./build.sh standaloneWar
+	> Start with java -jar Jonglisto.war
+	> Default port is 8080
     
 ### Configuration
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
