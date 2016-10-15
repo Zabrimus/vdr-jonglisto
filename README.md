@@ -15,7 +15,7 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 * vdr restfulapi plugin in the most recent version
 * java 8
 
-### Build instructions
+### Build instructions 
 
 There exist multiple possibilities to build and start the application. 
 
