@@ -90,6 +90,64 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 	> **TIMER_LIFETIME:** default timer lifetime
 	
 	> **RECORDING_NAMING_MODE:** the same value as used in epg2vdr plugin
+	
+```json
+  "VDR": [
+    {
+      "uuid": "pivdr1",
+      "displayName": "Pi Vdr 1",
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>1</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1		
+      }
+    },
+
+    {
+      "uuid": "pivdr2",
+      "displayName": "Pi Vdr 2",
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>2</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    },
+
+    {
+      "uuid": "stream1",
+      "displayName": "Stream 1",
+      "restfulApiPort" : 9004,     
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>1</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    },
+
+    {
+      "uuid": "stream2",
+      "displayName": "Stream 2",
+      "restfulApiPort" : 9006,
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>2</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    }
+  ]	
+```		
  
 * **Sichten:** This is a view to all configured VDR instances
 
