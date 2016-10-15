@@ -1,4 +1,4 @@
-## Welcome to vdr-jonglisto. A web frontend for multiple VDR instances.
+# Welcome to vdr-jonglisto. A web frontend for multiple VDR instances.
 
 My plan is to replace vdradmin-am with this new application. Currently you can see and search EPG data, see and edit timers and see, rename and move recordings.
 As a special feature used in my environment it is possible to define views of all configured VDR instances.
@@ -179,4 +179,36 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 			"recordings" : [ "stream2", "pivdr2" ]
 		}
 	]  
-```	
+```
+
+## **Screenshots:** Everyone loves screenshots...
+
+**start page showing the configured views:**
+![Start page for views](https://github.com/Zabrimus/page/blob/master/startseite-sichten.png)
+
+**start page showing the configured VDR:**
+![Start page for VDRs](https://github.com/Zabrimus/page/blob/master/startseite-vdr.png)
+
+**currently running program:**
+![EPG now](https://github.com/Zabrimus/page/blob/master/epg-now.png)
+
+**what's running today:**
+![EPG day](https://github.com/Zabrimus/page/blob/master/epg-day.png)
+
+**all EPG data for a channel:**
+![EPG channel](https://github.com/Zabrimus/page/blob/master/epg-channel.png)
+
+**EPG details:**
+![EPG details](https://github.com/Zabrimus/page/blob/master/epg-detail.png)
+
+**configured timers:**
+![EPG details](https://github.com/Zabrimus/page/blob/master/timer.png)
+
+**available recordings:**
+![EPG details](https://github.com/Zabrimus/page/blob/master/recordings.png)
+
+
+
+
+
+
