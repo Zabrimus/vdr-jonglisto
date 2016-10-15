@@ -1,0 +1,167 @@
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+	<t:content>	
+		<div class="row">
+			<table class="recordingTable">
+				<tr>
+					<td class="recTreeColumn">
+						<t:zone t:id="treeZone" id="treeZone">
+							<t:if test="treeModel">
+								<t:tree t:id="tree" model="treeModel" node="treeNode" value="recPath">
+									<p:label>
+										<t:eventLink event="recPathSelected" context="treeNode.id" async="true" class="prop:nodeClass" href="#">
+											${treeNode.label}
+										</t:eventLink>
+									</p:label>
+								</t:tree>
+							</t:if>
+						</t:zone>
+					</td>
+
+					<td class="recInfoColumn">
+						<t:if test="showSyncMapWarning()">
+							<span style="color:red;font-weight:bold">Warnung: Falls das restfulApi-Plugin nicht ganz aktuell ist, kann das Video-Verzeichnis zerstrubbelt werden!</span>
+							<br/>
+							<span style="color:red;font-weight:bold"> Aus diesem Grund werden alle Aktionen deaktiviert.</span> 
+						</t:if>
+						
+						<t:zone t:id="childZone" id="childZone">
+							<t:if test="selectedRecPath?.children">
+								<t:grid t:id="subFolderZone" id="subFolderZone" source="summary" row="pathSummary" exclude="nodeId" inplace="true" rowsPerPage="5">
+									<p:nameCell>
+										<t:eventlink event="selectSubDir" context="pathSummary.nodeId" zone="^">
+											${pathSummary.name}
+										</t:eventlink>
+									</p:nameCell>
+								</t:grid>
+							</t:if>
+						</t:zone>
+
+						<t:zone t:id="recZone" id="recZone">
+							<t:if test="recordings">
+								<t:Form t:id="recForm" async="true">
+									<t:grid t:id="recordingGrid" id="recordingGrid" source="recordings" row="recording" include="recStartDate,recStartTime,duration,fileSize, name"
+										add="action, select" rowsPerPage="2048" t:mixins="EnableGridZone">										
+										<p:actionCell>
+											<t:if test="showSyncMapWarning()" negate="true">
+												<t:eventlink t:event="renameRecording" t:context="[recording.fileName,recording.name]" zone="^">
+													<img src="${asset:edit.svg}" alt="Aufnahme umbenennen" class="renameicon" />
+												</t:eventlink> &nbsp;
+	
+												<t:eventlink t:event="moveRecording" t:context="recording.fileName" zone="^">
+													<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
+												</t:eventlink> &nbsp;
+	
+												<t:eventlink t:event="deleteRecording" t:context="recording.fileName" zone="^">
+													<img src="${asset:delete.svg}" alt="Aufnahme löschen" class="deleteicon" />
+												</t:eventlink>
+											</t:if>
+										</p:actionCell>
+
+										<p:nameCell>
+											<t:if test="showLinkOnly()">
+												<t:eventlink t:event="viewDetails" t:context="recording.relativeFileName" zone="recordingInfoZone">
+													${recording.name}
+												</t:eventlink>
+											</t:if>
+
+											<t:if test="renameThis()">
+												<t:hidden value="renameFilename" />
+												<t:textfield t:id="renameName" validate="required" size="30" />
+												<br />
+												<t:linksubmit t:event="saveRename">Speichern</t:linksubmit>&nbsp;
+												<t:linksubmit t:event="cancelRename">Abbrechen</t:linksubmit>
+											</t:if>
+
+											<t:if test="moveThis()">
+												<t:hidden value="moveFilename" />
+												<t:textfield t:id="targetDirSingle" validate="required" size="30" />
+												<br />
+												<t:linksubmit t:event="saveMove">Verschieben</t:linksubmit>&nbsp;
+												<t:linksubmit t:event="cancelMove">Abbrechen</t:linksubmit>
+											</t:if>
+
+										</p:nameCell>
+
+										<p:selectCell>
+											<t:hidden value="fileName" />
+											<input t:id="selected" t:type="checkbox" value="selected" class="data-rec-sel" />
+										</p:selectCell>
+
+										<p:selectHeader>
+											<t:Checkbox t:id="selectAllRecording" type="checkbox" value="selectAllRecording" onchange="$('.data-rec-sel').prop('checked', $('.data-rec-all').prop('checked'));"
+												class="data-rec-all" />
+										</p:selectHeader>
+
+										<p:recStartDateHeader>
+											<t:eventlink t:event="sort" t:context="literal:recStartDate" zone="recordingInfoZone">
+												${message:recStartDate-label}
+											</t:eventlink>
+										</p:recStartDateHeader>
+
+										<p:recStartTimeHeader>
+											<t:eventlink t:event="sort" t:context="literal:recStartTime" zone="recordingInfoZone">
+												${message:recStartTime-label}
+											</t:eventlink>
+										</p:recStartTimeHeader>
+
+										<p:durationHeader>
+											<t:eventlink t:event="sort" t:context="literal:duration" zone="recordingInfoZone">
+												${message:duration-label}
+											</t:eventlink>
+											<br />
+											Gesamt: ${totalDuration}
+										</p:durationHeader>
+
+										<p:fileSizeHeader>
+											<t:eventlink t:event="sort" t:context="literal:fileSize" zone="recordingInfoZone">
+												${message:fileSize-label}
+											</t:eventlink>
+											<br />
+											Gesamt: ${totalSize}
+										</p:fileSizeHeader>
+
+										<p:nameHeader>
+											<t:eventlink t:event="sort" t:context="literal:name" zone="recordingInfoZone">
+												${message:name-label}
+											</t:eventlink>
+											<br />
+											Gesamt: ${recordings.size()}
+										</p:nameHeader>
+									</t:grid>
+
+									<div class="col-sm-12">
+										<t:if test="showSyncMapWarning()" negate="true">
+											<div class="col-sm-3">
+												Ausgewählte Aufnahmen
+											</div>
+	
+											<div class="col-sm-2">
+												<img src="${asset:delete.svg}" alt="Aufnahmen löschen" class="deleteicon" />
+												<t:linksubmit t:event="deleteRecordings">löschen</t:linksubmit>
+											</div>
+	
+											<div class="col-sm-7">
+												<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
+												<t:linksubmit t:event="moveRecordings">verschieben nach</t:linksubmit>
+	
+												<t:textfield t:id="targetDir" size="30" />
+											</div>
+										</t:if>
+									</div>
+								</t:Form>
+							</t:if>
+						</t:zone>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+
+		<t:zone t:id="recordingInfoZone" id="recordingInfoZone">
+			<!-- dummy zone -->
+		</t:zone>
+
+		<!-- insert epg info zone -->
+		<t:Epg isRecording="true" recFilename="recording.relativeFileName" channelname="recording.channelName" />
+	</t:content>
+</html>

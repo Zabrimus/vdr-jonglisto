@@ -1,0 +1,41 @@
+.channelgroup {
+	display:inline;
+	float:left;
+	max-width: 150px;
+	margin-right:10px;
+} 
+
+.channelName {
+	display:inline;
+	float:left;
+	max-width: 150px;
+	margin-right:10px;
+}
+
+.genre {
+	display:inline;
+	float:left;
+	width: 150px;
+	margin-right:10px;
+}
+
+.category {	
+	display:inline;
+	float:left;
+	width: 150px;
+	margin-right:10px;
+}
+
+.searchtext {
+	display:inline;
+	float:left;
+	width: 160px;
+	margin-right:10px;
+}
+
+.searchtime {	
+	display:inline;
+	float:left;
+	width: 160px;
+	margin-right:10px;
+}

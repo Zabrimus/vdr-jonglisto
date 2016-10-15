@@ -1,0 +1,51 @@
+table tr td {
+	padding: 0px !important;
+	margin: 0px !important;
+	vertical-align: top !important;
+}
+
+table tr th {
+	padding: 0px !important;
+	margin: 0px !important;
+	vertical-align: top !important;
+}
+
+.timeCell {
+    vertical-align: top;
+    min-width: 8em;
+    max-width: 8em;	
+    width: 8em;
+}
+
+.titleCell {
+	max-width: 70%;
+	width:70%		
+}
+
+.genreCell  {
+	
+}
+
+.categoryCell {
+	
+}
+
+.actionCell {
+	vertical-align: top;
+    min-width: 100px;	
+}
+
+.progress {
+	margin:0;
+	padding:0;
+}
+
+.progress-bar {
+	margin:0;
+	padding:0;
+}
+
+.timericon {
+	width: 24px;
+	height: 24px;	
+}

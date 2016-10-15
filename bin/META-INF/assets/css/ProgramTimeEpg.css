@@ -1,0 +1,36 @@
+table tr td {
+	padding: 0px !important;
+	margin: 0px !important;
+	vertical-align: top !important;
+}
+
+table tr th {
+	padding: 0px !important;
+	margin: 0px !important;
+	vertical-align: top !important;
+}
+
+[data-grid-property="time"] {
+    vertical-align: top;
+    min-width: 8em;
+}
+
+[data-grid-property="action"] {
+    vertical-align: top;
+    min-width: 100px;
+}
+
+.progress {
+	margin:0;
+	padding:0;
+}
+
+.progress-bar {
+	margin:0;
+	padding:0;
+}
+
+.timericon {
+	width: 24px;
+	height: 24px;	
+}

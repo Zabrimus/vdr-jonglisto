@@ -1,0 +1,99 @@
+{
+  "channelImagePath": "/var/cache/Senderlogos/",
+  
+  "useRecordingSyncMap" : "false",
+  "areYouSureToUseSyncMap" : "false",
+
+  "epg2vdr": {
+    "url": "jdbc:mysql://server:3307/epg2vdr",
+    "username": "epg2vdr",
+    "password": "epg"
+  },
+
+  "hsqldb": {
+    "path": "/var/cache/jonglisto-db",
+    "remote": "true"
+  },
+  
+  "aliases" : {
+     "pivdr1"   : "39F75BA3-E7AE-4DEE-876D-203FEC6F3CD2",
+     "pivdr2"   : "4048B55F-E3DA-4654-AB36-6503F09FCD3F",
+     "stream1"  : "68CE1D58-BF0E-446F-BCE7-4B1F21EFFEEF",
+     "stream2"  : "96AB80F7-84F6-46DE-89DA-1D1D02595853"
+  },
+
+  "VDR": [
+    {
+      "uuid": "pivdr1",
+      "displayName": "Pi Vdr 1",
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>1</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1		
+      }
+    },
+
+    {
+      "uuid": "pivdr2",
+      "displayName": "Pi Vdr 2",
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>2</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    },
+
+    {
+      "uuid": "stream1",
+      "displayName": "Stream 1",
+      "restfulApiPort" : 9004,     
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>1</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    },
+
+    {
+      "uuid": "stream2",
+      "displayName": "Stream 2",
+      "restfulApiPort" : 9006,
+      "config" : {
+      	  "TIMER_AUX" : "<remotetimers>2</remotetimers>",
+		  "TIMER_MINUS_MINUTES" : 10,
+		  "TIMER_PLUS_MINUTES" : 10,
+		  "TIMER_PRIORITY" : 50,
+		  "TIMER_LIFETIME" : 99,
+		  "RECORDING_NAMING_MODE": 1	
+      }
+    }
+  ],
+  
+  "Sichten": [
+    {
+      "displayName": "Oben",
+      "head" : "pivdr1",
+      "channels": [ "pivdr1", "stream1", "stream2", "pivdr2" ],
+      "timers" : "stream1",
+      "recordings" : [ "stream1", "pivdr1" ]
+    },
+
+    {
+      "displayName": "Unten",
+      "head" : "pivdr2",
+      "channels": [ "pivdr2", "stream2", "stream1", "pivdr1" ],
+      "timers" : "stream2",
+      "recordings" : [ "stream2", "pivdr2" ]
+    }
+  ]  
+}
+		

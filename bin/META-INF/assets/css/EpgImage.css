@@ -1,0 +1,46 @@
+.epgimage {
+	display: inline-block;	
+	margin:9px;	
+	width: 200px;
+}
+
+.mi_actor figcaption {
+	width: 240px;
+	text-align: center;
+}
+
+.mi_actor {
+	display: inline-block;	
+	margin:9px;	
+	width: 240px;
+}
+
+.mi_banner {
+	display: inline-block;	
+	margin:9px;	
+	width: 800px;
+}
+
+.mi_epipic {
+	display: inline-block;	
+	margin:9px;	
+	width: 800px;
+}
+
+.mi_fanart {
+	display: inline-block;	
+	margin:9px;	
+	width: 370px;
+}
+
+.mi_poster {
+	display: inline-block;	
+	margin:9px;	
+	width: 370px;
+}
+	
+.mi_season {
+	display: inline-block;	
+	margin:9px;	
+	width: 800px;
+}					

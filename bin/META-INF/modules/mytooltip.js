@@ -1,0 +1,3 @@
+$(".tooltipTOP").tooltip({
+    placement: "top"
+});
