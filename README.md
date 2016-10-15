@@ -75,33 +75,23 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 
 * **VDR:** this is array where we define all desired VDR instances.
 
-> uuid: is the value defined in "aliases"
-
-> displayName: Value which will be shown in the Web Application
-
-> TIMER_AUX: default string for timer aux information. In this example the remotetimers id is set.
-
-> TIMER_MINUS_MINUTES: time in minutes
- 
-> TIMER_PLUS_MINUTES: time minutes
-
-> TIMER_PRIORITY: default timer priority
-
-> TIMER_LIFETIME: default timer lifetime
-
-> RECORDING_NAMING_MODE: the same value as used in epg2vdr plugin
+	> uuid: is the value defined in "aliases"
+	> displayName: Value which will be shown in the Web Application
+	> TIMER_AUX: default string for timer aux information. In this example the remotetimers id is set.
+	> TIMER_MINUS_MINUTES: time in minutes
+	> TIMER_PLUS_MINUTES: time minutes
+	> TIMER_PRIORITY: default timer priority	
+	> TIMER_LIFETIME: default timer lifetime
+	> RECORDING_NAMING_MODE: the same value as used in epg2vdr plugin
  
 * **Sichten:** This is a view to all configured VDR instances
 
-> displayName: Value which will be shown in the Web Application
-
-> head: the value defined in "aliases". This VDR instance has normally a display connected. Channel change and such operations works on this VDR.
-
-> channels: ordered list of VDR instances where to get a working channel list. Used in the EPG view to order the channels and to define the channel groups. 
-
-> timers: the VDR instance on which a timer shall be generated
-
-> recordings: ordered list of VDR instances where to get the recording lists and do some operations.
+	> displayName: Value which will be shown in the Web Application
+	> head: the value defined in "aliases". This VDR instance has normally a display connected. Channel change and such operations works on this VDR.
+	> channels: ordered list of VDR instances where to get a working channel list. Used in the EPG view to order the channels and to define the channel groups. 	
+	> timers: the VDR instance on which a timer shall be generated
+	> recordings: ordered list of VDR instances where to get the recording lists and do some operations.
+	
 ```json
 	"Sichten": [
 		{
