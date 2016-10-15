@@ -5,7 +5,7 @@ As a special feature used in my environment it is possible to define views of al
 
 if you have e.g. 4 running VDR instances: 2 headless which do nothing more than recordings and handling timers) and 2 instances which are connected to a display (TV) and which do not have any DVB device installed. Then it is possible to define a view and the application use the configured VDR instance to do the desired work.
 
-* head: point to the VDR instance which is connected to a display. Mainly used for channel switches.
+* head: points to the VDR instance which is connected to a display. Mainly used for channel switches.
 * channels: The application needs to be able to read the channel list and channel groups. In my environment, all VDR channel lists are synchronized, so i define the order of VDR instances where to get the channel list and channel groups. The first reachable VDR is then used.
 * timers: only the headless VDR instances have defined timers and are responsible for all timers. The head VDR do not have any timer.
 * recordings: where to get the recordings and do the desired work
@@ -32,8 +32,9 @@ There exist multiple possibilities to build and start the application.
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
 
 * channelImagePath: path to channel logos, png and svg images are supported. But the svg images have still problems with the aspect ratio. This problem needs to be fixed.
-
+```
 	"channelImagePath": "/var/cache/Senderlogos/"
+```
  
 * useRecordingSyncMap: use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version and a small patch! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
 
