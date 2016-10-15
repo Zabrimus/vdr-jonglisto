@@ -65,7 +65,7 @@ public class ChannelImage extends BaseComponent {
 					if ((channel != null) && (channel.length() > 0)) {
 						file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".svg");
 						
-						if (!file.exists()) {						
+						if (!file.exists()) {
 							file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".png");
 
 							if (!file.exists()) {
