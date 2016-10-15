@@ -31,44 +31,49 @@ There exist multiple possibilities to build and start the application.
 ### Configuration
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
 
-* channelImagePath: path to channel logos, png and svg images are supported. But the svg images have still problems with the aspect ratio. This problem needs to be fixed.
-```
+* **channelImagePath:** path to channel logos, png and svg images are supported. But the svg images have still problems with the aspect ratio. This problem needs to be fixed.
+```json
 	"channelImagePath": "/var/cache/Senderlogos/"
 ```
  
-* useRecordingSyncMap: use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version and a small patch! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
-
+* **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version and a small patch! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
+```json
 	"useRecordingSyncMap" : "false"
+```
 	
-* areYouSureToUseSyncMap: Another warning to not set "useRecordingSyncMap" to "true".
-
+* **areYouSureToUseSyncMap:** Another warning to not set "useRecordingSyncMap" to "true".
+```json
 	"areYouSureToUseSyncMap" : "false"
+```
 	
-* epg2vdr: configuration of the mysql connector to epg2vdr database.
-  
+* **epg2vdr:** configuration of the mysql connector to epg2vdr database.
+ ```json
 	"epg2vdr": {
     	"url": "jdbc:mysql://server:3307/epg2vdr",
     	"username": "epg2vdr",
     	"password": "epg"
     }
+```
   
-* hsqldb: configuration of the internal hsqldb database used mainly for recording information. 
-
+* **hsqldb:** configuration of the internal hsqldb database used mainly for recording information. 
+```json
 	"hsqldb": {
 		"path": "/var/cache/jonglisto-db",
 		"remote": "true"
 	}
+```
 	
-* aliases: define a shortcut and the correspondig UUID (as in epg2vdr) for the other configuration.
-
+* **aliases:** define a shortcut and the correspondig UUID (as in epg2vdr) for the other configuration.
+```json
 	"aliases" : {
 		"pivdr1"   : "39F75BA3-E7AE-4DEE-876D-203FEC6F3CD2",
 		"pivdr2"   : "4048B55F-E3DA-4654-AB36-6503F09FCD3F",
 		"stream1"  : "68CE1D58-BF0E-446F-BCE7-4B1F21EFFEEF",
 		"stream2"  : "96AB80F7-84F6-46DE-89DA-1D1D02595853"
 	}
+```
 
-* VDR: this is array where we define all desired VDR instances.
+* **VDR:** this is array where we define all desired VDR instances.
 
 > uuid: is the value defined in "aliases"
 
@@ -86,7 +91,7 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 
 > RECORDING_NAMING_MODE: the same value as used in epg2vdr plugin
  
-* Sichten: This is a view to all configured VDR instances
+* **Sichten:** This is a view to all configured VDR instances
 
 > displayName: Value which will be shown in the Web Application
 
@@ -97,7 +102,7 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 > timers: the VDR instance on which a timer shall be generated
 
 > recordings: ordered list of VDR instances where to get the recording lists and do some operations.
-  
+```json
 	"Sichten": [
 		{
 			"displayName": "Oben",
@@ -115,4 +120,4 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 			"recordings" : [ "stream2", "pivdr2" ]
 		}
 	]  
-	
+```	
