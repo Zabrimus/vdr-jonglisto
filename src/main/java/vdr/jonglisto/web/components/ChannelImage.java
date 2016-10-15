@@ -32,9 +32,15 @@ public class ChannelImage extends BaseComponent {
 			return false;
 		}
 		
-		File file = new File(configuration.getChannelImagePath() + channelName.toLowerCase() + ".png");
+		File fileSvg = new File(configuration.getChannelImagePath() + channelName.toLowerCase() + ".svg");
 		
-		if (file.exists()) {
+		if (fileSvg.exists()) {
+			return true;
+		}
+		
+		File filePng = new File(configuration.getChannelImagePath() + channelName.toLowerCase() + ".png");
+		
+		if (filePng.exists()) {
 			return true;
 		}
 		
@@ -49,6 +55,7 @@ public class ChannelImage extends BaseComponent {
 	public StreamResponse createChannelImage(String channel) {
 		return new StreamResponse() {
 			InputStream inputStream;
+			boolean isSvg = false;
 
 			@Override
 			public void prepareResponse(Response response) {
@@ -56,11 +63,16 @@ public class ChannelImage extends BaseComponent {
 					File file = null;
 
 					if ((channel != null) && (channel.length() > 0)) {
-						file = new File(
-								configuration.getChannelImagePath() + channel.toLowerCase() + ".png");
+						file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".svg");
+						
+						if (!file.exists()) {						
+							file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".png");
 
-						if (!file.exists()) {
-							file = null;
+							if (!file.exists()) {
+								file = null;
+							}
+						} else {
+							isSvg = true;
 						}
 					}
 
@@ -78,7 +90,11 @@ public class ChannelImage extends BaseComponent {
 
 			@Override
 			public String getContentType() {
-				return "text/png";
+				if (isSvg) {
+					return "image/svg+xml";
+				} else {
+					return "text/png";
+				}
 			}
 
 			@Override
