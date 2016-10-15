@@ -1,3 +1,0 @@
-<html t:type="layout" title="VDR Jonglisto Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
-	<t:ProgramDayEpg />
-</html>
