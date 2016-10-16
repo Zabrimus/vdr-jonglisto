@@ -1,5 +1,5 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<t:content>	
+	<t:content>
 		<div class="row">
 			<table class="recordingTable">
 				<tr>
@@ -18,12 +18,6 @@
 					</td>
 
 					<td class="recInfoColumn">
-						<t:if test="showSyncMapWarning()">
-							<span style="color:red;font-weight:bold">Warnung: Falls das restfulApi-Plugin nicht ganz aktuell ist, kann das Video-Verzeichnis zerstrubbelt werden!</span>
-							<br/>
-							<span style="color:red;font-weight:bold"> Aus diesem Grund werden alle Aktionen deaktiviert.</span> 
-						</t:if>
-						
 						<t:zone t:id="childZone" id="childZone">
 							<t:if test="selectedRecPath?.children">
 								<t:grid t:id="subFolderZone" id="subFolderZone" source="summary" row="pathSummary" exclude="nodeId" inplace="true" rowsPerPage="5">
@@ -40,21 +34,19 @@
 							<t:if test="recordings">
 								<t:Form t:id="recForm" async="true">
 									<t:grid t:id="recordingGrid" id="recordingGrid" source="recordings" row="recording" include="recStartDate,recStartTime,duration,fileSize, name"
-										add="action, select" rowsPerPage="2048" t:mixins="EnableGridZone">										
+										add="action, select" rowsPerPage="2048" t:mixins="EnableGridZone">
 										<p:actionCell>
-											<t:if test="showSyncMapWarning()" negate="true">
-												<t:eventlink t:event="renameRecording" t:context="[recording.fileName,recording.name]" zone="^">
-													<img src="${asset:edit.svg}" alt="Aufnahme umbenennen" class="renameicon" />
-												</t:eventlink> &nbsp;
-	
-												<t:eventlink t:event="moveRecording" t:context="recording.fileName" zone="^">
-													<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
-												</t:eventlink> &nbsp;
-	
-												<t:eventlink t:event="deleteRecording" t:context="recording.fileName" zone="^">
-													<img src="${asset:delete.svg}" alt="Aufnahme löschen" class="deleteicon" />
-												</t:eventlink>
-											</t:if>
+											<t:eventlink t:event="renameRecording" t:context="[recording.fileName,recording.name]" zone="^">
+												<img src="${asset:edit.svg}" alt="Aufnahme umbenennen" class="renameicon" />
+											</t:eventlink> &nbsp;
+
+											<t:eventlink t:event="moveRecording" t:context="recording.fileName" zone="^">
+												<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
+											</t:eventlink> &nbsp;
+
+											<t:eventlink t:event="deleteRecording" t:context="recording.fileName" zone="^">
+												<img src="${asset:delete.svg}" alt="Aufnahme löschen" class="deleteicon" />
+											</t:eventlink>
 										</p:actionCell>
 
 										<p:nameCell>
@@ -130,23 +122,21 @@
 									</t:grid>
 
 									<div class="col-sm-12">
-										<t:if test="showSyncMapWarning()" negate="true">
-											<div class="col-sm-3">
-												Ausgewählte Aufnahmen
-											</div>
-	
-											<div class="col-sm-2">
-												<img src="${asset:delete.svg}" alt="Aufnahmen löschen" class="deleteicon" />
-												<t:linksubmit t:event="deleteRecordings">löschen</t:linksubmit>
-											</div>
-	
-											<div class="col-sm-7">
-												<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
-												<t:linksubmit t:event="moveRecordings">verschieben nach</t:linksubmit>
-	
-												<t:textfield t:id="targetDir" size="30" />
-											</div>
-										</t:if>
+										<div class="col-sm-3">
+											Ausgewählte Aufnahmen
+										</div>
+
+										<div class="col-sm-2">
+											<img src="${asset:delete.svg}" alt="Aufnahmen löschen" class="deleteicon" />
+											<t:linksubmit t:event="deleteRecordings">löschen</t:linksubmit>
+										</div>
+
+										<div class="col-sm-7">
+											<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
+											<t:linksubmit t:event="moveRecordings">verschieben nach</t:linksubmit>
+
+											<t:textfield t:id="targetDir" size="30" />
+										</div>
 									</div>
 								</t:Form>
 							</t:if>

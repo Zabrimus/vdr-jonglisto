@@ -31,5 +31,4 @@ public interface ConfigurationService {
 	public String getChannelImagePath();
 	
 	public boolean useRecordingSyncMap();
-	public boolean isUsingSyncMapConfirmed();
 }

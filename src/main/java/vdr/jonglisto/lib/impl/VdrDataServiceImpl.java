@@ -26,7 +26,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.exception.NetworkException;
-import vdr.jonglisto.lib.exception.SyncNotSupportedException;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.Device;
 import vdr.jonglisto.lib.model.Plugin;

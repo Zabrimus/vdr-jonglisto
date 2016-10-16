@@ -115,7 +115,6 @@ public class Configuration {
 	private Map<String, LastCheck> lastCheck = new ConcurrentHashMap<>();
 
 	private boolean useSyncMap = false;
-	private boolean syncMapConfirmed = false;
 	
 	private Configuration(String pathname) {
 		initConfiguration(pathname);
@@ -155,14 +154,6 @@ public class Configuration {
 
 	public void setUseSyncMap(boolean useSyncMap) {
 		this.useSyncMap = useSyncMap;
-	}
-
-	public boolean isSyncMapConfirmed() {
-		return syncMapConfirmed;
-	}
-
-	public void setSyncMapConfirmed(boolean syncMapConfirmed) {
-		this.syncMapConfirmed = syncMapConfirmed;
 	}
 
 	public List<VDR> getSortedVdrList() {
@@ -303,7 +294,6 @@ public class Configuration {
 			channelImagePath = (String) config.get("channelImagePath");
 
 			useSyncMap = Boolean.valueOf((String) config.get("useRecordingSyncMap"));
-			syncMapConfirmed = Boolean.valueOf((String) config.get("areYouSureToUseSyncMap"));
 			
 			Map<String, Object> dbConfig;
 			// create DataSource for epg2vdr

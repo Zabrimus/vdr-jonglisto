@@ -71,9 +71,5 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public boolean useRecordingSyncMap() {
 		return configuration.isUseSyncMap();
 	}
-	
-	public boolean isUsingSyncMapConfirmed() {
-		return configuration.isSyncMapConfirmed();
-	}
 
 }

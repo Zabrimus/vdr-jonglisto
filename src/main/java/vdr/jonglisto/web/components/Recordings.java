@@ -412,10 +412,6 @@ public class Recordings extends BaseComponent {
 
 		return "";
 	}
-
-	public boolean showSyncMapWarning() {
-		return configuration.useRecordingSyncMap() && !configuration.isUsingSyncMapConfirmed();
-	}
 	
 	private void updateTree() {		
 		// INFO: update and sync are not working as expected. Perhaps i have to organize the database entries myself? I need to read the documentation. 
