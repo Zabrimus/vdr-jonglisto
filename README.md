@@ -201,9 +201,6 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 **all EPG data for a channel:**
 ![EPG channel](https://github.com/Zabrimus/page/blob/master/epg-channel.png)
 
-**EPG details:**
-![EPG details](https://github.com/Zabrimus/page/blob/master/epg-detail.png)
-
 **configured timers:**
 ![EPG details](https://github.com/Zabrimus/page/blob/master/timer.png)
 
