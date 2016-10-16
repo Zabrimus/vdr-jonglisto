@@ -12,7 +12,7 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 
 ### Requirements
 * a runnning vdr-epg-daemon, especially the mysql database
-* vdr restfulapi plugin in the most recent version
+* vdr restfulapi plugin, at least version 0.2.6.5
 * java 8
 
 ### Build instructions 
@@ -39,7 +39,7 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 	"channelImagePath": "/var/cache/Senderlogos/"
 ```
  
-* **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version and a small patch! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
+* **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
 ```json
 	"useRecordingSyncMap" : "false"
 ```
