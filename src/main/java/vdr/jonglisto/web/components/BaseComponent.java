@@ -13,6 +13,7 @@ import vdr.jonglisto.lib.CommandService;
 import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.EpgImageService;
+import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.model.VDRView;
 
@@ -42,6 +43,9 @@ public class BaseComponent {
 
 	@Inject
 	protected VdrDataService dataService;
+
+	@Inject
+	protected SearchTimerService searchTimerService;
 
 	@Inject
 	protected Request request;

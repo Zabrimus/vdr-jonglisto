@@ -52,6 +52,7 @@ public class Navbar extends BaseComponent {
 		pages.add(new NavPage("Programm (Kanal)", "programChannel"));
 		pages.add(new NavPage("Timer", "timer"));
 		pages.add(new NavPage("Aufnahmen", "recordings"));
+		pages.add(new NavPage("Suchtimer", "searchTimer"));
 	}
 	
 	public List<NavPage> getPageNames() {

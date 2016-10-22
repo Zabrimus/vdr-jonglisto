@@ -15,6 +15,8 @@ public class Channel {
 	
 	@JsonProperty("group")
 	private String group;
+
+	public static Channel emptyChannel = new Channel("", ""); 
 	
 	public Channel() {	
 	}
@@ -23,7 +25,7 @@ public class Channel {
 		this.id = id;
 		this.name = name;
 	}
-
+	
 	public String getId() {
 		return id;
 	}

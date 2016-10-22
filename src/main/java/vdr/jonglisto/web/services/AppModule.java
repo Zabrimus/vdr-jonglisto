@@ -31,11 +31,13 @@ import vdr.jonglisto.lib.CommandService;
 import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.EpgImageService;
+import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.impl.CommandServiceImpl;
 import vdr.jonglisto.lib.impl.ConfigurationServiceImpl;
 import vdr.jonglisto.lib.impl.EpgDataServiceImpl;
 import vdr.jonglisto.lib.impl.EpgImageServiceImpl;
+import vdr.jonglisto.lib.impl.SearchTimerServiceImpl;
 import vdr.jonglisto.lib.impl.VdrDataServiceImpl;
 import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.web.binding.MapBindingFactory;
@@ -55,7 +57,8 @@ public class AppModule {
 		binder.bind(VdrDataService.class, VdrDataServiceImpl.class);
 		binder.bind(EpgDataService.class, EpgDataServiceImpl.class);
 		binder.bind(EpgImageService.class, EpgImageServiceImpl.class);
-		binder.bind(CommandService.class, CommandServiceImpl.class);		
+		binder.bind(CommandService.class, CommandServiceImpl.class);
+		binder.bind(SearchTimerService.class, SearchTimerServiceImpl.class);
 		binder.bind(ChannelEncoder.class);
 	}
 
