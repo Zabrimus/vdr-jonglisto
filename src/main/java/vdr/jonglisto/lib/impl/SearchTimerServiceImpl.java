@@ -43,12 +43,74 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 		}
 	}
 
+	public SearchTimer getSearchTimer(Long id) {
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.open()) {
+			Map<String, Object> dbResult = con.createQuery("SELECT * FROM searchtimers where id = :id") //
+					.addParameter("id", id)  //
+					.executeAndFetchTable().asList().get(0);
+			
+			// Make a copy of the map, because sql2o implementation is immutable and throws a NullPointerException, if the key is not found
+			Map<String, Object> newResult = new HashMap<>();
+			dbResult.keySet().stream().forEach(resultKey -> newResult.put(resultKey, dbResult.get(resultKey)));
+			
+			return new SearchTimer(newResult);
+		}
+	}
+	
+	public void insertSearchTimer(SearchTimer timer) {
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.beginTransaction()) {
+			String sql = "INSERT INTO epg2vdr.searchtimers " + //
+				 "(inssp, channelids, chexclude, chformat, name, expression, expression1, searchmode, searchfields, searchfields1, casesensitiv, repeatfields, " + //"
+				 "episodename, season, seasonpart, category, genre, year, tipp, noepgmatch, type, state, namingmode, active, source, hits, vdruuid, weekdays, " + //
+				 "nextdays, starttime, endtime, directory, priority, lifetime, vps, childlock) " + //
+				 "VALUES(UNIX_TIMESTAMP(), :channelids, :chexclude, :chformat, :name, :expression, :expression1, :searchmode, :searchfields, :searchfields1, :casesensitiv, :repeatfields, " + //
+				 ":episodename, :season, :seasonpart, :category, :genre, :year, :tipp, :noepgmatch, :type, :state, :namingmode, :active, :source, :hits, :vdruuid, :weekdays, " + //
+				 ":nextdays, :starttime, :endtime, :directory, :priority, :lifetime, :vps, :childlock)";
+
+			Query query = con.createQuery(sql);			
+			query.getParamNameToIdxMap().keySet().stream().forEach(key -> query.addParameter(key, timer.getRawDbData().get(key)));
+			query.executeUpdate();
+			
+			con.commit();
+		}
+	}
+	
 	public void updateSearchTimer(SearchTimer timer) {
-		// TODO Auto-generated method stub
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.beginTransaction()) {
+			String sql = "update searchtimers" + //
+					"set updsp = UNIX_TIMESTAMP(), channelids = :channelids, chexclude = :chexclude, chformat = :chformat, " + //
+					"name = :name, expression = :expression, expression1 = :expression1, searchmode = :searchmode , searchfields = :searchfields, " + //
+					"searchfields1 = :searchfields1, casesensitiv = :casesensitiv, repeatfields = :repeatfields, episodename = :episodename, " + //
+					"season = :season, seasonpart = :seasonpart, category = :category, genre = :genre, year = :year, tipp = :tipp, " + //
+					"noepgmatch = :noepgmatch, type = :type, namingmode = :namingmode, active = :active, source = :source, vdruuid = :vdruuid, " + //
+					"weekdays = :weekdays, nextdays = :nextdays, starttime = :starttime, endtime = :endtime, directory = :directory, " + //
+					"priority = :priority, lifetime = :lifetime, vps = :vps, childlock = :childlock" + //
+					"where id = :id";
+			
+			Query query = con.createQuery(sql);			
+			query.getParamNameToIdxMap().keySet().stream().forEach(key -> query.addParameter(key, timer.getRawDbData().get(key)));
+			query.executeUpdate();
+			
+			con.commit();
+		}
 	}
 
-	public void deleteSearchTimer(SearchTimer timer) {
-		// TODO Auto-generated method stub
+	public void deleteSearchTimer(Long id) {
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+		
+		try (Connection con = sql2o.beginTransaction()) {
+			con.createQuery("update searchtimers set state = 'D' where id = :ID")
+			.addParameter("ID", id)
+			.executeUpdate();
+			
+			con.commit();
+		}
 	}
 
 	public void toggleActive(Long id) {
@@ -74,35 +136,35 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 			// fill all parameters
 			query.getParamNameToIdxMap().keySet().stream().forEach(key -> {
 				if ("EXPRESSION".equals(key)) {
-					query.addParameter("EXPRESSION", createLike(timer.getString("expression"), timer.getLong("searchmode")));
+					query.addParameter("EXPRESSION", createLike(timer.getExpression(), timer.getSearchmode()));
 				} else if ("EXPRESSION1".equals(key)) {
-					query.addParameter("EXPRESSION1", createLike(timer.getString("expression1"), timer.getLong("searchmode")));
+					query.addParameter("EXPRESSION1", createLike(timer.getExpression1(), timer.getSearchmode()));
 				} else if ("EPISODENAME".equals(key)) {
-					query.addParameter("EPISODENAME", timer.getString("episodename"));
+					query.addParameter("EPISODENAME", timer.getEpisodename());
 				} else if ("FORMAT1".equals(key)) {
 					// add all FORMATx parameters
 					AtomicInteger ai = new AtomicInteger(1);
-					Arrays.stream(timer.getString("chformat").split(",")).forEach(ch -> query.addParameter("FORMAT" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
+					Arrays.stream(timer.getChformat().split(",")).forEach(ch -> query.addParameter("FORMAT" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
 				} else if ("CATEGORY1".equals(key)) {
 					// add all CATEGORYx parameters
 					AtomicInteger ai = new AtomicInteger(1);
-					Arrays.stream(timer.getString("category").split(",")).forEach(ch -> query.addParameter("CATEGORY" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
+					Arrays.stream(timer.getCategory().split(",")).forEach(ch -> query.addParameter("CATEGORY" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
 				} else if ("GENRE1".equals(key)) {
 					// add all GENREx parameters
 					AtomicInteger ai = new AtomicInteger(1);
-					Arrays.stream(timer.getString("genre").split(",")).forEach(ch -> query.addParameter("GENRE" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
+					Arrays.stream(timer.getGenre().split(",")).forEach(ch -> query.addParameter("GENRE" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
 				} else if ("TIPP1".equals(key)) {
 					/// add aöö TIPPx parameters
 					AtomicInteger ai = new AtomicInteger(1);
-					Arrays.stream(timer.getString("tipp").split(",")).forEach(ch -> query.addParameter("TIPP" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
+					Arrays.stream(timer.getTipp().split(",")).forEach(ch -> query.addParameter("TIPP" + ai.getAndIncrement(), StringUtils.strip(ch, "'")));
 				} else if ("STARTTIME".equals(key)) {
-					query.addParameter("STARTTIME", timer.getInteger("starttime"));
+					query.addParameter("STARTTIME", timer.getStarttime());
 				} else if ("ENDTIME".equals(key)) {
-					query.addParameter("ENDTIME", timer.getInteger("endtime"));
+					query.addParameter("ENDTIME", timer.getEndtime());
 				} else if ("WEEKDAYS".equals(key)) {
-					query.addParameter("WEEKDAYS", timer.getInteger("weekdays"));
+					query.addParameter("WEEKDAYS", timer.getWeekdays());
 				} else if ("NEXTDAYS".equals(key)) {
-					query.addParameter("NEXTDAYS", timer.getInteger("nextdays"));
+					query.addParameter("NEXTDAYS", timer.getNextDays());
 				}
 			});
 			
@@ -113,29 +175,29 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 	private String createSelectStatement(SearchTimer timer) {
 		String searchOp = "=";
 				
-		String expression = timer.getString("expression");
-		String expression1 = timer.getString("expression1");
-	    String episodename = timer.getString("episodename");
-	    String season = timer.getString("season");
-	    String seasonpart = timer.getString("seasonpart");
-	    String category = timer.getString("category");
-	    String genre = timer.getString("genre");
-	    String tipp = timer.getString("tipp");
-	    String year = timer.getString("year");
-	    String chformat = timer.getString("chformat");
+		String expression = timer.getExpression();
+		String expression1 = timer.getExpression1();
+	    String episodename = timer.getEpisodename();
+	    String season = timer.getSeason();
+	    String seasonpart = timer.getSeasonpart();
+	    String category = timer.getCategory();
+	    String genre = timer.getGenre();
+	    String tipp = timer.getTipp();
+	    String year = timer.getYear();
+	    String chformat = timer.getChformat();
 	    
-	    String channels = timer.getString("channelids");	    
-	    Boolean channelExclude = !(0L == timer.getLong("chexclude"));
-	    Integer starttime = timer.getInteger("starttime");
-	    Integer endtime = timer.getInteger("endtime");
-	    Integer nextDays = timer.getInteger("nextdays");
+	    String channels = timer.getChannels();	    
+	    Boolean channelExclude = timer.getChannelExclude();
+	    Integer starttime = timer.getStarttime();
+	    Integer endtime = timer.getEndtime();
+	    Integer nextDays = timer.getNextDays();
 		       
-		Boolean noepgmatch = !(0 == timer.getInteger("noepgmatch"));
-		Long searchmode = timer.getLong("searchmode");
-		Integer searchfields = timer.getLong("searchfields") != null ? timer.getLong("searchfields").intValue() : null;
-		Integer searchfields1 = timer.getLong("searchfields1") != null ? timer.getLong("searchfields1").intValue() : null;
-		Boolean casesensitiv = !(0L == timer.getLong("casesensitiv"));
-		Integer weekdays = timer.getInteger("weekdays"); 
+		Boolean noepgmatch = timer.getNoepgmatch();
+		Long searchmode = timer.getSearchmode();
+		Integer searchfields = timer.getSearchfields() != null ? timer.getSearchfields().intValue() : null;
+		Integer searchfields1 = timer.getSearchfields1() != null ? timer.getSearchfields1().intValue() : null;
+		Boolean casesensitiv = timer.getCasesensitiv();
+		Integer weekdays = timer.getWeekdays(); 
 		
 		StringBuilder sb = new StringBuilder();
 		

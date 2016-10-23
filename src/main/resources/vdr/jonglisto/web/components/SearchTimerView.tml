@@ -1,20 +1,24 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<t:content>
 		<t:zone t:id="searchTimerListZone" id="searchTimerListZone">
-			<t:grid source="searchTimers" row="searchTimer" model="searchTimerModel">
+			<t:delegate to="activeBlock" />
+		</t:zone>
+
+		<t:block t:id="view">
+			<t:grid source="searchTimers" row="searchTimer" include="active,name,type,channels,chformat,expression,expression1,directory" add="action">
 				<p:activeCell>
-					<t:eventlink t:event="toggleSearchTimerActive" t:context="${searchTimer.get('id')}">
-						<t:TimerActive value="isActive()" recording="false" text="true" />
+					<t:eventlink t:event="toggleSearchTimerActive" t:context="searchtimer.id">
+						<t:TimerActive value="searchTimer.active" recording="false" text="true" />
 					</t:eventlink>
 				</p:activeCell>
 
 				<p:nameCell>
-					${searchTimer.get('name')}
+					${searchTimer.name}
 				</p:nameCell>
 
-				<p:timerActionCell>
+				<p:typeCell>
 					${timerAction}
-				</p:timerActionCell>
+				</p:typeCell>
 
 				<p:channelsCell>
 					<t:loop source="channels" value="currentChannel">
@@ -22,42 +26,215 @@
 					</t:loop>
 				</p:channelsCell>
 
-				<p:channelFormatCell>
-					${searchTimer.get('chformat')}
-				</p:channelFormatCell>
+				<p:chformatCell>
+					${searchTimer.chformat}
+				</p:chformatCell>
 
-				<p:searchText1Cell>
-					${searchTimer.get('expression')}
-				</p:searchText1Cell>
+				<p:expressionCell>
+					${searchTimer.expression}
+				</p:expressionCell>
 
-				<p:searchText2Cell>
-					${searchTimer.get('expression1')}
-				</p:searchText2Cell>
+				<p:expression1Cell>
+					${searchTimer.expression1}
+				</p:expression1Cell>
 
 				<p:directoryCell>
-					${searchTimer.get('directory')}
+					${searchTimer.directory}
 				</p:directoryCell>
 
 				<p:actionCell>
-					<t:eventlink t:event="executeSearchTimer" t:context="${searchTimer.get('id')}" zone="^">
+					<t:eventlink t:event="executeSearchTimer" t:context="searchTimer.id" zone="^">
 						<img src="${asset:search.svg}" alt="Suchtimer ausführen" class="searchicon" title="Suchtimer ausführen" />
 					</t:eventlink>
 					&nbsp;
-					<t:eventlink t:event="editSearchTimer" t:context="${searchTimer.get('id')}" zone="^">
+					<t:eventlink t:event="editSearchTimer" t:context="searchTimer.id" zone="^">
 						<img src="${asset:edit.svg}" alt="Suchtimer bearbeiten" class="editicon" title="Suchtimer bearbeiten" />
 					</t:eventlink>
 					&nbsp;
-					<t:eventlink t:event="deleteSearchTimer" t:context="${searchTimer.get('id')}">
-						<img src="${asset:delete.svg}" alt="Suchtimer löschen" class="deleteicon" title="Suchttimer löschen"/>
+					<t:eventlink t:event="deleteSearchTimer" t:context="searchTimer.id">
+						<img src="${asset:delete.svg}" alt="Suchtimer löschen" class="deleteicon" title="Suchttimer löschen" />
 					</t:eventlink>
 				</p:actionCell>
 			</t:grid>
-			
-			<t:eventlink t:event="newSearchTimer" t:context="${searchTimer.get('id')}" zone="^">
-				<img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="newicon" title="neuen Suchtimer erstellen" />
+
+			<t:eventlink t:event="newSearchTimer" zone="^">
+				<img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="editicon" title="neuen Suchtimer erstellen" />
 				Neuen Suchtimer erstellen
 			</t:eventlink>
-			
-		</t:zone>
+		</t:block>
+
+		<t:block t:id="edit">
+			<t:form class="form-horizontal" t:id="timerform" t:zone="^">
+				<div>
+					<h3>${message:edit_timer}: ${searchTimer.name}</h3>
+				</div>
+
+				<t:errors />
+
+				<div class="form-group col-sm-12">
+					<div class="col-sm-4">
+						<t:label for="timer_type" />
+						<br />
+						<t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=aufnehmen,V=umschalten,S=suchen" />
+					</div>
+
+					<div class="col-sm-4">
+						<t:label for="timer_name" />
+						<br />
+						<t:TextField t:id="timer_name" value="searchTimer.name" label="message:timer_name" size="25" />
+					</div>
+
+					<div class="col-sm-2">
+						<t:label for="timer_active" />
+						<br />
+						<input t:id="timer_active" t:type="checkbox" value="searchTimer.active" label="message:timer_active" />
+					</div>
+
+					<div class="col-sm-2">
+						<t:label for="timer_vps" />
+						<br />
+						<input t:id="timer_vps" t:type="checkbox" value="searchTimer.vps" label="message:timer_vps" />
+					</div>
+				</div>
+
+				<div class="form-group col-sm-12">
+					<div class="col-sm-6">
+						<fieldset class="scheduler-border">
+							<legend class="scheduler-border">Suchkriterien</legend>
+							
+							<div class="col-sm-8">
+								<t:label for="timer_searchitem" />
+								<br />
+								<t:TextField t:id="timer_searchitem" value="searchTimer.expression" label="message:timer_searchitem" size="20" />
+
+
+								<input t:id="timer_search_title" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title" />
+								<t:label for="timer_search_title" />
+											
+												&nbsp;
+
+								<input t:id="timer_search_shorttext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext" />
+								<t:label for="timer_search_shorttext" />
+											
+												&nbsp;
+
+								<input t:id="timer_search_longtext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext" />
+								<t:label for="timer_search_longtext" />
+
+
+								<t:label for="timer_searchitem2" />
+								<br />
+								<t:TextField t:id="timer_searchitem2" value="searchTimer.expression1" label="message:timer_searchitem2" size="20" />
+
+								<input t:id="timer_search_title2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title2" />
+								<t:label for="timer_search_title2" />
+											
+												&nbsp;
+
+								<input t:id="timer_search_shorttext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext2" />
+								<t:label for="timer_search_shorttext2" />
+											
+												&nbsp;
+
+								<input t:id="timer_search_longtext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext2" />
+								<t:label for="timer_search_longtext2" />
+												&nbsp;&nbsp;
+
+							</div>
+
+							<div class="col-sm-4">
+								<t:label for="timer_searchmode" />
+								<br />
+								<t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode" model="literal:1=Exakt,2=regulärer Ausdruck,3=Muster,4=enthalten in" />
+
+								<input t:id="timer_case" t:type="checkbox" value="searchTimer.casesensitiv" label="message:timer_case" />
+								<t:label for="timer_case" />
+
+								<br />
+								Wiederholungen vermeiden:
+								<br />
+								<input t:id="timer_repeat_title" t:type="checkbox" value="searchTimer.repeattitle" label="message:timer_repeat_title" />
+								<t:label for="timer_repeat_title" />
+							&nbsp;
+								<input t:id="timer_repeat_shorttext" t:type="checkbox" value="searchTimer.repeatshorttext" label="message:timer_repeat_shorttext" />
+								<t:label for="timer_repeat_shorttext" />
+							&nbsp;
+								<input t:id="timer_repeat_desc" t:type="checkbox" value="searchTimer.repeatdesc" label="message:timer_repeat_desc" />
+								<t:label for="timer_repeat_desc" />
+
+							</div>
+						</fieldset>
+
+					</div>
+
+					<div class="col-sm-6">
+						<fieldset class="scheduler-border">
+							<legend class="scheduler-border">Erweitert</legend>
+
+							<div class="col-sm-6">
+								<t:label for="timer_episode" />
+								<t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" />
+							</div>
+
+							<div class="col-sm-2">
+								<t:label for="timer_season" />
+								<t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" />
+							</div>
+
+							<div class="col-sm-2">
+								<t:label for="timer_seasonpart" />
+								<t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" size="6" />
+							</div>
+
+							<div class="col-sm-2">
+								<t:label for="timer_year" />
+								<t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" />
+							</div>
+
+							<div class="col-sm-6">
+								<t:label for="timer_category" />
+								<t:TextField t:id="timer_category" value="searchTimer.category" label="message:timer_category" size="4" />
+							</div>
+
+							<div class="col-sm-6">
+								<t:label for="timer_genre" />
+								<t:TextField t:id="timer_genre" value="searchTimer.genre" label="message:timer_genre" size="4" />
+							</div>
+
+						</fieldset>
+
+					</div>
+				</div>
+
+				<!-- <div class="form-group col-sm-12"> <fieldset class="scheduler-border"> <div class="col-sm-8"> <t:label for="timer_searchitem" /> <br /> <t:TextField t:id="timer_searchitem" 
+					value="searchTimer.expression" label="message:timer_searchitem" size="20" /> <input t:id="timer_search_title" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title" 
+					/> <t:label for="timer_search_title" /> &nbsp; <input t:id="timer_search_shorttext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext" 
+					/> <t:label for="timer_search_shorttext" /> &nbsp; <input t:id="timer_search_longtext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext" 
+					/> <t:label for="timer_search_longtext" /> <t:label for="timer_searchitem2" /> <br /> <t:TextField t:id="timer_searchitem2" value="searchTimer.expression1" label="message:timer_searchitem2" 
+					size="20" /> <input t:id="timer_search_title2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title2" /> <t:label for="timer_search_title2" 
+					/> &nbsp; <input t:id="timer_search_shorttext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext2" /> <t:label for="timer_search_shorttext2" 
+					/> &nbsp; <input t:id="timer_search_longtext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext2" /> <t:label for="timer_search_longtext2" 
+					/> &nbsp;&nbsp; </div> <div class="col-sm-4"> <t:label for="timer_searchmode" /> <br /> <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode" 
+					model="literal:1=Exakt,2=regulärer Ausdruck,3=Muster,4=enthalten in" /> <input t:id="timer_case" t:type="checkbox" value="searchTimer.casesensitiv" label="message:timer_case" 
+					/> <t:label for="timer_case" /> <br/> Wiederholungen vermeiden: <br /> <input t:id="timer_repeat_title" t:type="checkbox" value="searchTimer.repeattitle" label="message:timer_repeat_title" 
+					/> <t:label for="timer_repeat_title" /> &nbsp; <input t:id="timer_repeat_shorttext" t:type="checkbox" value="searchTimer.repeatshorttext" label="message:timer_repeat_shorttext" 
+					/> <t:label for="timer_repeat_shorttext" /> &nbsp; <input t:id="timer_repeat_desc" t:type="checkbox" value="searchTimer.repeatdesc" label="message:timer_repeat_desc" 
+					/> <t:label for="timer_repeat_desc" /> </div> </fieldset> </div> <div class="form-group col-sm-12"> <fieldset class="scheduler-border"> <legend class="scheduler-border">Erweitert</legend> 
+					<div class="col-sm-6"> <t:label for="timer_episode" /> <t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" 
+					/> </div> <div class="col-sm-2"> <t:label for="timer_season" /> <t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" 
+					/> </div> <div class="col-sm-2"> <t:label for="timer_seasonpart" /> <t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" 
+					size="6" /> </div> <div class="col-sm-2"> <t:label for="timer_year" /> <t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" 
+					/> </div> <div class="col-sm-6"> <t:label for="timer_category" /> <t:TextField t:id="timer_category" value="searchTimer.category" label="message:timer_category" 
+					size="4" /> </div> <div class="col-sm-6"> <t:label for="timer_genre" /> <t:TextField t:id="timer_genre" value="searchTimer.genre" label="message:timer_genre" size="4" 
+					/> </div> </fieldset> </div> -->
+
+				<div class="form-group">
+					<div class="col-sm-9 col-sm-offset-3">
+						<t:submit value="${message:timer_save}" />&nbsp;
+						<t:eventlink event="cancel" class="btn btn-default">${message:timer_cancel}</t:eventlink>
+					</div>
+				</div>
+			</t:form>
+		</t:block>
 	</t:content>
 </html>

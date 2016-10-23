@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -15,10 +17,13 @@ import org.apache.tapestry5.services.BeanModelSource;
 
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.SearchTimer;
-import vdr.jonglisto.web.conduit.SearchTimerConduit;
 
 @Import(stylesheet = "META-INF/assets/css/SearchTimerView.css")
 public class SearchTimerView extends BaseComponent {
+	
+	public enum Function {
+		LIST, EDIT, EPG, NEWTIMER;
+	}	
 	
 	@Inject
 	protected BeanModelSource beanModelSource;
@@ -29,35 +34,38 @@ public class SearchTimerView extends BaseComponent {
 	@InjectComponent
 	private Zone searchTimerListZone;
 	
+	@Inject
+	private Block view;
+	
+	@Inject
+	private Block edit;
+	
 	@Property
 	private BeanModel<Object> searchTimerModel;
 	
 	@Property
 	private List<SearchTimer> searchTimers;
 	
+	@Persist
 	@Property
 	private SearchTimer searchTimer;
+
+	@Persist
+	private Long searchTimerId;
 	
 	@Property
 	private String currentChannel;
 	
+	@Property
+	private Function function;
+
 	public SearchTimerView() {
-		searchTimerModel = beanModelSource.createDisplayModel(Object.class, messages);
-		
-		searchTimerModel.add("active", new SearchTimerConduit("active", Integer.class));
-		searchTimerModel.add("name", new SearchTimerConduit("name", String.class));
-		searchTimerModel.add("timerAction", new SearchTimerConduit("active", String.class));
-		searchTimerModel.add("channels", new SearchTimerConduit("active", String.class));
-		searchTimerModel.add("channelFormat", new SearchTimerConduit("active", String.class));
-		searchTimerModel.add("searchText1", new SearchTimerConduit("active", String.class));
-		searchTimerModel.add("searchText2", new SearchTimerConduit("active", String.class));
-		searchTimerModel.add("directoy", new SearchTimerConduit("directory", String.class));
-		searchTimerModel.addEmpty("action");
+		function = Function.LIST;
 	}
 
 	void setupRender() {
 		searchTimers = searchTimerService.getSearchTimers();
-		searchTimerService.performSearch(searchTimers.get(0));
+		function = Function.LIST;
 	}
 	
 	public void onToggleSearchTimerActive(Long id) {
@@ -76,26 +84,77 @@ public class SearchTimerView extends BaseComponent {
 	}
 
 	public void onEditSearchTimer(Long id) {
-		// TODO: implement this
-		System.err.println("edit search timer is not yet implemented");
+		function = Function.EDIT;
+		searchTimer = searchTimerService.getSearchTimer(id);
+		searchTimerId = id;
+				
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(searchTimerListZone);
+		}
 	}
 
 	public void onDeleteSearchTimer(Long id) {
-		// TODO: implement this
-		System.err.println("delete search timer is not yet implemented");
+		searchTimerService.deleteSearchTimer(id);
+		
+		searchTimers = searchTimerService.getSearchTimers();		
+		
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(searchTimerListZone);
+		}
 	}
 
-	public void onNewSearchTimer(Long id) {
+	public void onNewSearchTimer() {
 		// TODO: implement this
 		System.err.println("new search timer is not yet implemented");
 	}
 	
-	public boolean isActive() {
-		return ((Long)searchTimer.get("active")) != 0L;
+	public void onPrepareForSubmit() {
+		searchTimer = searchTimerService.getSearchTimer(searchTimerId);
+	}
+	
+	void onSuccess() {
+		if (searchTimerId == null) {
+			return;
+		}
+
+		// Create or update timer
+		if (searchTimer.getId() == null) {
+			// create timer
+			// dataService.createTimer(getTimerUuid(), timer);			
+		} else {
+			// update timer
+			// Timer oldTimer = dataService.getTimerById(getTimerUuid(), timer.getId()).get();
+			// dataService.updateTimer(getTimerUuid(), oldTimer, timer);
+		}
+		
+		function = Function.LIST;
+		searchTimer = null;
+		
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(searchTimerListZone);
+		}
+		
+		searchTimers = searchTimerService.getSearchTimers();		
+	}
+	
+    void onCancel() {
+    	searchTimerId = null;
+    }
+	
+	public boolean isListFunction() {
+		return function == Function.LIST || function == Function.NEWTIMER;
+	}
+	
+	public boolean isEditFunction() {
+		return function == Function.EDIT || function == Function.NEWTIMER;
+	}
+	
+	public boolean isNewSearchTimerFunction() {
+		return function == Function.NEWTIMER;
 	}
 	
 	public String getTimerAction() {
-		switch ((String)searchTimer.get("type")) {
+		switch (searchTimer.getType()) {
 		case "R": return "aufnehmen";
 		case "V": return "umschalten";
 		case "S": return "suchen";
@@ -103,11 +162,29 @@ public class SearchTimerView extends BaseComponent {
 		}
 	}
 	
+	public void setTimerAction(String s) {
+		System.err.println("SetTimerAction: " + s);
+	}
+	
 	public List<String> getChannels() {
-		String channelIds = searchTimer.getString("channelids");		
+		String channelIds = searchTimer.getChannels();		
 		return Arrays.stream(channelIds.split(",")) //
 				.map(ch -> vdrDataService.getChannel(getTimerUuid(), ch)) // 
 				.map(ch -> ch.orElse(Channel.emptyChannel).getName()) //
 				.collect(Collectors.toList());
 	}
+	
+	public Object getActiveBlock()
+    {
+		switch(function) {
+		case EDIT:
+			return edit;
+				
+		case LIST:
+			return view;
+		
+		default:
+			return view;
+		}
+    }
 }
