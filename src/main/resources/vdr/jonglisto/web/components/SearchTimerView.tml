@@ -206,28 +206,6 @@
 					</div>
 				</div>
 
-				<!-- <div class="form-group col-sm-12"> <fieldset class="scheduler-border"> <div class="col-sm-8"> <t:label for="timer_searchitem" /> <br /> <t:TextField t:id="timer_searchitem" 
-					value="searchTimer.expression" label="message:timer_searchitem" size="20" /> <input t:id="timer_search_title" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title" 
-					/> <t:label for="timer_search_title" /> &nbsp; <input t:id="timer_search_shorttext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext" 
-					/> <t:label for="timer_search_shorttext" /> &nbsp; <input t:id="timer_search_longtext" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext" 
-					/> <t:label for="timer_search_longtext" /> <t:label for="timer_searchitem2" /> <br /> <t:TextField t:id="timer_searchitem2" value="searchTimer.expression1" label="message:timer_searchitem2" 
-					size="20" /> <input t:id="timer_search_title2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_title2" /> <t:label for="timer_search_title2" 
-					/> &nbsp; <input t:id="timer_search_shorttext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_shorttext2" /> <t:label for="timer_search_shorttext2" 
-					/> &nbsp; <input t:id="timer_search_longtext2" t:type="checkbox" value="searchTimer.active" label="message:timer_search_longtext2" /> <t:label for="timer_search_longtext2" 
-					/> &nbsp;&nbsp; </div> <div class="col-sm-4"> <t:label for="timer_searchmode" /> <br /> <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode" 
-					model="literal:1=Exakt,2=regulärer Ausdruck,3=Muster,4=enthalten in" /> <input t:id="timer_case" t:type="checkbox" value="searchTimer.casesensitiv" label="message:timer_case" 
-					/> <t:label for="timer_case" /> <br/> Wiederholungen vermeiden: <br /> <input t:id="timer_repeat_title" t:type="checkbox" value="searchTimer.repeattitle" label="message:timer_repeat_title" 
-					/> <t:label for="timer_repeat_title" /> &nbsp; <input t:id="timer_repeat_shorttext" t:type="checkbox" value="searchTimer.repeatshorttext" label="message:timer_repeat_shorttext" 
-					/> <t:label for="timer_repeat_shorttext" /> &nbsp; <input t:id="timer_repeat_desc" t:type="checkbox" value="searchTimer.repeatdesc" label="message:timer_repeat_desc" 
-					/> <t:label for="timer_repeat_desc" /> </div> </fieldset> </div> <div class="form-group col-sm-12"> <fieldset class="scheduler-border"> <legend class="scheduler-border">Erweitert</legend> 
-					<div class="col-sm-6"> <t:label for="timer_episode" /> <t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" 
-					/> </div> <div class="col-sm-2"> <t:label for="timer_season" /> <t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" 
-					/> </div> <div class="col-sm-2"> <t:label for="timer_seasonpart" /> <t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" 
-					size="6" /> </div> <div class="col-sm-2"> <t:label for="timer_year" /> <t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" 
-					/> </div> <div class="col-sm-6"> <t:label for="timer_category" /> <t:TextField t:id="timer_category" value="searchTimer.category" label="message:timer_category" 
-					size="4" /> </div> <div class="col-sm-6"> <t:label for="timer_genre" /> <t:TextField t:id="timer_genre" value="searchTimer.genre" label="message:timer_genre" size="4" 
-					/> </div> </fieldset> </div> -->
-
 				<div class="form-group">
 					<div class="col-sm-9 col-sm-offset-3">
 						<t:submit value="${message:timer_save}" />&nbsp;
