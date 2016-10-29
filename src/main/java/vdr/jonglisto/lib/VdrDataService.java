@@ -27,6 +27,8 @@ public interface VdrDataService {
 	public Optional<List<String>> getGroups(String vdrUuid);	
 	public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group);
 	
+	public Optional<List<Channel>> getChannelsMap(String vdrUuid);
+	
 	/*
 	 * Timer
 	 */

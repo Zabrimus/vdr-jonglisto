@@ -1,6 +1,7 @@
 package vdr.jonglisto.web.pages;
 
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionAttribute;
@@ -23,6 +24,7 @@ public class Timer {
 	Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset, 
 						@RequestParameter(value = "newTimerUseId", allowBlank = true) String useid,
 						@RequestParameter(value = "channelName", allowBlank = true) String channelName) {
+
 		if (currentVdrView == null) {
 			// deep jump into this page?
 			return Index.class;

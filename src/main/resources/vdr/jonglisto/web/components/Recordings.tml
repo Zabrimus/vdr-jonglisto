@@ -121,17 +121,17 @@
 										</p:nameHeader>
 									</t:grid>
 
-									<div class="col-sm-12">
-										<div class="col-sm-3">
+									<div class="col-sm-36">
+										<div class="col-sm-9">
 											Ausgewählte Aufnahmen
 										</div>
 
-										<div class="col-sm-2">
+										<div class="col-sm-6">
 											<img src="${asset:delete.svg}" alt="Aufnahmen löschen" class="deleteicon" />
 											<t:linksubmit t:event="deleteRecordings">löschen</t:linksubmit>
 										</div>
 
-										<div class="col-sm-7">
+										<div class="col-sm-21">
 											<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
 											<t:linksubmit t:event="moveRecordings">verschieben nach</t:linksubmit>
 

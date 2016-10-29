@@ -53,32 +53,32 @@
 					</t:grid>
 
 					<t:if test="hasTimer()">
-						<div class="col-sm-12">
+						<div class="col-sm-36">
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								Ausgewählte Timer
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<img src="${asset:delete.svg}" alt="Timer löschen" class="deleteicon" />
 								<t:linksubmit t:event="deleteTimers">löschen</t:linksubmit>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<img src="${asset:record.svg}" alt="aktiv" class="timericon" />
 								<t:linksubmit t:event="activateTimers">aktivieren</t:linksubmit>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<img src="${asset:stop.svg}" alt="inaktiv" class="timericon" />
 								<t:linksubmit t:event="deactivateTimers">deaktivieren</t:linksubmit>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<t:linksubmit t:event="moveTimers">verschieben nach </t:linksubmit>
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<!-- 
 								<t:select t:id="selectedVdr" value="selectedVdr" model="VdrSelectModel" secure="never" blankLabel="Auswahl..." />
 								-->
@@ -117,16 +117,16 @@
 									<t:errors />								
 
 									<div class="form-group">
-										<div class="col-sm-3">
+										<div class="col-sm-9">
 										</div>
 
-										<div class="col-sm-9">
-											<div class="col-sm-3">
+										<div class="col-sm-18">
+											<div class="col-sm-9">
 												<t:label for="timer_active" />&nbsp;
 												<input t:id="timer_active" t:type="checkbox" value="timer.isActive" label="message:timer_active" />
 											</div>
 
-											<div class="col-sm-3">
+											<div class="col-sm-9">
 												<t:label for="timer_vps" />&nbsp;
 												<input t:id="timer_vps" t:type="checkbox" value="timer.vps" label="message:timer_vps" />
 											</div>
@@ -134,42 +134,42 @@
 									</div>
 									
 									<div class="form-group">
-										<t:label for="timer_date" class="col-sm-3" />
-										<div class="col-sm-4">
+										<t:label for="timer_date" class="col-sm-9" />
+										<div class="col-sm-12">
 											<t:TextField t:id="timer_date" value="timer.startDate" validate="regexp=^[0-9]{2}\.[0-9]{2}\.[0-9]{4}$" label="message:timer_date"
 												size="10" />
 										</div>
 									</div>
 
 									<div class="form-group">
-										<t:label for="timer_start" class="col-sm-3" />
+										<t:label for="timer_start" class="col-sm-9" />
 
-										<div class="col-sm-9">
+										<div class="col-sm-27">
 
-											<div class="control-label col-sm-1 label2">
+											<div class="control-label col-sm-3 label2">
 												${message:timer_time_from}
 											</div>
 
-											<div class="col-sm-3">
+											<div class="col-sm-9">
 												<t:TextField t:id="timer_start" value="timer.startTime" validate="regexp=^[0-9]{2}:[0-9]{2}$" size="6" label="message:timer_start" />
 											</div>
 
-											<div class="control-label col-sm-1 label2">
+											<div class="control-label col-sm-3 label2">
 												${message:timer_time_to}
 											</div>
 
-											<div class="col-sm-3">
+											<div class="col-sm-9">
 												<t:TextField t:id="timer_end" value="timer.stopTime" validate="regexp=^[0-9]{2}:[0-9]{2}$" size="6" label="message:timer_end" />
 											</div>
 										</div>
 									</div>
 
 									<div class="form-group">
-										<div class="control-label col-sm-3 label2">
+										<div class="control-label col-sm-9 label2">
 											${message:timer_weekdays}
 										</div>
 
-										<div class="col-sm-9">
+										<div class="col-sm-27">
 											<input t:id="timerMonday" t:type="checkbox" value="timer.monday" class="data-day-sel" label="message:timer_monday" />
 											<t:label for="timerMonday" />
 											&nbsp;
@@ -200,35 +200,35 @@
 									</div>
 
 									<div class="form-group">
-										<t:label for="timer_priority" class="col-sm-3" />
+										<t:label for="timer_priority" class="col-sm-9" />
 
-										<div class="col-sm-3">
+										<div class="col-sm-9">
 											<t:TextField t:id="timer_priority" value="timer.priority" validate="max=99,min=0" />
 										</div>
 
-										<t:label for="timer_lifetime" class="col-sm-3" />
+										<t:label for="timer_lifetime" class="col-sm-9" />
 
-										<div class="col-sm-3">
+										<div class="col-sm-9">
 											<t:TextField t:id="timer_lifetime" value="timer.lifetime" validate="max=99,min=0" />
 										</div>
 									</div>
 
 									<div class="form-group">
-										<t:label for="timer_titel" class="col-sm-3" />
-										<div class="col-sm-9">
+										<t:label for="timer_titel" class="col-sm-9" />
+										<div class="col-sm-27">
 											<t:TextField t:id="timer_titel" value="timer.filename" />
 										</div>
 									</div>
 
 									<div class="form-group">
-										<t:label for="timer_aux" class="col-sm-3" />
-										<div class="col-sm-9">
+										<t:label for="timer_aux" class="col-sm-9" />
+										<div class="col-sm-27">
 											<t:TextArea t:id="timer_aux" value="timer.aux" rows="10" />
 										</div>
 									</div>
 
 									<div class="form-group">
-										<div class="col-sm-9 col-sm-offset-3">
+										<div class="col-sm-27 col-sm-offset-9">
 											<t:submit value="${message:timer_save}" />&nbsp;
 											<t:eventlink event="cancel" class="btn btn-default">${message:timer_cancel}</t:eventlink>
 										</div>

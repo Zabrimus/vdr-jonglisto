@@ -70,4 +70,8 @@ public class Navbar extends BaseComponent {
 	public boolean isVdrSelected() {
 		return currentVdrView != null;
 	}
+	
+	public boolean isDeveloperMode() {
+		return configuration.isDeveloperMode();
+	}
 }

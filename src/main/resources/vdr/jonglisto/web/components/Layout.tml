@@ -10,12 +10,20 @@
 	</head>
 
 	<body style="padding-top:0">
+		<!-- 
+		INFO: 
+		conversation is the desired default strategy, but only if the conversation moderator works again for Tapestry 5.4.1
+		otherwise some persistent page data will be deleted too often and too early
+ 		
+		<t:conversation.moderator warnBeforeHandler="warnBeforeHandler" endedHandler="endedHandler" />
+		-->
+		
 		<div class="container-fluid">
-			<div class="col-md-2 mynavbar">
+			<div class="col-md-6 mynavbar">
 				<t:navbar />
 			</div>
 
-			<div class="col-md-10">
+			<div class="col-md-30">
 				<nav class="navbar navbar-default">
 					<div class="container-fluid">
 						<div class="navbar-header">							
@@ -32,17 +40,17 @@
 						<ul class="nav navbar-nav">
 							<t:loop source="views" value="view">
 								<t:any element="li" class="prop:classForView">
-									<t:eventlink event="selectView" context="view.displayName" class="btn btn-default">
+									<t:eventlink event="selectView" context="view.displayName">
 										${view.displayName}
 									</t:eventlink>
 								</t:any>
 							</t:loop>
-						</ul>
+						</ul>										
 					</div>
 				</nav>
 
 				<t:body />
 			</div>
-		</div>
+		</div>			
 	</body>
 </html>

@@ -1,6 +1,5 @@
 package vdr.jonglisto.web.pages;
 
-
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Import;
@@ -20,59 +19,60 @@ import vdr.jonglisto.lib.model.VDRView.Type;
  * Start page of application VDR Jonglisto app.
  */
 @Import(stylesheet = "META-INF/assets/css/Index.css")
-public class Index
-{
-	  @Inject
-	  private ConfigurationService configuration;
+public class Index {
+	
+	@Inject
+	private ConfigurationService configuration;
 
-	  @Inject
-	  private VdrDataService dataService;
-	  
-	  @Property
-	  private VDR vdr;
-	  
-	  @Property
-	  private Plugin plugin;
-	  
-	  @Property
-	  private Device device;
+	@Inject
+	private VdrDataService dataService;
 
-	  @SessionAttribute
-	  @Property
-	  private VDRView currentVdrView;
-	  
-	  public void onActivate() {
-		  if (currentVdrView == null) {
-			  // session is empty. re-init...
-			  currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == Type.View).findFirst().get();
-		  }
-	  }
-	  
-	  public List<VDR> getConfiguredVdrs() {
-		  return configuration.getSortedVdrList();
-	  }
-	  
-	  public void onWol(String uuid) {
-		  configuration.sendWol(uuid);
-	  }
-	  
-	  public boolean pingHost() {
-		  return configuration.pingHost(vdr.getIp());
-	  }
-	  
-	  public boolean testSvdrp() {
-		  return configuration.testSvdrp(vdr.getIp(), vdr.getSvdrpPort());
-	  }
-	  
-	  public boolean testRestfulApi() {
-		  return configuration.testRestfulApi(vdr.getIp(), vdr.getRestfulApiPort());
-	  }
-	  
-	  public List<Device> getDevices() {
-		  return dataService.getDevices(vdr.getUuid());
-	  }
-	  
-	  public List<Plugin> getPlugins() {
-		  return dataService.getPlugins(vdr.getUuid());
-	  }
+	@Property
+	private VDR vdr;
+
+	@Property
+	private Plugin plugin;
+
+	@Property
+	private Device device;
+
+	@SessionAttribute
+	@Property
+	private VDRView currentVdrView;
+
+	public void onActivate() {
+		if (currentVdrView == null) {
+			// session is empty. re-init...
+			currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == Type.View)
+					.findFirst().get();
+		}
+	}
+
+	public List<VDR> getConfiguredVdrs() {
+		return configuration.getSortedVdrList();
+	}
+
+	public void onWol(String uuid) {
+		configuration.sendWol(uuid);
+	}
+
+	public boolean pingHost() {
+		return configuration.pingHost(vdr.getIp());
+	}
+
+	public boolean testSvdrp() {
+		return configuration.testSvdrp(vdr.getIp(), vdr.getSvdrpPort());
+	}
+
+	public boolean testRestfulApi() {
+		return configuration.testRestfulApi(vdr.getIp(), vdr.getRestfulApiPort());
+	}
+
+	public List<Device> getDevices() {
+		return dataService.getDevices(vdr.getUuid());
+	}
+
+	public List<Plugin> getPlugins() {
+		return dataService.getPlugins(vdr.getUuid());
+	}
 }

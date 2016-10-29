@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -87,7 +88,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     
 	public Optional<List<Channel>> getChannels(String vdrUuid) {
 		return getJsonList(vdrUuid, "channels/.json", "channels", Channel.class);
-	}
+	}	
 	
 	public Optional<List<String>> getGroups(String vdrUuid) {
 		return getJsonList(vdrUuid, "channels/groups.json", "groups", String.class);
@@ -99,6 +100,21 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 		} else {
 			return getChannels(vdrUuid);
 		}			
+	}
+	
+	public Optional<List<Channel>> getChannelsMap(String vdrUuid) {
+		// get List of channels in VDR
+		Optional<List<Channel>> vdrChannels = getChannels(vdrUuid);
+		
+		// get List of channels in epg2vdr
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+		
+		try (Connection con = sql2o.open()) {
+			final List<String> channelMap = con.createQuery("select distinct channelid from channelmap").executeAndFetch(String.class);
+
+			// find all VDR channels, which are also in channelMap
+			return Optional.of(vdrChannels.orElse(Collections.emptyList()).stream().filter(c -> channelMap.contains(c.getId())).collect(Collectors.toList()));
+		}		
 	}
 	
 	/*

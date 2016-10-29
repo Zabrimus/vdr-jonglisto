@@ -72,4 +72,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 		return configuration.isUseSyncMap();
 	}
 
+	public boolean isDeveloperMode() {
+		return configuration.isDeveloperMode();
+	}
 }

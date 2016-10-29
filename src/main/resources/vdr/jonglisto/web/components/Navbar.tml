@@ -2,7 +2,7 @@
 	<t:content>
 		<ul class="nav nav-stacked nav-pills">			
 			<t:loop source="pageNames" value="page">			
-				<t:any element="li" class="prop:classForPage">
+				<t:any element="li" class="${prop:classForPage}">
 					<t:if test="vdrSelected">
 					   <t:pagelink page="${page.page}" t:parameters="{'reset':'true'}">${page.name}</t:pagelink>
 					</t:if>
@@ -13,6 +13,15 @@
 				</t:any>			
 			</t:loop>			
 		</ul>
+
+		<t:if test="developerMode">
+			<br/><br/><br/>			
+			<ul class="nav nav-stacked nav-pills">
+				<li>Developer-Seiten</li>
+				<li><t:pageLink page="t5dashboard" >Dashboard</t:pageLink></li>
+				<li><t:pageLink page="ExceptionReport" >Exception</t:pageLink></li>
+			</ul>
+		</t:if>
 	</t:content>
 </html>
 

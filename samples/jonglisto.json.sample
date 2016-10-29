@@ -2,6 +2,8 @@
   "channelImagePath": "/var/cache/Senderlogos/",
   
   "useRecordingSyncMap" : "false",
+  
+  "developer_mode": "false",
 
   "epg2vdr": {
     "url": "jdbc:mysql://server:3307/epg2vdr",

@@ -55,7 +55,7 @@
 						<img src="${asset:delete.svg}" alt="Suchtimer löschen" class="deleteicon" title="Suchttimer löschen" />
 					</t:eventlink>
 				</p:actionCell>
-			</t:grid>
+			</t:grid>					
 
 			<t:eventlink t:event="newSearchTimer" zone="^">
 				<img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="editicon" title="neuen Suchtimer erstellen" />
@@ -71,38 +71,38 @@
 
 				<t:errors />
 
-				<div class="form-group col-sm-12">
-					<div class="col-sm-4">
+				<div class="form-group col-sm-36">
+					<div class="col-sm-12">
 						<t:label for="timer_type" />
 						<br />
 						<t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=aufnehmen,V=umschalten,S=suchen" />
 					</div>
 
-					<div class="col-sm-4">
+					<div class="col-sm-12">
 						<t:label for="timer_name" />
 						<br />
 						<t:TextField t:id="timer_name" value="searchTimer.name" label="message:timer_name" size="25" />
 					</div>
 
-					<div class="col-sm-2">
+					<div class="col-sm-6">
 						<t:label for="timer_active" />
 						<br />
 						<input t:id="timer_active" t:type="checkbox" value="searchTimer.active" label="message:timer_active" />
 					</div>
 
-					<div class="col-sm-2">
+					<div class="col-sm-6">
 						<t:label for="timer_vps" />
 						<br />
 						<input t:id="timer_vps" t:type="checkbox" value="searchTimer.vps" label="message:timer_vps" />
 					</div>
 				</div>
 
-				<div class="form-group col-sm-12">
-					<div class="col-sm-6">
+				<div class="form-group col-sm-36">
+					<div class="col-sm-18">
 						<fieldset class="scheduler-border">
 							<legend class="scheduler-border">Suchkriterien</legend>
 							
-							<div class="col-sm-8">
+							<div class="col-sm-24">
 								<t:label for="timer_searchitem" />
 								<br />
 								<t:TextField t:id="timer_searchitem" value="searchTimer.expression" label="message:timer_searchitem" size="20" />
@@ -142,7 +142,7 @@
 
 							</div>
 
-							<div class="col-sm-4">
+							<div class="col-sm-12">
 								<t:label for="timer_searchmode" />
 								<br />
 								<t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode" model="literal:1=Exakt,2=regulärer Ausdruck,3=Muster,4=enthalten in" />
@@ -167,36 +167,36 @@
 
 					</div>
 
-					<div class="col-sm-6">
+					<div class="col-sm-18">
 						<fieldset class="scheduler-border">
 							<legend class="scheduler-border">Erweitert</legend>
 
-							<div class="col-sm-6">
+							<div class="col-sm-18">
 								<t:label for="timer_episode" />
 								<t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" />
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<t:label for="timer_season" />
 								<t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" />
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<t:label for="timer_seasonpart" />
 								<t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" size="6" />
 							</div>
 
-							<div class="col-sm-2">
+							<div class="col-sm-6">
 								<t:label for="timer_year" />
 								<t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" />
 							</div>
 
-							<div class="col-sm-6">
+							<div class="col-sm-18">
 								<t:label for="timer_category" />
 								<t:TextField t:id="timer_category" value="searchTimer.category" label="message:timer_category" size="4" />
 							</div>
 
-							<div class="col-sm-6">
+							<div class="col-sm-18">
 								<t:label for="timer_genre" />
 								<t:TextField t:id="timer_genre" value="searchTimer.genre" label="message:timer_genre" size="4" />
 							</div>
@@ -206,8 +206,10 @@
 					</div>
 				</div>
 
+				<t:channelSelectPalette />	
+
 				<div class="form-group">
-					<div class="col-sm-9 col-sm-offset-3">
+					<div class="col-sm-27 col-sm-offset-9">
 						<t:submit value="${message:timer_save}" />&nbsp;
 						<t:eventlink event="cancel" class="btn btn-default">${message:timer_cancel}</t:eventlink>
 					</div>

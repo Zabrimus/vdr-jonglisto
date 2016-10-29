@@ -16,6 +16,11 @@ public class ChannelEncoder implements ValueEncoder<Channel>, ValueEncoderFactor
 	public ChannelEncoder() {
 		channels = new HashMap<>();
 	}
+
+	public ChannelEncoder(List<Channel> ch) {
+		channels = new HashMap<>();
+		addChannels(ch);
+	}
 	
     @Override
     public String toClient(Channel value) {

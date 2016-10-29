@@ -23,6 +23,7 @@ import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
+import org.apache.tapestry5.services.pageload.PreloaderMode;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -111,21 +112,33 @@ public class AppModule {
 	@Contribute(SymbolProvider.class)
 	@ApplicationDefaults
 	public static void setupEnvironment(MappedConfiguration<String, Object> configuration) {
-		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
-		// configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:mybootstrap");
-		configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
+		configuration.override(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
+        configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:jbootstrap");
+        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "random value!");
+        
+		// configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
 		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
 		configuration.add(SymbolConstants.ENABLE_PAGELOADING_MASK, true);
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "de");		
 		configuration.add(SymbolConstants.CLUSTERED_SESSIONS, false);
 		configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
 		configuration.add(SymbolConstants.COMPACT_JSON, true);
-		
-		configuration.add(SymbolConstants.HMAC_PASSPHRASE, "random value!");
+		configuration.add(SymbolConstants.COMPRESS_WHITESPACE, true);
+		configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
+		configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
 		
 		// configuration.add("tapestry.closure-compiler-level", "WHITESPACE_ONLY");
 		configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS");
-		// configuration.add("tapestry.closure-compiler-level", "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this! 
+		// configuration.add("tapestry.closure-compiler-level", "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this!
+
+        // INFO:
+		// only in production 1 to 5 minutes        
+        // configuration.add(SymbolConstants.FILE_CHECK_INTERVAL, 60);
+		
+		// INFO: 
+		// conversation is the desired default strategy, but only if the conversation moderator works again for Tapestry 5.4.1
+		// otherwise some persistent page data will be deleted too often and too early
+		// configuration.add(SymbolConstants.PERSISTENCE_STRATEGY, "conversation");		 
 	}
 
 	public RequestFilter buildTimingFilter(final Logger log) {
