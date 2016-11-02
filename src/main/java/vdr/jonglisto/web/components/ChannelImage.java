@@ -1,7 +1,5 @@
 package vdr.jonglisto.web.components;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,9 +14,14 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Response;
 
+import vdr.jonglisto.web.services.GlobalLogoFilename;
+
 @Import(stylesheet = "META-INF/assets/css/ChannelImage.css")
 public class ChannelImage extends BaseComponent {
 
+	@Inject
+	private GlobalLogoFilename logoCache;
+	
 	@Property
 	@Parameter(required = true)
 	private String channelName;
@@ -26,27 +29,28 @@ public class ChannelImage extends BaseComponent {
 	@Inject
 	@Path("META-INF/assets/empty_channel.png")
 	protected Asset emptyChannel;
-	
+
 	public boolean isLogoExists() {
 		if (channelName == null) {
 			return false;
 		}
-		
-		File fileSvg = new File(configuration.getChannelImagePath() + channelName.toLowerCase() + ".svg");
-		
-		if (fileSvg.exists()) {
-			return true;
+
+		InputStream inputStream = null;
+		try {
+			// inputStream = getResourceAsStream(channelName);
+			inputStream = logoCache.getResource(channelName);
+			return inputStream != null;			
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
 		}
-		
-		File filePng = new File(configuration.getChannelImagePath() + channelName.toLowerCase() + ".png");
-		
-		if (filePng.exists()) {
-			return true;
-		}
-		
-		return false;
 	}
-	
+
 	public Link getChannelImageLink() {
 		return componentResources.createEventLink("channelImage", channelName);
 	}
@@ -55,33 +59,17 @@ public class ChannelImage extends BaseComponent {
 	public StreamResponse createChannelImage(String channel) {
 		return new StreamResponse() {
 			InputStream inputStream;
-			boolean isSvg = false;
 
 			@Override
 			public void prepareResponse(Response response) {
 				try {
-					File file = null;
-
-					if ((channel != null) && (channel.length() > 0)) {
-						file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".svg");
-						
-						if (!file.exists()) {
-							file = new File(configuration.getChannelImagePath() + channel.toLowerCase() + ".png");
-
-							if (!file.exists()) {
-								file = null;
-							}
-						} else {
-							isSvg = true;
-						}
-					}
-
-					if (file != null) {
-						inputStream = new FileInputStream(file);
-					} else {
+					// inputStream = getResourceAsStream(channel);
+					inputStream = logoCache.getResource(channel);
+					
+					if (inputStream == null) {
 						inputStream = emptyChannel.getResource().openStream();
 					}
-
+					
 					response.setHeader("Content-Length", "" + inputStream.available());
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -90,11 +78,7 @@ public class ChannelImage extends BaseComponent {
 
 			@Override
 			public String getContentType() {
-				if (isSvg) {
-					return "image/svg+xml";
-				} else {
-					return "text/png";
-				}
+				return "text/png";
 			}
 
 			@Override
@@ -102,5 +86,37 @@ public class ChannelImage extends BaseComponent {
 				return inputStream;
 			}
 		};
+	}
+
+	private InputStream getResourceAsStream(String channel) {
+		return logoCache.getResource(channel);
+		
+		
+		
+		
+		
+		/*
+		if ((channel != null) && (channel.length() > 0)) {
+			// new version, try to find the logo in logo.jar
+			String filename = StringUtils.stripAccents(channel)//					
+					.replaceAll("\\&", "and")//
+					.replaceAll("\\+", "plus")//
+					.replaceAll("\\*", "star");
+			
+			String filename2 = filename.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+			
+			InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("/logo/" + filename2 + ".png");
+			
+			if (inputStream == null) {
+				// try to find similar channel images
+				filename2 = filename.replaceAll("\\w*\\(S\\)$", "").replaceAll("\\w*HD$", "").replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+				inputStream = this.getClass().getClassLoader().getResourceAsStream("/logo/" + filename2 + ".png");
+			}
+
+			return inputStream;
+		}
+		
+		return null;
+		*/
 	}
 }

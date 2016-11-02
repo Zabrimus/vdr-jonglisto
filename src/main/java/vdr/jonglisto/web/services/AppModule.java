@@ -61,6 +61,7 @@ public class AppModule {
 		binder.bind(CommandService.class, CommandServiceImpl.class);
 		binder.bind(SearchTimerService.class, SearchTimerServiceImpl.class);
 		binder.bind(ChannelEncoder.class);
+		binder.bind(GlobalLogoFilename.class);
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
@@ -116,7 +117,7 @@ public class AppModule {
         configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:jbootstrap");
         configuration.add(SymbolConstants.HMAC_PASSPHRASE, "random value!");
         
-		// configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
+		configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
 		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
 		configuration.add(SymbolConstants.ENABLE_PAGELOADING_MASK, true);
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "de");		
@@ -128,7 +129,7 @@ public class AppModule {
 		configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
 		
 		// configuration.add("tapestry.closure-compiler-level", "WHITESPACE_ONLY");
-		configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS");
+		configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--
 		// configuration.add("tapestry.closure-compiler-level", "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this!
 
         // INFO:

@@ -58,7 +58,7 @@ public class Channel {
 	public void setGroup(String group) {
 		this.group = group;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Channel [id=" + id + ", name=" + name + ", number=" + number + ", group=" + group + "]";

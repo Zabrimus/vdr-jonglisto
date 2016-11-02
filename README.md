@@ -15,6 +15,13 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 * vdr restfulapi plugin, at least version 0.2.6.5
 * java 8
 
+### Channel logos
+The application now uses channel logos from <https://github.com/picons/picons-source>. To build the necessary logo.jar ju,p into directory tools and start ./build-logo-jar.sh.
+This jar have to created only at the very first build or if there exists some new and interesting logos. The logo.jar has a size of only 8MB.
+
+### Theme
+The application currently use a theme from <https://bootswatch.com/cerulean/>. If you want to change the default theme, change build.less in directory tools/build-bootstrap and start build.sh in the same directory.
+
 ### Build instructions 
 
 There exist multiple possibilities to build and start the application. 
@@ -22,9 +29,13 @@ There exist multiple possibilities to build and start the application.
 1.  Use the docker repository <https://github.com/Zabrimus/vdr-jonglisto-docker>.
 
 2.  Build a war file which can be deployed in a running servlet container like jetty or tomcat.
+	> cd tools; ./build-logo-jar.sh
+	
 	> ./build.sh war
 	
-3.  Build a runnable (hybrid) war file which either can be deployed  (see 2.) or can be started as normal application.  
+3.  Build a runnable (hybrid) war file which either can be deployed  (see 2.) or can be started as normal application.
+	> cd tools; ./build-logo-jar.sh
+	  
 	> ./build.sh standaloneWar
 	
 	> Start with java -jar vdr-jonglisto-0.0.1.war
@@ -34,19 +45,10 @@ There exist multiple possibilities to build and start the application.
 ### Configuration
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
 
-* **channelImagePath:** path to channel logos, png and svg images are supported. But the svg images have still problems with the aspect ratio. This problem needs to be fixed.
-```json
-	"channelImagePath": "/var/cache/Senderlogos/"
-```
  
 * **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
 ```json
 	"useRecordingSyncMap" : "false"
-```
-	
-* **areYouSureToUseSyncMap:** Another warning to not set "useRecordingSyncMap" to "true".
-```json
-	"areYouSureToUseSyncMap" : "false"
 ```
 	
 * **epg2vdr:** configuration of the mysql connector to epg2vdr database.

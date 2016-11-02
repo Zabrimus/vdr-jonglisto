@@ -1,5 +1,33 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<t:content>
-		<t:Palette t:id="palette" t:model="model" t:selected="selectedValues" t:encoder="encoder"/>
+		<div class="form-group">
+			<div class="col-sm-12">
+				Kanalliste sortieren nach:
+				<br />
+				<t:zone t:id="channelPaletteZone" id="channelPaletteZone">
+					<t:RadioGroup value="channelSelectType">
+						<t:Radio t:id="select_vdr" value="literal:1" label="message:select_vdr" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" ZoneUpdater.event="palSelectVdr" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')"/>
+						<t:label for="select_vdr" />&nbsp;
+						<t:Radio t:id="select_channelmap" value="literal:2" label="message:select_channelmap" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" ZoneUpdater.event="palSelectMap" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')"/>
+						<t:label for="select_channelmap" />&nbsp;
+					</t:RadioGroup>
+
+					<t:Checkbox t:id="select_alpha" type="checkbox" label="message:select_alpha" value="sortAlpha" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" ZoneUpdater.event="palSelectAlpha" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')" />
+					<t:label for="select_alpha" />&nbsp;
+					<br />
+					
+					<!-- 
+					<t:select t:id="group" model="groups" value="group" blankOption="ALWAYS" blankLabel="Alle..." zone="channelPaletteZone" disabled="selectBoxEnabled" />
+					-->
+					<t:select t:id="group" model="groups" value="group" blankOption="ALWAYS" blankLabel="Alle..." disabled="selectBoxEnabled" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" ZoneUpdater.event="palSelectGroup" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')"/>
+					<br />
+
+					<div id="chpal">
+					<t:Palette t:id="XXpalette" t:model="model" t:selected="selectedValues" t:encoder="encoder" />
+					</div>
+				</t:zone>
+			</div>
+		</div>
 	</t:content>
-</html>	
+</html>
+	

@@ -13,6 +13,12 @@ targetCompatibility = "1.8"
 group = "vdr.jonglisto"
 version = "0.0.1"
 
+buildscript {
+  repositories {
+    jcenter()
+  }
+}
+
 repositories {
     mavenLocal()
 
@@ -54,6 +60,8 @@ sourceSets {
 // sourceSets.main.compileClasspath += configurations.embeddedJetty
 
 dependencies {
+    // build logo.jar in directory 'tools' with ./build-logo-jar.sh
+	compile files('external-jar/logo.jar')
 
     compile  'org.apache.tapestry:tapestry-core:5.4.1'
 	compile  'org.apache.tapestry:tapestry-ioc:5.4.1'
