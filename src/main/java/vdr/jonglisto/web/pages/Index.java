@@ -2,7 +2,6 @@ package vdr.jonglisto.web.pages;
 
 import java.util.List;
 
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -18,7 +17,6 @@ import vdr.jonglisto.lib.model.VDRView.Type;
 /**
  * Start page of application VDR Jonglisto app.
  */
-@Import(stylesheet = "META-INF/assets/css/Index.css")
 public class Index {
 	
 	@Inject

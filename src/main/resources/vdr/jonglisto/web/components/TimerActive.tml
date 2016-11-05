@@ -1,14 +1,14 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<t:content>
 		<t:if test="value">
-			<img src="${asset:record.svg}" alt="aktiv" title="aktiv" class="timericon" />
+			<img src="${asset:record.svg}" alt="aktiv" title="aktiv" class="iconwhlarge" />
 			<t:if test="text">
 				ja
 			</t:if>
 		</t:if>
 
 		<t:if test="value" negate="true">
-			<img src="${asset:stop.svg}" alt="inaktiv" title="inaktiv" class="timericon" />
+			<img src="${asset:stop.svg}" alt="inaktiv" title="inaktiv" class="iconwhlarge" />
 			<t:if test="text">
 				nein
 			</t:if>
@@ -16,7 +16,7 @@
 		
 		<t:if test="recording">
 			&nbsp;
-			<img src="${asset:recording.svg}" alt="aktiv" title="aktiv" class="timericon" />
+			<img src="${asset:recording.svg}" alt="aktiv" title="aktiv" class="iconwhlarge" />
 		</t:if>
 	</t:content>
 </html>

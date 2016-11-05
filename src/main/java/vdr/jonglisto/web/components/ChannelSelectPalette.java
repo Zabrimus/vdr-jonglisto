@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -19,7 +18,6 @@ import org.apache.tapestry5.services.SelectModelFactory;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
 
-@Import(stylesheet = "META-INF/assets/css/ChannelSelectPalette.css")
 public class ChannelSelectPalette extends BaseComponent {
 
 	@Inject

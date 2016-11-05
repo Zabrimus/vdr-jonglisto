@@ -44,21 +44,21 @@
 
 				<p:actionCell>
 					<t:eventlink t:event="executeSearchTimer" t:context="searchTimer.id" zone="^">
-						<img src="${asset:search.svg}" alt="Suchtimer ausführen" class="searchicon" title="Suchtimer ausführen" />
+						<img src="${asset:search.svg}" alt="Suchtimer ausführen" class="iconwh" title="Suchtimer ausführen" />
 					</t:eventlink>
 					&nbsp;
 					<t:eventlink t:event="editSearchTimer" t:context="searchTimer.id" zone="^">
-						<img src="${asset:edit.svg}" alt="Suchtimer bearbeiten" class="editicon" title="Suchtimer bearbeiten" />
+						<img src="${asset:edit.svg}" alt="Suchtimer bearbeiten" class="iconwh" title="Suchtimer bearbeiten" />
 					</t:eventlink>
 					&nbsp;
 					<t:eventlink t:event="deleteSearchTimer" t:context="searchTimer.id">
-						<img src="${asset:delete.svg}" alt="Suchtimer löschen" class="deleteicon" title="Suchttimer löschen" />
+						<img src="${asset:delete.svg}" alt="Suchtimer löschen" class="iconwh" title="Suchttimer löschen" />
 					</t:eventlink>
 				</p:actionCell>
 			</t:grid>					
 
 			<t:eventlink t:event="newSearchTimer" zone="^">
-				<img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="editicon" title="neuen Suchtimer erstellen" />
+				<img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="iconwh" title="neuen Suchtimer erstellen" />
 				Neuen Suchtimer erstellen
 			</t:eventlink>
 		</t:block>

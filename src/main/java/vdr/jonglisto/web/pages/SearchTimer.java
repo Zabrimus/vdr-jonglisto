@@ -1,13 +1,10 @@
 package vdr.jonglisto.web.pages;
 
-import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionAttribute;
 
 import vdr.jonglisto.lib.model.VDRView;
 
-@Import(stylesheet = "META-INF/assets/css/SearchTimer.css")
 public class SearchTimer {
 
     @SessionAttribute

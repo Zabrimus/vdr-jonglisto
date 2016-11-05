@@ -1,0 +1,299 @@
+@import "includes.less";
+
+table {
+	tr {
+		th, td {
+			padding: 0;
+			margin: 0;
+			vertical-align: top;
+		}
+	}
+}
+
+.status {
+	.border(2px);	
+	margin: 10px;
+	
+	thead {
+		background-color: highlight;
+		
+		th {
+			text-align: center;
+		}
+		
+		tr {
+			.border(1px);
+		}			
+	}
+	
+	tbody {
+		tr {
+			.border(1px);
+		}
+		
+		td {
+			padding: 10px;
+		}		
+	}
+}
+
+.vdrinfo {
+	display: inline-block;
+}
+
+.centertop {
+    text-align: center;
+    vertical-align: top;
+}
+
+.lptop {
+   .ptop(10px);
+}
+
+.iconwh {
+	.wh(20px, 20px);
+}
+
+.iconwhsmall {
+	.wh(15px, 15px);
+}
+
+.iconwhlarge {
+	.wh(24px, 24px);
+}	
+
+.channelimage {
+	.wh(70px, 53px);
+}
+
+.epg-data {
+	.mtop(10px);
+}
+
+.epg-header {
+	background-color: aqua;
+	font-weight: bold;
+	font-family: fantasy;
+	font-size: 1.2em	
+}
+
+.epg-header-right {
+	text-align: right;
+	display: inline;
+	margin-left:30px;
+}
+	
+.epg-title {
+	margin-top: 10px;
+	font-weight: bold;
+	font-size: 1.2em
+}
+
+.epg-shorttext {	
+	font-weight: bold;
+}
+
+.epg-image {
+  display: inline-block;
+  margin: 9px;
+  width: 200px;
+}
+
+.epg_image_actor figcaption {
+  width: 240px;
+  text-align: center;
+}
+
+.epg_image_actor {
+  .epg_image_tmpl(9px, 240px);
+}
+
+.epg_image_banner, .epg_image_epipic, .epg_image_season {
+  .epg_image_tmpl(9px, 800px);
+}
+ 
+.epg_image_fanart, .epg_image_poster {
+  .epg_image_tmpl(9px, 370px);
+}
+
+.progress, .progress-bar {
+	.mapa(0);
+}
+
+.timeCell {
+  vertical-align: top;
+  min-width: 8em;
+  max-width: 8em;
+  width: 8em;
+}
+
+.titleCell {
+  max-width: 70%;
+  width: 70%;
+}
+
+.actionCell {
+  vertical-align: top;
+  min-width: 100px;
+}
+
+.genreCell  {	
+}
+
+.categoryCell {
+}
+
+.navheader {
+	font-weight: bolder;
+	text-decoration: underline;
+}
+
+.mynavbar {
+	padding-top: 10px;
+}
+
+.tree-container .last {
+	background-image: none;
+	padding: 0;
+}
+
+.tree-label a {
+	text-decoration: none;
+	cursor: pointer;
+	color: #444;
+}
+
+.selected {
+	font-weight: bold;
+}
+
+.recTreeColumn {
+	vertical-align: top;
+	max-width: 25em;
+	min-width: 25em;
+}
+
+.recInfoColumn {
+	vertical-align: top;
+	padding-left: 20px;
+	width:100%;
+}
+
+.recordingTable {
+	width: 100%;	
+}
+
+.channelgroup {
+  display: inline-block;
+  max-width: 150px;
+  margin-right: 10px;
+}
+.channelName {
+  display: inline-block;
+  max-width: 150px;
+  margin-right: 10px;
+}
+.genre {
+  display: inline-block;
+  width: 150px;
+  margin-right: 10px;
+}
+.category {
+  display: inline-block;
+  width: 150px;
+  margin-right: 10px;
+}
+.searchtext {
+  display: inline-block;
+  width: 160px;
+  margin-right: 10px;
+}
+.searchtime {
+  display: inline-block;
+  width: 160px;
+  margin-right: 10px;
+}
+
+.longdate {
+  font-weight: bolder;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.tree-container .last {
+  background-image: none;
+  padding: 0;
+}
+
+.tree-label a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #444;
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.recTreeColumn {
+  vertical-align: top;
+  max-width: 25em;
+  min-width: 25em;
+}
+
+.recInfoColumn {
+  vertical-align: top;
+  padding-left: 20px;
+  width: 100%;
+}
+
+.recordingTable {
+  width: 100%;
+}
+
+.border {
+  border: 1px solid;
+  border-color: LightGrey;
+}
+
+fieldset.scheduler-border {
+  border: 1px groove #ddd;
+  padding: 0 1.4em 1.4em 1.4em;
+  margin: 0 0 1.5em 0;
+}
+legend.scheduler-border {
+  width: inherit;
+  padding: 0 10px;
+  border-bottom: none;
+  font-size: 1em;
+  font-weight: bold;
+}
+legend {
+  margin-bottom: 0;
+}
+.label2 {
+  font-weight: bold;
+}
+
+
+[data-grid-property="time"] {
+  vertical-align: top;
+  min-width: 8em;
+}
+[data-grid-property="action"] {
+  vertical-align: top;
+  min-width: 100px;
+}
+
+[data-grid-property="duration"], [data-grid-property="startTime"], [data-grid-property="stopTime"], [data-grid-property="startDate"] {  
+  text-align: center;
+}
+
+[data-grid-property="duration"],
+[data-grid-property="recStartTime"],
+[data-grid-property="recStartDate"],
+[data-grid-property="fileSize"] {
+  text-align: center;
+  vertical-align: top;
+}
+

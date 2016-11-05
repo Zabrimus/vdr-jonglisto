@@ -6,7 +6,6 @@ import java.io.InputStream;
 
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.StreamResponse;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -14,7 +13,6 @@ import org.apache.tapestry5.services.Response;
 
 import vdr.jonglisto.lib.model.EPGMedia;
 
-@Import(stylesheet = "META-INF/assets/css/EpgImage.css")
 public class EpgImage extends BaseComponent {
 	
 	@Property
@@ -136,29 +134,29 @@ public class EpgImage extends BaseComponent {
 	
 	public String getCssClass() {
 		if (filename != null) {
-			return "epgimage";
+			return "epg-image";
 		} else {
 			switch (imageKey.getTabType()) {
 			case Actor:
-				return "mi_actor";
+				return "epg_image_actor";
 				
 			case Banner:
-				return "mi_banner";
+				return "epg_image_banner";
 				
 			case EpisodePic:
-				return "mi_epipic";
+				return "epg_image_epipic";
 				
 			case FanArt:
-				return "mi_fanart";
+				return "epg_image_fanart";
 				
 			case Poster:
-				return "mi_poster";
+				return "epg_image_poster";
 				
 			case SeasonPoster:
-				return "mi_season";
+				return "epg_image_season";
 				
 			default:
-				return "mediaimage";
+				return "";
 			}
 		}
 	}

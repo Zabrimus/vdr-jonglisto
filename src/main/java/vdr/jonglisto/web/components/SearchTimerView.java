@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.Block;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -18,7 +17,6 @@ import org.apache.tapestry5.services.BeanModelSource;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.SearchTimer;
 
-@Import(stylesheet = "META-INF/assets/css/SearchTimerView.css")
 public class SearchTimerView extends BaseComponent {
 	
 	public enum Function {

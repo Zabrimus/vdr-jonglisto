@@ -20,7 +20,7 @@ import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.VDRView.Type;
 import vdr.jonglisto.web.pages.Index;
 
-@Import(module = "bootstrap/collapse", stylesheet = "META-INF/assets/css/Layout.css")
+@Import(module = "bootstrap/collapse", stylesheet = "META-INF/assets/css/jonglisto.less")
 @Meta("tapestry.persistence-strategy=conversation")
 public class Layout extends BaseComponent {
 

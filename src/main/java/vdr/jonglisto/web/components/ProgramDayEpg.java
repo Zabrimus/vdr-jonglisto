@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -17,7 +16,6 @@ import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.util.EpgSorter;
 import vdr.jonglisto.web.conduit.MapPropertyConduit;
 
-@Import(stylesheet = "META-INF/assets/css/ProgramDayEpg.css")
 public class ProgramDayEpg extends ProgramBaseEpg {
 	@Property
 	private BeanModel<Object> epgModel;

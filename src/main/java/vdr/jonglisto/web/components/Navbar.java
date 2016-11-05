@@ -3,12 +3,10 @@ package vdr.jonglisto.web.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentClassResolver;
 
-@Import(stylesheet = "META-INF/assets/css/Navbar.css")
 public class Navbar extends BaseComponent {
 	
 	public class NavPage {

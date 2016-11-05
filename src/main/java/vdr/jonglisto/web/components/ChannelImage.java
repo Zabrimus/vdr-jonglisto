@@ -6,7 +6,6 @@ import java.io.InputStream;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.StreamResponse;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Path;
@@ -16,7 +15,6 @@ import org.apache.tapestry5.services.Response;
 
 import vdr.jonglisto.web.services.GlobalLogoFilename;
 
-@Import(stylesheet = "META-INF/assets/css/ChannelImage.css")
 public class ChannelImage extends BaseComponent {
 
 	@Inject

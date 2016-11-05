@@ -19,11 +19,11 @@
 		-->
 		
 		<div class="container-fluid">
-			<div class="col-md-6 mynavbar">
+			<div class="col-md-6 lptop">
 				<t:navbar />
 			</div>
 
-			<div class="col-md-30">
+			<div class="col-md-30 lptop">
 				<nav class="navbar navbar-default">
 					<div class="container-fluid">
 						<div class="navbar-header">							

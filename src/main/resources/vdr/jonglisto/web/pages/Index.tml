@@ -2,13 +2,13 @@
 
 	<t:loop source="configuredVdrs" value="vdr">
 		<div class="vdrinfo">
-			<table id="status">
+			<table class="status">
 				<thead>
 					<tr>
 						<th colspan="3">
 							${vdr.displayName}&nbsp;
 							<t:eventlink t:event="wol" t:context="vdr.uuid">
-								<img src="${asset:wol.svg}" alt="WOL" class="wol" />
+								<img src="${asset:wol.svg}" alt="WOL" class="iconwhsmall" />
 							</t:eventlink>
 						</th>
 					</tr>
@@ -20,9 +20,9 @@
 						<td>${vdr.ip}</td>
 						<td>
 							<t:if test="pingHost()">
-								<img src="${asset:ok.svg}" alt="OK" class="svdrpok" />
+								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
 								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="svdrpnok" />
+									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
 								</p:else>
 							</t:if>
 						</td>
@@ -32,9 +32,9 @@
 						<td>${vdr.svdrpPort}</td>
 						<td>
 							<t:if test="testSvdrp()">
-								<img src="${asset:ok.svg}" alt="OK" class="svdrpok" />
+								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
 								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="svdrpnok" />
+									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
 								</p:else>
 							</t:if>
 						</td>
@@ -44,9 +44,9 @@
 						<td>${vdr.restfulApiPort}</td>
 						<td>
 							<t:if test="testRestfulApi()">
-								<img src="${asset:ok.svg}" alt="OK" class="restfulapiok" />
+								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
 								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="restfulapinok" />
+									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
 								</p:else>
 							</t:if>
 						</td>

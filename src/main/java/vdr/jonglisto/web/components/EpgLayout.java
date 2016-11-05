@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -24,7 +23,6 @@ import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
 
-@Import(stylesheet = "META-INF/assets/css/EpgLayout.css")
 public class EpgLayout extends BaseComponent {
 
 	public enum Function {

@@ -23,21 +23,21 @@
 												</t:eventlink> &nbsp;
 												
 												<t:eventlink t:event="editTimer" t:context="timer.id" zone="^">
-													<img src="${asset:edit.svg}" alt="Timer bearbeiten" class="editicon" title="Timer bearbeiten"/>
+													<img src="${asset:edit.svg}" alt="Timer bearbeiten" class="iconwh" title="Timer bearbeiten"/>
 												</t:eventlink> &nbsp;
 												
 												<t:eventlink t:event="deleteTimer" t:context="timer.id">
-													<img src="${asset:delete.svg}" alt="Timer löschen" class="deleteicon" title="Timer löschen"/>
+													<img src="${asset:delete.svg}" alt="Timer löschen" class="iconwh" title="Timer löschen"/>
 												</t:eventlink>
 											</t:if>
 										</div>
 									</div>
 
-									<div class="row col-md-36 epg-title">
+									<div class="row col-md-36 epg-data">
 										${map:epg['title']}
 									</div>
 
-									<div class="row col-md-36 epg-shorttext">
+									<div class="row col-md-36 epg-data">
 										${map:epg['shorttext']}
 									</div>
 
@@ -56,13 +56,13 @@
 														<t:trigger event="loadEpgData" />
 
 														<t:if test="${map:epg['movie_tagline']}">
-															<div class="row col-md-36 epg-season">
+															<div class="row col-md-36 epg-data">
 																${map:epg['movie_tagline']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['season']}">
-															<div class="row col-md-36 epg-season">
+															<div class="row col-md-36 epg-data">
 																<strong>Staffel:</strong>
 																${map:epg['season']},
 																<strong>Staffelfolge:</strong>
@@ -73,13 +73,13 @@
 														</t:if>
 
 														<t:if test="${map:epg['series_status']}">
-															<div class="row col-md-36 epg-season">
+															<div class="row col-md-36 epg-data">
 																<strong>Status:</strong>
 																${map:epg['series_status']}
 															</div>
 														</t:if>
 
-														<div class="row col-md-36 epg-info">
+														<div class="row col-md-36 epg-data">
 															<t:if test="${map:epg['genre']}">
 																<strong>Genre:</strong>
 																${map:epg['genre']},
@@ -115,73 +115,73 @@
 														</div>
 
 														<t:if test="${map:epg['longdescription']}">
-															<div class="row col-md-36 epg-long">
+															<div class="row col-md-36 epg-data">
 																${map:epg['longdescription']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['movie_overview']}">
-															<div class="row col-md-36 epg-long">
+															<div class="row col-md-36 epg-data">
 																${map:epg['movie_overview']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['episode_overview']}">
-															<div class="row col-md-36 epg-long">
+															<div class="row col-md-36 epg-data">
 																${map:epg['episode_overview']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['series_overview']}">
-															<div class="row col-md-36 epg-long">
+															<div class="row col-md-36 epg-data">
 																<strong>Serienübersicht:</strong>
 																${map:epg['series_overview']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['actor']}">
-															<div class="row col-md-36 epg-actor">
+															<div class="row col-md-36 epg-data">
 																<strong>Darsteller:</strong>
 																${map:epg['actor']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['director']}">
-															<div class="row col-md-36 epg-director">
+															<div class="row col-md-36 epg-data">
 																<strong>Regie:</strong>
 																${map:epg['director']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['audio']}">
-															<div class="row col-md-36 epg-audio">
+															<div class="row col-md-36 epg-data">
 																<strong>Audio:</strong>
 																${map:epg['audio']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['flags']}">
-															<div class="row col-md-36 epg-flags">
+															<div class="row col-md-36 epg-data">
 																<strong>Flags:</strong>
 																${map:epg['flags']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['shortreview']}">
-															<div class="row col-md-36 epg-shortreview">
+															<div class="row col-md-36 epg-data">
 																<strong>Kurzreview:</strong>
 																${map:epg['shortreview']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['tipp']}">
-															<div class="row col-md-36 epg-tipp">
+															<div class="row col-md-36 epg-data">
 																<strong>Bewertung:</strong>
 																${map:epg['tipp']}
 															</div>
 														</t:if>
 
-														<div class="row col-md-36 epg-rating">
+														<div class="row col-md-36 epg-data">
 															<t:if test="${map:epg['rating']}">
 																<strong>Rating:</strong>
 																${map:epg['rating']}
@@ -204,35 +204,35 @@
 														</div>
 
 														<t:if test="${map:epg['moderator']}">
-															<div class="row col-md-36 epg-moderator">
+															<div class="row col-md-36 epg-data">
 																<strong>Moderator:</strong>
 																${map:epg['moderator']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['other']}">
-															<div class="row col-md-36 epg-other">
+															<div class="row col-md-36 epg-data">
 																<strong>Andere:</strong>
 																${map:epg['other']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['guest']}">
-															<div class="row col-md-36 epg-guest">
+															<div class="row col-md-36 epg-data">
 																<strong>Gäste:</strong>
 																${map:epg['guest']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['camera']}">
-															<div class="row col-md-36 epg-camera">
+															<div class="row col-md-36 epg-data">
 																<strong>Kamera:</strong>
 																${map:epg['camera']}
 															</div>
 														</t:if>
 
 														<t:if test="${map:epg['merge']}">
-															<div class="row col-md-36 epg-camera">
+															<div class="row col-md-36 epg-data">
 																<strong>Quelle:</strong>
 																${map:epg['merge']}
 															</div>

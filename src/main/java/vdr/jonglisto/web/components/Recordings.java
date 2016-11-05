@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.ValueEncoder;
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -30,7 +29,6 @@ import vdr.jonglisto.lib.model.RecordingInfo;
 import vdr.jonglisto.lib.util.DateTimeUtil;
 import vdr.jonglisto.web.model.RecPathTreeAdapter;
 
-@Import(stylesheet = "META-INF/assets/css/RecordingsView.css")
 public class Recordings extends BaseComponent {
 
 	public enum Function {

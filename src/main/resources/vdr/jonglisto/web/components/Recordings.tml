@@ -37,15 +37,15 @@
 										add="action, select" rowsPerPage="2048" t:mixins="EnableGridZone">
 										<p:actionCell>
 											<t:eventlink t:event="renameRecording" t:context="[recording.fileName,recording.name]" zone="^">
-												<img src="${asset:edit.svg}" alt="Aufnahme umbenennen" class="renameicon" />
+												<img src="${asset:edit.svg}" alt="Aufnahme umbenennen" class="iconwh" />
 											</t:eventlink> &nbsp;
 
 											<t:eventlink t:event="moveRecording" t:context="recording.fileName" zone="^">
-												<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="moveicon" />
+												<img src="${asset:rename.svg}" alt="Aufnahme verschieben" class="iconwh" />
 											</t:eventlink> &nbsp;
 
 											<t:eventlink t:event="deleteRecording" t:context="recording.fileName" zone="^">
-												<img src="${asset:delete.svg}" alt="Aufnahme löschen" class="deleteicon" />
+												<img src="${asset:delete.svg}" alt="Aufnahme löschen" class="iconwh" />
 											</t:eventlink>
 										</p:actionCell>
 

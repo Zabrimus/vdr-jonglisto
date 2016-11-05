@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
@@ -20,7 +19,6 @@ import vdr.jonglisto.lib.model.Timer;
 import vdr.jonglisto.lib.model.VDR;
 import vdr.jonglisto.lib.util.DateTimeUtil;
 
-@Import(stylesheet = "META-INF/assets/css/TimerView.css")
 public class TimerView extends BaseComponent {
 
 	public enum Function {

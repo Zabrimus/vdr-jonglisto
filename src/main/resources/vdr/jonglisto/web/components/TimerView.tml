@@ -32,11 +32,11 @@
 
 						<p:actionCell>
 							<t:eventlink t:event="editTimer" t:context="timer.id" zone="^">
-								<img src="${asset:edit.svg}" alt="Timer bearbeiten" class="editicon" title="Timer bearbeiten" />
+								<img src="${asset:edit.svg}" alt="Timer bearbeiten" class="iconwh" title="Timer bearbeiten" />
 							</t:eventlink>
 							&nbsp;
 							<t:eventlink t:event="deleteTimer" t:context="timer.id">
-								<img src="${asset:delete.svg}" alt="Timer löschen" class="deleteicon" title="Timer löschen"/>
+								<img src="${asset:delete.svg}" alt="Timer löschen" class="iconwh" title="Timer löschen"/>
 							</t:eventlink>
 						</p:actionCell>
 
@@ -60,17 +60,17 @@
 							</div>
 
 							<div class="col-sm-6">
-								<img src="${asset:delete.svg}" alt="Timer löschen" class="deleteicon" />
+								<img src="${asset:delete.svg}" alt="Timer löschen" class="iconwhlarge" />
 								<t:linksubmit t:event="deleteTimers">löschen</t:linksubmit>
 							</div>
 
 							<div class="col-sm-6">
-								<img src="${asset:record.svg}" alt="aktiv" class="timericon" />
+								<img src="${asset:record.svg}" alt="aktiv" class="iconwhlarge" />
 								<t:linksubmit t:event="activateTimers">aktivieren</t:linksubmit>
 							</div>
 
 							<div class="col-sm-6">
-								<img src="${asset:stop.svg}" alt="inaktiv" class="timericon" />
+								<img src="${asset:stop.svg}" alt="inaktiv" class="iconwhlarge" />
 								<t:linksubmit t:event="deactivateTimers">deaktivieren</t:linksubmit>
 							</div>
 

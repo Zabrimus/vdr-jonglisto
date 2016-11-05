@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.PageActivationContext;
 import org.apache.tapestry5.annotations.Parameter;
@@ -19,7 +18,6 @@ import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.model.EPGMedia.MediaType;
 import vdr.jonglisto.lib.model.Timer;
 
-@Import(stylesheet = "META-INF/assets/css/Epg.css")
 public class Epg extends BaseComponent {
 	
 	@Parameter

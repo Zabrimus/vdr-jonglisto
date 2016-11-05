@@ -76,11 +76,11 @@
 
 					<td>
 						<t:pagelink page="timer" parameters="{'newTimerUseId':useId, 'channelName':channelName}">
-							<img src="${asset:record.svg}" alt="Record Timer" data-toggle="tooltip" title="Timer anlegen" class="timericon tooltipTop" />
+							<img src="${asset:record.svg}" alt="Record Timer" data-toggle="tooltip" title="Timer anlegen" class="iconwhlarge tooltipTop" />
 						</t:pagelink>
 					
 						<t:eventlink t:event="switchChannel" context="channelId">
-							<img src="${asset:umschalten.svg}" alt="Channel Switch" data-toggle="tooltip" title="TV umschalten" class="timericon tooltipTop" />
+							<img src="${asset:umschalten.svg}" alt="Channel Switch" data-toggle="tooltip" title="TV umschalten" class="iconwhlarge tooltipTop" />
 						</t:eventlink>
 
 					</td>

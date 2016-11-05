@@ -1,8 +1,6 @@
 package vdr.jonglisto.web.pages;
 
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionAttribute;
@@ -12,7 +10,6 @@ import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria.What;
 
-@Import(stylesheet = "META-INF/assets/css/ProgramTime.css")
 public class ProgramTime {
 
 	@SessionAttribute("epgSearchCriteria")
