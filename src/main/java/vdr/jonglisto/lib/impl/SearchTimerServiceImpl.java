@@ -28,15 +28,24 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 		try (Connection con = sql2o.open()) {
 			List<SearchTimer> result = new ArrayList<>();
 			
-			List<Map<String, Object>> dbResult = con.createQuery("SELECT * FROM searchtimers") //
+			List<Map<String, Object>> dbResult = con.createQuery("SELECT * FROM searchtimers where state <> 'D'") //
 					.executeAndFetchTable().asList();
 			
 			dbResult.stream().forEach(s -> {
 				// Make a copy of the map, because sql2o implementation is immutable and throws a NullPointerException, if the key is not found
 				Map<String, Object> newResult = new HashMap<>();
 				s.keySet().stream().forEach(resultKey -> newResult.put(resultKey, s.get(resultKey)));
+	
+				// enrichment
+				SearchTimer st = new SearchTimer(newResult);
+				String vdrUuid = st.getVdrUuid();
+				if ("any".equals(vdrUuid)) {
+					st.setVdrName("auto");
+				} else {				
+					st.setVdrName(configuration.getVdr(vdrUuid).getDisplayName());
+				}
 				
-				result.add(new SearchTimer(newResult));
+				result.add(st);
 			});
 						
 			return result;
@@ -55,7 +64,11 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 			Map<String, Object> newResult = new HashMap<>();
 			dbResult.keySet().stream().forEach(resultKey -> newResult.put(resultKey, dbResult.get(resultKey)));
 			
-			return new SearchTimer(newResult);
+			// enrichment
+			SearchTimer st = new SearchTimer(newResult);
+			st.setVdrName(configuration.getVdr(st.getVdrUuid()).getDisplayName());
+			
+			return st;
 		}
 	}
 	
@@ -71,6 +84,8 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 				 ":episodename, :season, :seasonpart, :category, :genre, :year, :tipp, :noepgmatch, :type, :state, :namingmode, :active, :source, :hits, :vdruuid, :weekdays, " + //
 				 ":nextdays, :starttime, :endtime, :directory, :priority, :lifetime, :vps, :childlock)";
 
+			System.err.println("INSERT called...");
+			
 			Query query = con.createQuery(sql);			
 			query.getParamNameToIdxMap().keySet().stream().forEach(key -> query.addParameter(key, timer.getRawDbData().get(key)));
 			query.executeUpdate();

@@ -5,7 +5,7 @@
 		</t:zone>
 
 		<t:block t:id="view">
-			<t:grid source="searchTimers" row="searchTimer" include="active,name,type,channels,chformat,expression,expression1,directory" add="action">
+			<t:grid source="searchTimers" row="searchTimer" include="active,name,type,hits,channels,chformat,expression,expression1,vdrName,directory" add="action">
 				<p:activeCell>
 					<t:eventlink t:event="toggleSearchTimerActive" t:context="searchtimer.id">
 						<t:TimerActive value="searchTimer.active" recording="false" text="true" />

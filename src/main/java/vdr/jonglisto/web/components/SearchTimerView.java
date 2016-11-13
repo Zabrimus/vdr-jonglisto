@@ -19,6 +19,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.SelectModelFactory;
 
+import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.SearchTimer;
@@ -130,8 +131,7 @@ public class SearchTimerView extends BaseComponent {
 	}
 	
 	public void afterRender() {
-		// disabled, because i'm not sure if this is really useful
-		// javaScriptSupport.require("hideme").with(".clickToHide");
+		javaScriptSupport.require("hideme").with(".clickToHide");
 	}
 	
 	public void onToggleSearchTimerActive(Long id) {
@@ -169,7 +169,7 @@ public class SearchTimerView extends BaseComponent {
 			searchTimer.getGenre().stream().forEach(s -> selectedGenres.add(s));
 		}
 	
-		selectedVdr = configuration.getVdr(currentVdrView.getRecordingVdr().get()); 
+		selectedVdr = configuration.getVdr(searchTimer.getVdrUuid());
 				
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(searchTimerListZone);
@@ -187,29 +187,50 @@ public class SearchTimerView extends BaseComponent {
 	}
 
 	public void onNewSearchTimer() {
-		// TODO: implement this
-		System.err.println("new search timer is not yet implemented");
+		function = Function.EDIT;
+		searchTimer = new SearchTimer();
+		searchTimerId = null;
+		
+		selectedChannels = new ArrayList<>();
+		selectedCategories = new ArrayList<>();
+		selectedGenres = new ArrayList<>();
+		selectedVdr = null;
+		searchTimer.setNamingMode(1);
+				
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(searchTimerListZone);
+		}
 	}
 	
 	public void onPrepareForSubmit() {
-		searchTimer = searchTimerService.getSearchTimer(searchTimerId);
+		if (searchTimerId != null) {
+			searchTimer = searchTimerService.getSearchTimer(searchTimerId);
+		} else {
+			searchTimer = new SearchTimer();
+			
+			// default values
+			searchTimer.setChannelExclude(false);
+			searchTimer.setCasesensitiv(false);
+			searchTimer.setNoepgmatch(true);
+			searchTimer.setSource("webif");
+			searchTimer.setNamingMode(1);			
+		}
 	}
 	
 	void onFailure() {
 	}
 	
 	void onSuccess() {
-		if (searchTimerId == null) {
-			return;
-		}
-
 		// set channels, genre and category
 		searchTimer.setChannelsList(selectedChannels.stream().map(s -> s.getId()).collect(Collectors.toList()));
 		searchTimer.setGenre(selectedGenres);
 		searchTimer.setCategory(selectedCategories);
 		
-		// Alle Werte mal ausgeben:
-		System.err.println("Timer1: " + searchTimer);
+		if (selectedVdr != null) {
+			searchTimer.setVdrUuid(selectedVdr.getUuid());
+		} else {
+			searchTimer.setVdrUuid("any");
+		}
 		
 		// Create or update timer
 		if (searchTimer.getId() == null) {			
@@ -231,8 +252,6 @@ public class SearchTimerView extends BaseComponent {
 	}
 	
     void onCancel() {
-    	System.err.println("onCancel()");
-    	
     	searchTimerId = null;
     }
 	
@@ -267,6 +286,10 @@ public class SearchTimerView extends BaseComponent {
 				.map(ch -> ch.orElse(Channel.emptyChannel).getName()) //
 				.collect(Collectors.toList());
 	}
+
+	public String getCurrentVdrName() {
+		return configuration.getVdr(searchTimer.getVdrUuid()).getDisplayName();
+	}
 	
 	public Object getActiveBlock()
     {
@@ -283,7 +306,6 @@ public class SearchTimerView extends BaseComponent {
     }
 	
 	public void onRenderZone() {
-		// disabled, because i'm not sure if this is really useful
-		// javaScriptSupport.require("hideme").with(".clickToHide");		
+		javaScriptSupport.require("hideme").with(".clickToHide");		
 	}
 }

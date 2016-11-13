@@ -1,6 +1,5 @@
 package vdr.jonglisto.lib.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,9 +11,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public class SearchTimer {
 	private Map<String, Object> dbData;
-
+	
+	// enriched
+	private String vdrName;
+	
+	
 	public SearchTimer() {
 		dbData = new HashMap<>();
+		dbData.put("state", "");
 	}
 	
 	public SearchTimer(Map<String, Object> dbData) {
@@ -205,7 +209,11 @@ public class SearchTimer {
 	}
 
 	public Boolean getVps() {
-		return !(0 == (Integer)dbData.get("vps"));
+		if (dbData.get("vps") != null) {
+			return !(0 == (Integer)dbData.get("vps"));
+		} else {
+			return false;
+		}
 	}
 
 	public void setVps(Boolean vps) {
@@ -213,7 +221,11 @@ public class SearchTimer {
 	}
 
 	public Boolean getActive() {
-		return !(0L == (Long)dbData.get("active"));
+		if (dbData.get("active") != null) {
+			return !(0L == (Long)dbData.get("active"));
+		} else {
+			return false;
+		}
 	}
 
 	public void setActive(Boolean active) {
@@ -461,7 +473,27 @@ public class SearchTimer {
 	public void setSunday(Boolean val) {
 		setBitFlag(val, 64, "weekdays");
 	}
+	
+	public void setSource(String value) {
+		dbData.put("source", value);
+	}
 
+	public String getSource() {
+		return (String)dbData.get("source");
+	}
+
+	public Long getHits() {
+		return (Long)dbData.get("hits");
+	}
+	
+	public String getVdrName() {
+		return vdrName;
+	}
+	
+	public void setVdrName(String name) {
+		this.vdrName = name;
+	}
+	
 	private Boolean getBitFlag(int idx, String name) {		
 		Integer data = (Integer)dbData.get(name);
 		if (data == null) {
@@ -505,7 +537,6 @@ public class SearchTimer {
 			dbData.put(name, data &= ~idx);
 		}
 	}
-
 	
 	@Override
 	public String toString() {
