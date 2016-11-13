@@ -283,11 +283,11 @@ public class SearchTimer {
 	}
 
 	public Boolean getNoepgmatch() {
-		return !(0L == (Long)dbData.get("noepgmatch"));
+		return !(0L == (Integer)dbData.get("noepgmatch"));
 	}
 
 	public void setNoepgmatch(Boolean noepgmatch) {
-		dbData.put("noepgmatch", noepgmatch ? 1L : 0L);
+		dbData.put("noepgmatch", noepgmatch ? 1 : 0);
 	}
 
 	public Long getSearchmode() {
@@ -298,19 +298,19 @@ public class SearchTimer {
 		dbData.put("searchmode", searchmode);
 	}
 
-	public Integer getRawSearchFields() {		
-		return (Integer) dbData.get("searchfields");
+	public Long getRawSearchFields() {		
+		return (Long) dbData.get("searchfields");
 	}
 
-	public void setRawSearchFields(Integer f) {		
+	public void setRawSearchFields(Long f) {		
 		dbData.put("searchfields", f);
 	}
 
-	public Integer getRawSearchFields1() {		
-		return (Integer) dbData.get("searchfields1");
+	public Long getRawSearchFields1() {		
+		return (Long) dbData.get("searchfields1");
 	}
 
-	public void setRawSearchFields1(Integer f) {		
+	public void setRawSearchFields1(Long f) {		
 		dbData.put("searchfields1", f);
 	}
 	

@@ -3,6 +3,7 @@ package vdr.jonglisto.web.components;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.Block;
@@ -147,6 +148,9 @@ public class SearchTimerView extends BaseComponent {
 	public void onExecuteSearchTimer(Long id) {
 		// TODO: implement this
 		System.err.println("execute search timer is not yet implemented");
+		
+		List<Map<String, Object>> result = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
+		System.err.println("Result:" + result);		
 	}
 
 	public void onEditSearchTimer(Long id) {
