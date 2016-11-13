@@ -66,7 +66,12 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
 			
 			// enrichment
 			SearchTimer st = new SearchTimer(newResult);
-			st.setVdrName(configuration.getVdr(st.getVdrUuid()).getDisplayName());
+			String vdrUuid = st.getVdrUuid();
+			if ("any".equals(vdrUuid)) {
+				st.setVdrName("auto");
+			} else {				
+				st.setVdrName(configuration.getVdr(vdrUuid).getDisplayName());
+			}
 			
 			return st;
 		}
