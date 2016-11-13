@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
@@ -26,6 +27,10 @@ public class ChannelSelectPalette extends BaseComponent {
 	@InjectComponent
 	private Zone channelPaletteZone;
 
+	@Property
+	@Parameter
+	private List<Channel> selectedChannels;
+
 	@Persist
 	@Property
 	private ChannelEncoder encoder;
@@ -36,14 +41,6 @@ public class ChannelSelectPalette extends BaseComponent {
 	@Persist
 	@Property
 	private SelectModel model;
-
-	@Property
-	@Persist
-	private List<Channel> selectedValues;
-
-	@Property
-	@Persist
-	private String channelSelectType;
 
 	@Persist
 	@Property
@@ -68,28 +65,8 @@ public class ChannelSelectPalette extends BaseComponent {
 
 		groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
 
-		if (selectedValues == null) {
-			selectedValues = new ArrayList<>();
-		}
-
-		if (channelSelectType == null) {
-			channelSelectType = "1";
-		}
-	}
-
-	public void onPalSelectVdr() {
-		channelSelectType = "1";
-		
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(channelPaletteZone);
-		}
-	}
-
-	public void onPalSelectMap() {
-		channelSelectType = "2";
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(channelPaletteZone);
+		if (selectedChannels == null) {
+			selectedChannels = new ArrayList<>();
 		}
 	}
 
@@ -97,13 +74,12 @@ public class ChannelSelectPalette extends BaseComponent {
 			@RequestParameter(value = "add", allowBlank = true) String add) {
 
 		sortAlpha = !sortAlpha;
+		setSelectValues(group, add);
 	}
 
 	public void onPalSelectGroup(@RequestParameter(value = "param", allowBlank = true) String param,
 			@RequestParameter(value = "add", allowBlank = true) String add) {
-		
-		System.err.println("Change Group: " + param + " -> " + add);
-		
+
 		setSelectValues(param, add);
 	}
 
@@ -118,27 +94,16 @@ public class ChannelSelectPalette extends BaseComponent {
 		}
 	}
 
-	public boolean getSelectBoxEnabled() {
-		return !"1".equals(channelSelectType);
-	}
-	
 	private <T> void setSelectValues(String group, String preSelectedValues) {
-		selectedValues = new ArrayList<>();
+		selectedChannels = new ArrayList<>();
 		
 		if (group != null) {
 			// only channels in group
 			channels = vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), group).orElse(Collections.emptyList());
 		} else {
-			if ("1".equals(channelSelectType)) {
-				// VDR, all channels, because group is null
-				channels = vdrDataService.getChannels(currentVdrView.getChannelVdr().get()).orElse(Collections.emptyList());
-			} else {
-				// channelmap
-			}
+			// VDR, all channels, because group is null
+			channels = vdrDataService.getChannels(currentVdrView.getChannelVdr().get()).orElse(Collections.emptyList());
 		}
-		
-		System.err.println("Group: " + group);
-		System.err.println("presel: " + preSelectedValues);
 		
 		// sort list
 		if (sortAlpha) {			
@@ -158,17 +123,17 @@ public class ChannelSelectPalette extends BaseComponent {
 			    list.add( array.getString(i) );
 			}
 
-			list.stream().forEach(s -> selectedValues.add(vdrDataService.getChannel(currentVdrView.getChannelVdr().get(), s).get()));
+			list.stream().forEach(s -> selectedChannels.add(vdrDataService.getChannel(currentVdrView.getChannelVdr().get(), s).get()));
 			
 			// the preselected values must be also in the whole list
-			selectedValues.stream().forEach(s -> {
+			selectedChannels.stream().forEach(s -> {
 				if (!channels.contains(s)) {
 					channels.add(s);
 				}
 			});
 			
 			if (sortAlpha) {
-				selectedValues.sort(new Comparator<Channel>() {
+				selectedChannels.sort(new Comparator<Channel>() {
 					public int compare(Channel o1, Channel o2) {
 						return o1.getName().compareToIgnoreCase(o2.getName());				
 					}

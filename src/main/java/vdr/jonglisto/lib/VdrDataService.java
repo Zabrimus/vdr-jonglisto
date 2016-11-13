@@ -1,5 +1,6 @@
 package vdr.jonglisto.lib;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +29,7 @@ public interface VdrDataService {
 	public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group);
 	
 	public Optional<List<Channel>> getChannelsMap(String vdrUuid);
+	public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group);
 	
 	/*
 	 * Timer
@@ -62,7 +64,5 @@ public interface VdrDataService {
 	
 	public void renameRecording(String vdrUuid, String fileName, String newName);
 	public void moveRecordings(String vdrUuid, List<String> recordingsToChange, String destination);
-	public void moveRecording(String vdrUuid, String sourceFilename, String destination);	
-
-	
+	public void moveRecording(String vdrUuid, String sourceFilename, String destination);
 }

@@ -19,4 +19,7 @@ public interface EpgDataService {
 	public List<Map<String, Object>> getEpgChannelData(EpgSearchCriteria epgCriteria);
 	
 	public String getVdrTimerName(Long id, RecordingNamingMode naming_mode);
+	
+	public List<String> getGenres();
+	public List<String> getCategories();
 }

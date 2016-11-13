@@ -62,6 +62,7 @@ public class AppModule {
 		binder.bind(SearchTimerService.class, SearchTimerServiceImpl.class);
 		binder.bind(ChannelEncoder.class);
 		binder.bind(GlobalLogoFilename.class);
+		binder.bind(GlobalValues.class);
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {

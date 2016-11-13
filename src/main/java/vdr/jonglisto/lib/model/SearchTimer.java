@@ -1,8 +1,14 @@
 package vdr.jonglisto.lib.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class SearchTimer {
 	private Map<String, Object> dbData;
@@ -30,13 +36,37 @@ public class SearchTimer {
 	public void setId(Long id) {
 		dbData.put("id", id);
 	}
+
+	public String getVdrUuid() {
+		return (String)dbData.get("vdruuid");
+	}
+	
+	public void setVdrUuid(String id) {
+		dbData.put("vdruuid", id);
+	}
+
+	public Integer getPriority() {
+		return (Integer)dbData.get("priority");
+	}
+	
+	public void setPriority(Integer id) {
+		dbData.put("priority", id);
+	}
+	
+	public Integer getLifetime() {
+		return (Integer)dbData.get("lifetime");
+	}
+	
+	public void setLifetime(Integer id) {
+		dbData.put("lifetime", id);
+	}
 	
 	public String getExpression() {
 		return (String) dbData.get("expression");
 	}
 
 	public void setExpression(String expression) {
-		dbData.put("expresion", expression);
+		dbData.put("expression", expression);
 	}
 
 	public String getDirectory() {
@@ -60,7 +90,7 @@ public class SearchTimer {
 	}
 
 	public void setExpression1(String expression1) {
-		dbData.put("expresion1", expression1);
+		dbData.put("expression1", expression1);
 	}
 
 	public String getEpisodename() {
@@ -86,21 +116,39 @@ public class SearchTimer {
 	public void setSeasonpart(String seasonpart) {
 		dbData.put("seasonpart", seasonpart);
 	}
-
-	public String getCategory() {
-		return (String) dbData.get("category");
+	
+	public List<String> getCategory() {
+		String category = (String) dbData.get("category");		
+		if (StringUtils.isNotEmpty(category)) {
+			return Arrays.stream(category.split(",")).map(s -> s.replaceAll("^'", "").replaceAll("'$", "")).collect(Collectors.toList());
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
-	public void setCategory(String category) {
-		dbData.put("category", category);
+	public void setCategory(List<String> category) {
+		if (category.size() > 0) {
+			dbData.put("category", category.stream().map(s -> "'" + s + "'").collect(Collectors.joining(",")));
+		} else {
+			dbData.put("category", null);
+		}
 	}
 
-	public String getGenre() {
-		return (String)dbData.get("genre");
+	public List<String> getGenre() {
+		String genre = (String) dbData.get("genre");
+		if (StringUtils.isNotEmpty(genre)) {
+			return Arrays.stream(genre.split(",")).map(s -> s.replaceAll("^'", "").replaceAll("'$", "")).collect(Collectors.toList());
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
-	public void setGenre(String genre) {
-		dbData.put("genre", genre);
+	public void setGenre(List<String> genre) {
+		if (genre.size() > 0) {
+			dbData.put("genre", genre.stream().map(s -> "'" + s + "'").collect(Collectors.joining(",")));
+		} else {
+			dbData.put("genre", null);
+		}
 	}
 
 	public String getTipp() {
@@ -126,15 +174,28 @@ public class SearchTimer {
 	public void setChformat(String chformat) {
 		dbData.put("chformat", chformat);
 	}
-
+	
+	public List<String> getChannelsList() {
+		String channelIds = (String)dbData.get("channelids");
+		if (!StringUtils.isEmpty(channelIds)) {
+			return Arrays.stream(channelIds.split(",")).collect(Collectors.toList());
+		} else {
+			return Collections.emptyList();
+		}
+	}
+	
+	public void setChannelsList(List<String> channels) {
+		if (channels.size() > 0) {
+			dbData.put("channelids", channels.stream().collect(Collectors.joining(",")));
+		} else {
+			dbData.put("channelids", null);
+		}
+	}
+	
 	public String getChannels() {
 		return (String)dbData.get("channelids");
 	}
-
-	public void setChannels(String channels) {
-		dbData.put("channelids", channels);
-	}
-
+	
 	public Boolean getChannelExclude() {
 		return !(0L == (Long)dbData.get("chexclude"));
 	}
@@ -159,20 +220,46 @@ public class SearchTimer {
 		dbData.put("active", active ? 1L : 0L);
 	}
 
-	public Integer getStarttime() {
+	public String getStarttime() {
+		Integer time = (Integer)dbData.get("starttime");
+		if (time == null) {
+			return null;
+		} else {		
+			return String.format("%02d:%02d", time/100, time%100);
+		}
+	}
+
+	public void setStarttime(String starttime) {
+		if (StringUtils.isEmpty(starttime)) {
+			dbData.put("starttime", null);
+		} else {
+			dbData.put("starttime", Integer.valueOf(starttime.replace(":", "")));
+		}
+	}
+	
+	public Integer getRawStartTime() {
 		return (Integer)dbData.get("starttime");
 	}
 
-	public void setStarttime(Integer starttime) {
-		dbData.put("starttime", starttime);
+	public String getEndtime() {
+		Integer time = (Integer)dbData.get("endtime");
+		if (time == null) {
+			return null;
+		} else {		
+			return String.format("%02d:%02d", time/100, time%100);
+		}
 	}
 
-	public Integer getEndtime() {
+	public void setEndtime(String endtime) {
+		if (StringUtils.isEmpty(endtime)) {
+			dbData.put("endtime", null);
+		} else {
+			dbData.put("endtime", Integer.valueOf(endtime.replace(":", "")));
+		}
+	}
+
+	public Integer getRawEndTime() {
 		return (Integer)dbData.get("endtime");
-	}
-
-	public void setEndtime(Integer endtime) {
-		dbData.put("endtime", endtime);
 	}
 	
 	public Integer getNextDays() {
@@ -198,23 +285,71 @@ public class SearchTimer {
 	public void setSearchmode(Long searchmode) {
 		dbData.put("searchmode", searchmode);
 	}
+
+	public Integer getRawSearchFields() {		
+		return (Integer) dbData.get("searchfields");
+	}
+
+	public void setRawSearchFields(Integer f) {		
+		dbData.put("searchfields", f);
+	}
+
+	public Integer getRawSearchFields1() {		
+		return (Integer) dbData.get("searchfields1");
+	}
+
+	public void setRawSearchFields1(Integer f) {		
+		dbData.put("searchfields1", f);
+	}
 	
-	public Integer getSearchfields() {
-		return dbData.get("searchfields") != null ? ((Long)dbData.get("searchfields")).intValue() : null;
+	public Boolean getSearchFieldTitle() {
+		return getLBitFlag(1, "searchfields");
+	}
+	
+	public void setSearchFieldTitle(Boolean val) {
+		setLBitFlag(val, 1, "searchfields");
+	}
+	
+	public Boolean getSearchFieldFolge() {
+		return getLBitFlag(2, "searchfields");
+	}
+	
+	public void setSearchFieldFolge(Boolean val) {
+		setLBitFlag(val, 2, "searchfields");
+	}
+	
+	public Boolean getSearchFieldDescription() {
+		return getLBitFlag(4, "searchfields");
+	}
+	
+	public void setSearchFieldDescription(Boolean val) {
+		setLBitFlag(val, 4, "searchfields");
 	}
 
-	public void setSearchfields(Integer searchfields) {
-		dbData.put("searchfields", Long.valueOf(searchfields.intValue()));
+	public Boolean getSearchFieldTitle1() {
+		return getLBitFlag(1, "searchfields1");
 	}
-
-	public Integer getSearchfields1() {
-		return dbData.get("searchfields1") != null ? ((Long)dbData.get("searchfields1")).intValue() : null;
+	
+	public void setSearchFieldTitle1(Boolean val) {
+		setLBitFlag(val, 1, "searchfields1");
 	}
-
-	public void setSearchfields1(Integer searchfields1) {
-		dbData.put("searchfields1", Long.valueOf(searchfields1.intValue()));
+	
+	public Boolean getSearchFieldFolge1() {
+		return getLBitFlag(2, "searchfields1");
 	}
-
+	
+	public void setSearchFieldFolge1(Boolean val) {
+		setLBitFlag(val, 2, "searchfields1");
+	}
+	
+	public Boolean getSearchFieldDescription1() {
+		return getLBitFlag(4, "searchfields1");
+	}
+	
+	public void setSearchFieldDescription1(Boolean val) {
+		setLBitFlag(val, 4, "searchfields1");
+	}
+	
 	public Boolean getCasesensitiv() {
 		return !(0L == (Long)dbData.get("casesensitiv"));
 	}
@@ -239,29 +374,138 @@ public class SearchTimer {
 		dbData.put("type", type);
 	}
 
+	public Integer getNamingMode() {
+		return (Integer) dbData.get("namingmode");
+	}
+	
+	public void setNamingMode(Integer mode) {
+		dbData.put("namingmode", mode);
+	}
+
 	public Boolean getRepeatTitle() {
-		return false;
+		return getLBitFlag(1, "repeatfields");
 	}
 
 	public void setRepeatTitle(Boolean repeat) {
+		setLBitFlag(repeat, 1, "repeatfields");
+	}
 		
-	}
-	
-	public Boolean getRepeatDesc() {
-		return false;
-	}
-
-	public void setRepeatDesc(Boolean repeat) {
-		
-	}
-	
 	public Boolean getRepeatShortText() {
-		return false;
+		return getLBitFlag(2, "repeatfields");
 	}
 
 	public void setRepeatShortText(Boolean repeat) {
-		
+		setLBitFlag(repeat, 2, "repeatfields");
+	}	
+
+	public Boolean getRepeatDesc() {
+		return getLBitFlag(4, "repeatfields");
 	}
+
+	public void setRepeatDesc(Boolean repeat) {
+		setLBitFlag(repeat, 4, "repeatfields");
+	}
+	
+	public Boolean getMonday() {		
+		return getBitFlag(1, "weekdays");
+	}
+		
+	public void setMonday(Boolean val) {
+		setBitFlag(val, 1, "weekdays");
+	}
+
+	public Boolean getTuesday() {		
+		return getBitFlag(2, "weekdays");
+	}
+	
+	public void setTuesday(Boolean val) {
+		setBitFlag(val, 2, "weekdays");
+	}
+
+	public Boolean getWednesday() {
+		return getBitFlag(4, "weekdays");
+	}
+	
+	public void setWednesday(Boolean val) {
+		setBitFlag(val, 4, "weekdays");
+	}
+
+	public Boolean getThursday() {
+		return getBitFlag(8, "weekdays");
+	}
+	
+	public void setThursday(Boolean val) {
+		setBitFlag(val, 8, "weekdays");
+	}
+
+	public Boolean getFriday() {
+		return getBitFlag(16, "weekdays");
+	}
+	
+	public void setFriday(Boolean val) {
+		setBitFlag(val, 16, "weekdays");
+	}
+
+	public Boolean getSaturday() {
+		return getBitFlag(32, "weekdays");
+	}
+	
+	public void setSaturday(Boolean val) {
+		setBitFlag(val, 32, "weekdays");
+	}
+
+	public Boolean getSunday() {
+		return getBitFlag(64, "weekdays");
+	}
+	
+	public void setSunday(Boolean val) {
+		setBitFlag(val, 64, "weekdays");
+	}
+
+	private Boolean getBitFlag(int idx, String name) {		
+		Integer data = (Integer)dbData.get(name);
+		if (data == null) {
+			return false;
+		}
+	
+		return (data & idx) > 0;
+	}
+	
+	private void setBitFlag(Boolean val, int idx, String name) {
+		Integer data = (Integer)dbData.get(name);
+		if (data == null) {
+			data = 0;
+		}
+		
+		if (val) {
+			dbData.put(name, data |= idx);
+		} else {
+			dbData.put(name, data &= ~idx);
+		}
+	}
+
+	private Boolean getLBitFlag(int idx, String name) {		
+		Long data = (Long)dbData.get(name);
+		if (data == null) {
+			return false;
+		}
+	
+		return (data & idx) > 0;
+	}
+	
+	private void setLBitFlag(Boolean val, int idx, String name) {
+		Long data = (Long)dbData.get(name);
+		if (data == null) {
+			data = 0L;
+		}
+		
+		if (val) {
+			dbData.put(name, data |= idx);
+		} else {
+			dbData.put(name, data &= ~idx);
+		}
+	}
+
 	
 	@Override
 	public String toString() {

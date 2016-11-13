@@ -43,20 +43,20 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	protected ObjectMapper mapper;
 	protected Pattern eventIdPattern = Pattern.compile("<eventid>(.*)<\\/eventid>");
-	
-    public VdrDataServiceImpl() {
-    	mapper = new ObjectMapper();
-    	mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    	mapper.registerModule(new AfterburnerModule());
-    	mapper.registerModule(new JavaTimeModule());
-    	mapper.registerModule(new Jdk8Module());
-    }
-	
+
+	public VdrDataServiceImpl() {
+		mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.registerModule(new AfterburnerModule());
+		mapper.registerModule(new JavaTimeModule());
+		mapper.registerModule(new Jdk8Module());
+	}
+
 	/*
 	 * Information
 	 */
-    public List<Plugin> getPlugins(String vdrUuid) {    	
-    	try {
+	public List<Plugin> getPlugins(String vdrUuid) {
+		try {
 			JSONObject object = (JSONObject) getJsonData(vdrUuid, "info.json").get("vdr");
 			return convertJSONArrayToList(object.getJSONArray("plugins"), Plugin.class);
 		} catch (NetworkException e) {
@@ -64,83 +64,80 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			log.debug("NetworkException for getPlugins, " + vdrUuid);
 			return Collections.emptyList();
 		}
-    }
-    
-    public List<Device> getDevices(String vdrUuid) {
-    	try {
+	}
+
+	public List<Device> getDevices(String vdrUuid) {
+		try {
 			JSONObject object = (JSONObject) getJsonData(vdrUuid, "info.json").get("vdr");
 			return convertJSONArrayToList(object.getJSONArray("devices"), Device.class);
-    	} catch (NetworkException e) {
-    		// could happen, if VDR is down
-    		log.debug("NetworkException for getDevices, " + vdrUuid);
-    		return Collections.emptyList();
-    	}
-    }
-    
+		} catch (NetworkException e) {
+			// could happen, if VDR is down
+			log.debug("NetworkException for getDevices, " + vdrUuid);
+			return Collections.emptyList();
+		}
+	}
+
 	/*
 	 * Channels
 	 */
 
 	public Optional<Channel> getChannel(String vdrUuid, String channelId) {
-		List<Channel> list = getJsonList(vdrUuid, "channels/" + JonglistoUtil.encode(channelId) + ".json", "channels", Channel.class).orElse(Collections.emptyList());
+		List<Channel> list = getJsonList(vdrUuid, "channels/" + JonglistoUtil.encode(channelId) + ".json", "channels",
+				Channel.class).orElse(Collections.emptyList());
 		return list.size() > 0 ? Optional.of(list.get(0)) : Optional.empty();
 	}
-    
+
 	public Optional<List<Channel>> getChannels(String vdrUuid) {
 		return getJsonList(vdrUuid, "channels/.json", "channels", Channel.class);
-	}	
-	
+	}
+
 	public Optional<List<String>> getGroups(String vdrUuid) {
 		return getJsonList(vdrUuid, "channels/groups.json", "groups", String.class);
 	}
-	
+
 	public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group) {
 		if (group != null) {
-			return getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group), "channels", "name", Channel.class);
+			return getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group), "channels", "name",
+					Channel.class);
 		} else {
 			return getChannels(vdrUuid);
-		}			
+		}
 	}
-	
+
 	public Optional<List<Channel>> getChannelsMap(String vdrUuid) {
 		// get List of channels in VDR
-		Optional<List<Channel>> vdrChannels = getChannels(vdrUuid);
-		
-		// get List of channels in epg2vdr
-		Sql2o sql2o = configuration.getSql2oEpg2vdr();
-		
-		try (Connection con = sql2o.open()) {
-			final List<String> channelMap = con.createQuery("select distinct channelid from channelmap").executeAndFetch(String.class);
-
-			// find all VDR channels, which are also in channelMap
-			return Optional.of(vdrChannels.orElse(Collections.emptyList()).stream().filter(c -> channelMap.contains(c.getId())).collect(Collectors.toList()));
-		}		
+		return filterChannels(getChannels(vdrUuid));
 	}
-	
+
+	public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group) {		
+		// get List of channels in VDR		
+		return filterChannels(getChannelsInGroup(vdrUuid, group));
+	}
+
 	/*
 	 * Timer
 	 */
 
 	public Optional<List<Timer>> getTimer(String vdrUuid) {
 		// get timer list
-		Optional<List<Timer>> list = getJsonList(vdrUuid, "timers.json", "timers", Timer.class);		
+		Optional<List<Timer>> list = getJsonList(vdrUuid, "timers.json", "timers", Timer.class);
 		List<Timer> timer = list.orElse(Collections.emptyList());
-		
+
 		// check if all timers has an eventid
-		timer.stream().forEach(s -> enrichEventId(s));		
+		timer.stream().forEach(s -> enrichEventId(s));
 		return Optional.of(timer);
 	}
-	
+
 	public Optional<Timer> getTimerById(String vdrUuid, String timerId) {
 		Optional<List<Timer>> list = getJsonList(vdrUuid, "timers/" + timerId + ".json", "timers", Timer.class);
-		
+
 		if (list.isPresent()) {
 			return Optional.of(enrichEventId(list.get().get(0)));
 		} else {
 			return null;
 		}
 	}
-	
+
 	public void createTimer(String vdrUuid, Timer timer) {
 		post(vdrUuid, "timers", timer.createTimer());
 	}
@@ -154,59 +151,59 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 		deleteTimer(vdrUuid, timer.getId());
 	}
 
-	public void deleteTimer(String vdrUuid, String timerId) {		
+	public void deleteTimer(String vdrUuid, String timerId) {
 		delete(vdrUuid, "timers/" + JonglistoUtil.encode(timerId), null);
 	}
 
-	public void bulkDeleteTimer(String vdrUuid, List<String> timerIds) {		
+	public void bulkDeleteTimer(String vdrUuid, List<String> timerIds) {
 		JSONArray ja = new JSONArray();
 		timerIds.stream().forEach(s -> ja.put(s));
 
 		JSONObject obj = new JSONObject();
 		obj.put("timers", ja);
-		
+
 		delete(vdrUuid, "timers/bulkdelete.json", obj.toString());
 	}
 
-	public void activateTimer(String vdrUuid, String timerId) {		    
+	public void activateTimer(String vdrUuid, String timerId) {
 		put(vdrUuid, "timers", "timer_id=" + timerId + "&flags=1");
 	}
 
 	public void deactivateTimer(String vdrUuid, String timerId) {
-		 put(vdrUuid, "timers", "timer_id=" + timerId + "&flags=0");
+		put(vdrUuid, "timers", "timer_id=" + timerId + "&flags=0");
 	}
 
 	/*
 	 * Recordings
 	 */
-	
+
 	public void fullRecSync(String vdrUuid) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.beginTransaction()) {
 			// delete existing recordings
 			con.createQuery("delete from recording where vdr_uuid = :vdrUuid") //
 					.addParameter("vdrUuid", vdrUuid) //
 					.executeUpdate();
-			
-			
+
 			String syncIdStr = "";
-			
+
 			if (configuration.isUseSyncMap()) {
 				// create new sync id if an existing syncid cannot be found
-				Integer syncId = getRecSyncId(vdrUuid, con);			
-				
+				Integer syncId = getRecSyncId(vdrUuid, con);
+
 				if (syncId == null) {
-					con.createQuery("MERGE INTO configuration USING (VALUES(:name, concat((next value for seq_recording_sync),''))) AS vals(x,y) ON configuration.name = vals.x WHEN MATCHED THEN UPDATE SET configuration.val = vals.y WHEN NOT MATCHED THEN INSERT VALUES vals.x, vals.y") //
-						.addParameter("name", "rec_" + vdrUuid) //
-						.executeUpdate();
-				
+					con.createQuery(
+							"MERGE INTO configuration USING (VALUES(:name, concat((next value for seq_recording_sync),''))) AS vals(x,y) ON configuration.name = vals.x WHEN MATCHED THEN UPDATE SET configuration.val = vals.y WHEN NOT MATCHED THEN INSERT VALUES vals.x, vals.y") //
+							.addParameter("name", "rec_" + vdrUuid) //
+							.executeUpdate();
+
 					syncId = con.createQuery("select current value for seq_recording_sync from (VALUES(0))") //
-								.executeScalar(Integer.class);
-				
+							.executeScalar(Integer.class);
+
 					log.debug("new syncId created for " + vdrUuid + " -> " + syncId);
-				}					
-				
+				}
+
 				syncIdStr = "?" + createSyncStr(vdrUuid, syncId);
 			} else {
 				syncIdStr = "";
@@ -214,11 +211,11 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 			// get recordings
 			List<Recording> list = getJsonList(vdrUuid, "recordings/.json" + syncIdStr, "recordings", Recording.class) //
-									.orElse(Collections.<Recording>emptyList());
+					.orElse(Collections.<Recording>emptyList());
 
 			// insert all recordings
 			list.stream().forEach(s -> insertRecording(con, s, vdrUuid));
-			
+
 			con.commit();
 		}
 	}
@@ -228,7 +225,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			fullRecSync(vdrUuid);
 			return;
 		}
-		
+
 		Sql2o sql2o = configuration.getSql2oHsqldb();
 
 		// sync
@@ -240,7 +237,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 				fullRecSync(vdrUuid);
 				return;
 			}
-			
+
 			// Create parameter body
 			List<Map<String, Object>> recList = con
 					.createQuery("select file_name, hash from recording where vdr_uuid = :vdruuid") //
@@ -250,13 +247,15 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 			String body = "";
 			for (Map<String, Object> s : recList) {
-				body += "recordings[]=" + JonglistoUtil.encodePath((String) s.get("file_name")) + "," + s.get("hash") + "\n";
+				body += "recordings[]=" + JonglistoUtil.encodePath((String) s.get("file_name")) + "," + s.get("hash")
+						+ "\n";
 			}
 
 			List<Recording> list;
-			list = postAndGetList(vdrUuid, "recordings/sync.json?" + createSyncStr(vdrUuid, syncId), body, "recordings", Recording.class);
+			list = postAndGetList(vdrUuid, "recordings/sync.json?" + createSyncStr(vdrUuid, syncId), body, "recordings",
+					Recording.class);
 			processRecordingList(vdrUuid, con, list);
-			
+
 			con.commit();
 		}
 	}
@@ -266,9 +265,9 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			fullRecSync(vdrUuid);
 			return;
 		}
-		
+
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.beginTransaction()) {
 			// get sync id
 			Integer syncId = getRecSyncId(vdrUuid, con);
@@ -278,7 +277,8 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 				return;
 			}
 
-			List<Recording> list = getJsonList(vdrUuid, "recordings/updates.json?" + createSyncStr(vdrUuid, syncId), "recordings", Recording.class).orElse(Collections.<Recording>emptyList());
+			List<Recording> list = getJsonList(vdrUuid, "recordings/updates.json?" + createSyncStr(vdrUuid, syncId),
+					"recordings", Recording.class).orElse(Collections.<Recording>emptyList());
 
 			processRecordingList(vdrUuid, con, list);
 
@@ -292,19 +292,19 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 		List<String> tmpResult;
 		try (Connection con = sql2o.beginTransaction()) {
 			tmpResult = con.createQuery("select name from recording where vdr_uuid = :vdruuid order by upper(name)") //
-				.addParameter("vdruuid", vdrUuid).executeScalarList(String.class);
+					.addParameter("vdruuid", vdrUuid).executeScalarList(String.class);
 		}
-		
+
 		List<String> result = new ArrayList<String>();
 
 		for (String node : tmpResult) {
 			int idx = node.lastIndexOf("~");
 			if (idx != -1) {
 				String path = node.substring(0, idx);
-				
+
 				// check if path(element) already exists
 				if (!result.contains(path)) {
-					if (! result.stream().filter(s -> s.startsWith(path + "~")).findFirst().isPresent()) {
+					if (!result.stream().filter(s -> s.startsWith(path + "~")).findFirst().isPresent()) {
 						result.add(path);
 					}
 				}
@@ -316,7 +316,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public List<RecordingInfo> getRecordingsInPath(String vdrUuid, String path) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.open()) {
 			return con.createQuery(
 					"SELECT NAME, regexp_substring(NAME, '[^~]*$') NAME, file_name fileName, relative_file_name relativeFileName, duration, filesize fileSize, event_start_time recStart FROM recording WHERE (( POSITION(CONCAT(:path, '~') IN NAME) = 1 AND POSITION('~' IN RIGHT(NAME,LENGTH(NAME) - LENGTH(CONCAT(:path, '~')))) = 0 ) OR ( (nvl(:path, '') = '') AND (POSITION('~' IN NAME) = 0) )) AND vdr_uuid = :vdruuid") //
@@ -328,7 +328,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public RecordingInfo getRecording(String vdruuid, String file) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.open()) {
 			return con.createQuery(
 					"select regexp_substring(name, '[^~]*$') name, file_name fileName, relative_file_name relativeFileName, duration, filesize fileSize, event_start_time recStart, frames_per_second framesPerSecond, edited, channel_id channelId, event_title title, event_short_text shortText, event_description description, aux from recording where relative_file_name = :fileName and vdr_uuid = :vdruuid") //
@@ -340,7 +340,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public RecPathSummary getRecSummary(String vdrUuid, String path) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.open()) {
 			return con.createQuery(
 					"select count(*) countRecordings, sum(duration) time, sum(filesize) size from recording where vdr_uuid = :vdruuid and name like concat(:path, '~%')") //
@@ -352,7 +352,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public void deleteRecording(String vdrUuid, String fileName) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
+
 		try (Connection con = sql2o.beginTransaction()) {
 			con.createQuery("delete from recording where vdr_uuid = :vdruuid and file_name=:fileName") //
 					.addParameter("vdruuid", vdrUuid) //
@@ -360,11 +360,12 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 					.executeUpdate();
 
 			if (configuration.isUseSyncMap()) {
-				delete(vdrUuid, "recordings" + JonglistoUtil.encodePath(fileName) + "?" + createSyncStr(vdrUuid, getRecSyncId(vdrUuid, con)), null);
+				delete(vdrUuid, "recordings" + JonglistoUtil.encodePath(fileName) + "?"
+						+ createSyncStr(vdrUuid, getRecSyncId(vdrUuid, con)), null);
 			} else {
 				delete(vdrUuid, "recordings" + JonglistoUtil.encodePath(fileName), null);
 			}
-			
+
 			con.commit();
 		}
 
@@ -395,7 +396,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			String name = null;
 
 			int idx = oldName.lastIndexOf("~");
-			
+
 			if (idx == -1) {
 				name = newName;
 			} else {
@@ -423,14 +424,15 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public void moveRecording(String vdrUuid, String source, String destination) {
 		Sql2o sql2o = configuration.getSql2oHsqldb();
-		
-		try (Connection con = sql2o.beginTransaction()) {
-			String oldName = con.createQuery("select name from recording where vdr_uuid = :vdruuid and file_name = :fileName") //
-								.addParameter("fileName", source) //
-								.addParameter("vdruuid", vdrUuid) //
-								.executeScalar(String.class);
 
-			// build new name			
+		try (Connection con = sql2o.beginTransaction()) {
+			String oldName = con
+					.createQuery("select name from recording where vdr_uuid = :vdruuid and file_name = :fileName") //
+					.addParameter("fileName", source) //
+					.addParameter("vdruuid", vdrUuid) //
+					.executeScalar(String.class);
+
+			// build new name
 			// Directories have to be splitted by '~' not '/'
 			String name = null;
 
@@ -440,21 +442,22 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			if (idx == -1) {
 				name = destination + "~" + name;
 			} else {
-				name = destination + "~" + oldName.substring(idx+1, oldName.length());
+				name = destination + "~" + oldName.substring(idx + 1, oldName.length());
 			}
-			
+
 			moveRecording(con, vdrUuid, source, name);
 		}
 	}
-	
+
 	/*
 	 * private helper functions
 	 */
-	
-	private <T> Optional<List<T>> getJsonList(String vdrUuid, String urlPart, String arrayName, String key, Class<T> clazz) {
+
+	private <T> Optional<List<T>> getJsonList(String vdrUuid, String urlPart, String arrayName, String key,
+			Class<T> clazz) {
 		try {
 			JSONArray array = getJsonData(vdrUuid, urlPart).getJSONArray(arrayName);
-			
+
 			if (key != null) {
 				return Optional.of(convertJSONArrayToList(array, key, clazz));
 			} else {
@@ -474,8 +477,8 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 			log.error("Fehler in getJsonList2: ", e);
 			return Optional.empty();
 		}
-	}	
-	
+	}
+
 	protected Timer enrichEventId(Timer timer) {
 		if (timer.getEventId() == -1) {
 			// try to find an eventid in epgsearch aux
@@ -484,17 +487,18 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 				timer.setEventId(Integer.valueOf(m.group(1)));
 			} else {
 				// try to find an event id in epg2vdr database
-				
+
 				// TODO: implement this.
 				// perhaps this could work:
-				// 		select * from eventsviewplain 
-				// 		 where cnt_channelid = 'C-133-6-1124' (timer.getChannelId())
-				//		 and   cnt_starttime >= 1476064080    (timer.getStart())
-				//	 	 and   cnt_starttime + cnt_duration <= 1476067800; (timer.getStop())
+				// select * from eventsviewplain
+				// where cnt_channelid = 'C-133-6-1124' (timer.getChannelId())
+				// and cnt_starttime >= 1476064080 (timer.getStart())
+				// and cnt_starttime + cnt_duration <= 1476067800;
+				// (timer.getStop())
 
 			}
 		}
-		
+
 		return timer;
 	}
 
@@ -511,29 +515,27 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 				.addParameter("vdruuid", vdrUuid) //
 				.executeScalar(Integer.class);
 	}
-	
+
 	private void moveRecording(Connection con, String vdrUuid, String source, String destination) {
 		con.createQuery("delete from recording where vdr_uuid = :vdruuid and file_name = :fileName") //
 				.addParameter("vdruuid", vdrUuid) //
 				.addParameter("fileName", source) //
 				.executeUpdate();
 
-		post(vdrUuid, "recordings/move.json", "source=" + JonglistoUtil.encodePath(source) + "&target=" + JonglistoUtil.encodePath(destination));
+		post(vdrUuid, "recordings/move.json",
+				"source=" + JonglistoUtil.encodePath(source) + "&target=" + JonglistoUtil.encodePath(destination));
 	}
 
 	private void insertRecording(Connection con, Recording r, String vdrUuid) {
 		/*
-		if (USE_SYNC_ID) {
-			// in esoteric cases (2 identical VDR configurations), it is possible,
-			// that a recording already exists with the same hash but with different
-			// file names.
-			con.createQuery("delete from recording where hash = :hash and vdr_uuid = :vdruuid") //
-					.addParameter("hash", r.getHash()) //
-					.addParameter("vdruuid", vdrUuid) //
-					.executeUpdate();
-		}
-		*/
-		
+		 * if (USE_SYNC_ID) { // in esoteric cases (2 identical VDR
+		 * configurations), it is possible, // that a recording already exists
+		 * with the same hash but with different // file names. con.
+		 * createQuery("delete from recording where hash = :hash and vdr_uuid = :vdruuid"
+		 * ) // .addParameter("hash", r.getHash()) // .addParameter("vdruuid",
+		 * vdrUuid) // .executeUpdate(); }
+		 */
+
 		con.createQuery(
 				"insert into recording (id, vdr_uuid, number, name, file_name, relative_file_name, duration, frames_per_second, edited, filesize, channel_id, event_title, event_short_text, event_description, event_start_time, event_duration, hash, aux) values ((next value for seq_recording), :vdruuid, :number, :name, :file_name, :relative_file_name, :duration, :frames_per_second, :edited, :filesize, :channel_id, :event_title, :event_short_text, :event_description, :event_start, :event_duration, :hash, :aux)") //
 				.addParameter("vdruuid", vdrUuid) //
@@ -562,7 +564,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 				.addParameter("vdruuid", vdrUuid) //
 				.executeUpdate();
 	}
-	
+
 	private void processRecordingList(String vdrUuid, Connection con, List<Recording> list) {
 		for (Recording r : list) {
 			// add, delete or update.
@@ -579,21 +581,35 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	public List<String> getDirectoriesWithLeafs(String vdrUuid, Connection con) {
 		return con.createQuery("select name from recording where vdr_uuid = :vdruuid order by upper(name)") //
-					.addParameter("vdruuid", vdrUuid).executeScalarList(String.class);
+				.addParameter("vdruuid", vdrUuid).executeScalarList(String.class);
 	}
-	
+
+	private Optional<List<Channel>> filterChannels(Optional<List<Channel>> vdrChannels) {
+		// get List of channels in epg2vdr
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.open()) {
+			final List<String> channelMap = con.createQuery("select distinct channelid from channelmap")
+					.executeAndFetch(String.class);
+
+			// find all VDR channels, which are also in channelMap
+			return Optional.of(vdrChannels.orElse(Collections.emptyList()).stream()
+					.filter(c -> channelMap.contains(c.getId())).collect(Collectors.toList()));
+		}
+	}
+
 	/*
-	 *  conversion methods
+	 * conversion methods
 	 */
 
 	@SuppressWarnings("unchecked")
 	private <T> List<T> convertJSONArrayToList(JSONArray array, Class<T> clazz) {
 		List<T> result = new ArrayList<>();
-		
+
 		array.forEach(s -> {
 			try {
 				if (clazz == String.class) {
-					result.add((T)s);
+					result.add((T) s);
 				} else {
 					result.add(mapper.readValue(s.toString(), clazz));
 				}
@@ -607,7 +623,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
 	private <T> List<T> convertJSONArrayToList(JSONArray array, String key, Class<T> clazz) {
 		List<T> result = new ArrayList<>();
-		
+
 		array.forEach(s -> {
 			try {
 				result.add(mapper.readValue(s.toString(), clazz));
@@ -619,117 +635,120 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 		return result;
 	}
 
-	
 	/*
 	 * low level rest api methods
 	 */
-	
+
 	private String getVdrRestUrl(String vdrUuid) {
-		VDR v = configuration.getVdr(vdrUuid);		
+		VDR v = configuration.getVdr(vdrUuid);
 		return "http://" + v.getIp() + ":" + v.getRestfulApiPort() + "/";
 	}
-	
-    private JSONObject getJsonData(String vdrUuid, String path)  {
-    	JSONObject result;    	
-        HttpResponse<String> jsonResponse;
 
-        try {
-        	String restUrl = getVdrRestUrl(vdrUuid) + path;
-            
-            if (log.isDebugEnabled()) {
-            	log.debug("GET: " + restUrl);
-            }
-            
-            jsonResponse = Unirest.get(restUrl).asString();
-        } catch (UnirestException e) {
-            throw new NetworkException(e);
-        }
-        
-        if ((jsonResponse != null) && (jsonResponse.getStatus() == 200)) {
-        	result = new JSONObject(jsonResponse.getBody());        	
-        } else {
-        	if (jsonResponse == null) {
-        		throw new NetworkException("unknown error: Keine Antwort erhalten");
-        	} else {
-        		throw new NetworkException("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", " + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
-        	}
-        }
+	private JSONObject getJsonData(String vdrUuid, String path) {
+		JSONObject result;
+		HttpResponse<String> jsonResponse;
 
-        return result;
-    }
-    
-    protected String put(String vdrUuid, String path, String body) {
 		try {
 			String restUrl = getVdrRestUrl(vdrUuid) + path;
-			
+
 			if (log.isDebugEnabled()) {
-            	log.debug("PUT: " + restUrl + "\n" + body);
-            }
-			
+				log.debug("GET: " + restUrl);
+			}
+
+			jsonResponse = Unirest.get(restUrl).asString();
+		} catch (UnirestException e) {
+			throw new NetworkException(e);
+		}
+
+		if ((jsonResponse != null) && (jsonResponse.getStatus() == 200)) {
+			result = new JSONObject(jsonResponse.getBody());
+		} else {
+			if (jsonResponse == null) {
+				throw new NetworkException("unknown error: Keine Antwort erhalten");
+			} else {
+				throw new NetworkException("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
+						+ jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
+			}
+		}
+
+		return result;
+	}
+
+	protected String put(String vdrUuid, String path, String body) {
+		try {
+			String restUrl = getVdrRestUrl(vdrUuid) + path;
+
+			if (log.isDebugEnabled()) {
+				log.debug("PUT: " + restUrl + "\n" + body);
+			}
+
 			HttpResponse<String> result = Unirest.put(restUrl).body(body).asString();
 			if (result.getStatus() != 200) {
-				throw new NetworkException("Put failed with code " + result.getStatus() + ", " + result.getStatusText());
+				throw new NetworkException(
+						"Put failed with code " + result.getStatus() + ", " + result.getStatusText());
 			}
-			
+
 			return result.getBody();
 		} catch (UnirestException e) {
 			throw new NetworkException(e);
 		}
 	}
-	
+
 	protected String delete(String vdrUuid, String path, String body) {
 		try {
 			String restUrl = getVdrRestUrl(vdrUuid) + path;
-			
+
 			HttpResponse<String> result;
-			
-            if (log.isDebugEnabled()) {
-            	log.debug("DELETE: " + restUrl + "\n" + body);
-            }
-			
+
+			if (log.isDebugEnabled()) {
+				log.debug("DELETE: " + restUrl + "\n" + body);
+			}
+
 			if (body != null) {
 				result = Unirest.delete(restUrl).body(body).asString();
 			} else {
 				result = Unirest.delete(restUrl).asString();
 			}
-			
+
 			if (result.getStatus() == 404) {
 				// recording not found, but we want to delete this
 				return result.getBody();
-			} else  if (result.getStatus() != 200) {				
-				throw new NetworkException("Delete failed with code " + result.getStatus() + ", " + result.getStatusText());
+			} else if (result.getStatus() != 200) {
+				throw new NetworkException(
+						"Delete failed with code " + result.getStatus() + ", " + result.getStatusText());
 			}
-			
+
 			return result.getBody();
 		} catch (UnirestException e) {
 			throw new NetworkException(e);
-		}	
+		}
 	}
-	
+
 	protected String post(String vdrUuid, String path, String body) {
 		String restUrl = getVdrRestUrl(vdrUuid) + path;
-		
+
 		try {
 			HttpResponse<String> result;
-			
-            if (log.isDebugEnabled()) {
-            	log.debug("POST: " + restUrl + "\n" + body);
-            }
-			
+
+			if (log.isDebugEnabled()) {
+				log.debug("POST: " + restUrl + "\n" + body);
+			}
+
 			if (body != null) {
 				result = Unirest.post(restUrl).body(body).asString();
 			} else {
 				result = Unirest.post(restUrl).asString();
 			}
-			
+
 			if (result.getStatus() != 200) {
-				throw new NetworkException("Post failed with code " + result.getStatus() + ", " + result.getStatusText());
+				throw new NetworkException(
+						"Post failed with code " + result.getStatus() + ", " + result.getStatusText());
 			}
-			
+
 			return result.getBody();
 		} catch (UnirestException e) {
 			throw new NetworkException(e);
-		}	
+		}
 	}
 
 	protected <T> List<T> postAndGetList(String vdrUuid, String urlPart, String body, String name, Class<T> clazz) {

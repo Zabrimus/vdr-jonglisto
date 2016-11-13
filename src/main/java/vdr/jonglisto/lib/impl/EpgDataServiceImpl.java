@@ -362,4 +362,22 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
 						.executeScalar(String.class);			   
 		}
 	}
+
+	public List<String> getGenres() {
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.open()) {
+			return con.createQuery("select distinct sub_genre from eventsviewplain where sub_genre is not null order by sub_genre") //
+					.executeAndFetch(String.class);
+		}
+	}
+
+	public List<String> getCategories() {
+		Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+		try (Connection con = sql2o.open()) {
+			return con.createQuery("select distinct sub_category from eventsviewplain where sub_category is not null order by sub_category") //
+					.executeAndFetch(String.class);
+		}
+	}
 }
