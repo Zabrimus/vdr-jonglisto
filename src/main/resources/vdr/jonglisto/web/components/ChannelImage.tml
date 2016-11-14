@@ -1,10 +1,10 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<t:content>		
-		<t:if test="isLogoExists()">
-			<img src="${getChannelImageLink()}" alt="${channelName}" data-toggle="tooltip" title="${channelName}" class="channelimage tooltipTop" />
-			<p:else>
-				${channelName}
-			</p:else>
-		</t:if>		
-	</t:content>
+    <t:content>
+        <t:if test="isLogoExists()">
+            <img src="${getChannelImageLink()}" alt="${channelName}" data-toggle="tooltip" title="${channelName}" class="channelimage tooltipTop" />
+            <p:else>
+                ${channelName}
+            </p:else>
+        </t:if>
+    </t:content>
 </html>	

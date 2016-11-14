@@ -19,164 +19,165 @@ import vdr.jonglisto.lib.model.EPGMedia.MediaType;
 import vdr.jonglisto.lib.model.Timer;
 
 public class Epg extends BaseComponent {
-	
-	@Parameter
-	private Long useId;
-	
-	@Property
-	@Parameter(required = true)
-	private String channelName;
 
-	@Property
-	@Parameter 
-	private boolean isRecording;
+    @Parameter
+    private Long useId;
 
-	@Property
-	@Parameter 
-	private String recFilename;
-	
-	@PageActivationContext
-	@Property
-	private String epgTab;
-	
-	@InjectComponent
-	protected Zone epgInfoZone;
+    @Property
+    @Parameter(required = true)
+    private String channelName;
 
-	@Property
-	private Map<String, Object> epg;
+    @Property
+    @Parameter
+    private boolean isRecording;
 
-	@Persist
-	private Long savedUseId;
+    @Property
+    @Parameter
+    private String recFilename;
 
-	@Persist
-	@Property
-	private String filename;
-	
-	@Persist
-	@Property
-	private boolean recordingFlag; 
+    @PageActivationContext
+    @Property
+    private String epgTab;
 
-	@Property
-	private List<EPGMedia> allMedia;
-	
-	@Property
-	private EPGMedia epgMedia;
-	
-	@Persist
-	private Set<MediaType> availableMediaTypes;
+    @InjectComponent
+    protected Zone epgInfoZone;
 
-	@Property
+    @Property
+    private Map<String, Object> epg;
+
+    @Persist
+    private Long savedUseId;
+
+    @Persist
+    @Property
+    private String filename;
+
+    @Persist
+    @Property
+    private boolean recordingFlag;
+
+    @Property
+    private List<EPGMedia> allMedia;
+
+    @Property
+    private EPGMedia epgMedia;
+
+    @Persist
+    private Set<MediaType> availableMediaTypes;
+
+    @Property
     private String epgInfoModalId = "epgInfoModal";
 
-	@Property
-	private boolean visible;
+    @Property
+    private boolean visible;
 
-	private Timer timer;
-	
-	// Trigger from Epg.tml to reload the epg data
-	public void onLoadEpgData() {
-		if (epg == null) {
-			if (recordingFlag) {
-				// special handling for recordings
-				// epg = epgDataService.getEpgDataForRecording(recFilename);
-				epg = epgDataService.getEpgDataForRecording(filename);
-				channelName = (String) epg.get("channelname");
-			} else {
-				// normal processing
-				epg = epgDataService.getEpgDataForUseId(savedUseId);
-			}
-		}
-	}
-	
-	// nasty, but trigger does now allow parameters
-	public void onReloadEpgImagesBanner() {
-		reloadEpgImages(MediaType.Banner);
-	}
-	
-	public void onReloadEpgImagesPoster() {
-		reloadEpgImages(MediaType.Poster);
-	}
-	
-	public void onReloadEpgImagesSeasonPoster() {
-		reloadEpgImages(MediaType.SeasonPoster);
-	}
-	
-	public void onReloadEpgImagesFanArt() {
-		reloadEpgImages(MediaType.FanArt);
-	}
-	
-	public void onReloadEpgImagesEpisodePic() {
-		reloadEpgImages(MediaType.EpisodePic);
-	}
-	
-	public void onReloadEpgImagesActor() {
-		reloadEpgImages(MediaType.Actor);
-	}
-	
-	public boolean onEditTimer(String id) {
-		visible = false;
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(epgInfoZone);
-		}
-		
-		return false;
-	}
-	
-	public List<String> getImageFilenames() {
-		List<String> result;
-		
-		if (recordingFlag) {
-			result = epgImageService.getImageFilenames(filename);
-		} else {
-			result = epgImageService.getImageFilenames(savedUseId);
-		}
-		
-		return result;
-	}
-	
-	public boolean isMediaTypeAvailable(MediaType type) {		
-		return availableMediaTypes.contains(type);
-	}
-	
-	private void reloadEpgImages(MediaType type) {		
-		allMedia = epgImageService.getEpgMedia(savedUseId, filename, type);
-	}
-	
-	public Timer getTimer() {
-		return timer;
-	}
+    private Timer timer;
 
-	public void setTimer(Timer timer) {
-		this.timer = timer;
-	}
+    // Trigger from Epg.tml to reload the epg data
+    public void onLoadEpgData() {
+        if (epg == null) {
+            if (recordingFlag) {
+                // special handling for recordings
+                // epg = epgDataService.getEpgDataForRecording(recFilename);
+                epg = epgDataService.getEpgDataForRecording(filename);
+                channelName = (String) epg.get("channelname");
+            } else {
+                // normal processing
+                epg = epgDataService.getEpgDataForUseId(savedUseId);
+            }
+        }
+    }
 
-	public void showInfoZone() {
-		visible = true;
-		
-		savedUseId = useId;			
-		filename = recFilename;
-		recordingFlag = isRecording;
-		availableMediaTypes = epgImageService.getAvailableMediaTypes(savedUseId, filename);
-		
-		onLoadEpgData();
-		
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addCallback(makeScriptToShowModal());
-			ajaxResponseRenderer.addRender(epgInfoZone);
-		}
-	}
+    // nasty, but trigger does now allow parameters
+    public void onReloadEpgImagesBanner() {
+        reloadEpgImages(MediaType.Banner);
+    }
 
-	public void hideInfoZone() {
-		visible = false;
-		
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addCallback(makeScriptToHideModal());
-			ajaxResponseRenderer.addRender(epgInfoZone);
-		}
-	}
-	
-	public JavaScriptCallback makeScriptToShowModal() {
+    public void onReloadEpgImagesPoster() {
+        reloadEpgImages(MediaType.Poster);
+    }
+
+    public void onReloadEpgImagesSeasonPoster() {
+        reloadEpgImages(MediaType.SeasonPoster);
+    }
+
+    public void onReloadEpgImagesFanArt() {
+        reloadEpgImages(MediaType.FanArt);
+    }
+
+    public void onReloadEpgImagesEpisodePic() {
+        reloadEpgImages(MediaType.EpisodePic);
+    }
+
+    public void onReloadEpgImagesActor() {
+        reloadEpgImages(MediaType.Actor);
+    }
+
+    public boolean onEditTimer(String id) {
+        visible = false;
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(epgInfoZone);
+        }
+
+        return false;
+    }
+
+    public List<String> getImageFilenames() {
+        List<String> result;
+
+        if (recordingFlag) {
+            result = epgImageService.getImageFilenames(filename);
+        } else {
+            result = epgImageService.getImageFilenames(savedUseId);
+        }
+
+        return result;
+    }
+
+    public boolean isMediaTypeAvailable(MediaType type) {
+        return availableMediaTypes.contains(type);
+    }
+
+    private void reloadEpgImages(MediaType type) {
+        allMedia = epgImageService.getEpgMedia(savedUseId, filename, type);
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
+    }
+
+    public void showInfoZone() {
+        visible = true;
+
+        savedUseId = useId;
+        filename = recFilename;
+        recordingFlag = isRecording;
+        availableMediaTypes = epgImageService.getAvailableMediaTypes(savedUseId, filename);
+
+        onLoadEpgData();
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addCallback(makeScriptToShowModal());
+            ajaxResponseRenderer.addRender(epgInfoZone);
+        }
+    }
+
+    public void hideInfoZone() {
+        visible = false;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addCallback(makeScriptToHideModal());
+            ajaxResponseRenderer.addRender(epgInfoZone);
+        }
+    }
+
+    public JavaScriptCallback makeScriptToShowModal() {
         return new JavaScriptCallback() {
+
             public void run(JavaScriptSupport javascriptSupport) {
                 javaScriptSupport.require("dialogmodal").invoke("activate").with(epgInfoModalId, new JSONObject());
             }
@@ -185,6 +186,7 @@ public class Epg extends BaseComponent {
 
     public JavaScriptCallback makeScriptToHideModal() {
         return new JavaScriptCallback() {
+
             public void run(JavaScriptSupport javascriptSupport) {
                 javaScriptSupport.require("dialogmodal").invoke("hide").with(epgInfoModalId);
             }

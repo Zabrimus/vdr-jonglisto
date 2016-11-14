@@ -2,9 +2,7 @@
 	<t:content>
 		<div class="form-group col-sm-36">
 			<t:zone t:id="channelPaletteZone" id="channelPaletteZone">
-				<!-- 
-				VDR Kanalgruppe:
-				-->
+				<!-- VDR Kanalgruppe: -->
 				<t:select t:id="group" model="groups" value="group" blankOption="ALWAYS" blankLabel="Alle..." t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change"
 					ZoneUpdater.event="palSelectGroup" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')" />
 				<br />
@@ -15,7 +13,8 @@
 				<t:Checkbox t:id="select_alpha" type="checkbox" label="message:select_alpha" value="sortAlpha" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change"
 					ZoneUpdater.event="palSelectAlpha" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')" />
 
-				&nbsp;<t:label for="select_alpha" />
+				&nbsp;
+				<t:label for="select_alpha" />
 			</t:zone>
 		</div>
 	</t:content>

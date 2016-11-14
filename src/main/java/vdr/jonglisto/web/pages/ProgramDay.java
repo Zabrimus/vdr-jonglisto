@@ -10,24 +10,24 @@ import vdr.jonglisto.lib.model.search.EpgSearchCriteria.What;
 
 public class ProgramDay {
 
-	@SessionAttribute("epgSearchCriteria")
-	@Property
-	private EpgSearchCriteria epgCriteria;
+    @SessionAttribute("epgSearchCriteria")
+    @Property
+    private EpgSearchCriteria epgCriteria;
 
     @SessionAttribute
-	@Property
-	private VDRView currentVdrView;
-	
-	Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
-		if (currentVdrView == null) {
-			// side jump into the page?
-			return Index.class;
-		}
-		
-		if (((reset != null) && reset) || (epgCriteria == null) || (epgCriteria.getWhat() != What.DAY)) {
-			epgCriteria = new EpgSearchCriteria(What.DAY);
-		}
-		
-		return null;
-	}
+    @Property
+    private VDRView currentVdrView;
+
+    Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
+        if (currentVdrView == null) {
+            // side jump into the page?
+            return Index.class;
+        }
+
+        if (((reset != null) && reset) || (epgCriteria == null) || (epgCriteria.getWhat() != What.DAY)) {
+            epgCriteria = new EpgSearchCriteria(What.DAY);
+        }
+
+        return null;
+    }
 }

@@ -25,211 +25,212 @@ import vdr.jonglisto.web.encoder.ChannelEncoder;
 
 public class EpgLayout extends BaseComponent {
 
-	public enum Function {
-		LIST, INFO;
-	}
+    public enum Function {
+        LIST, INFO;
+    }
 
-	private static DateTimeFormatter localTimeformatter = DateTimeFormatter.ofPattern("HH:mm");
+    private static DateTimeFormatter localTimeformatter = DateTimeFormatter.ofPattern("HH:mm");
 
-	private Function function;
+    private Function function;
 
-	@InjectComponent
-	protected Epg epg;
+    @InjectComponent
+    protected Epg epg;
 
-	@InjectComponent
-	protected Zone epgCriteriaZone;
+    @InjectComponent
+    protected Zone epgCriteriaZone;
 
-	@Inject
-	@Property	
-	private ChannelEncoder channelEncoder;
+    @Inject
+    @Property
+    private ChannelEncoder channelEncoder;
 
-	@Inject
-	private SelectModelFactory selectModelFactory;
+    @Inject
+    private SelectModelFactory selectModelFactory;
 
-	@SessionAttribute("epgSearchCriteria")
-	@Property
-	private EpgSearchCriteria epgCriteria;
-	
-	@Persist
-	@Property
-	private List<String> groups;
+    @SessionAttribute("epgSearchCriteria")
+    @Property
+    private EpgSearchCriteria epgCriteria;
 
-	@Persist
-	@Property
-	private SelectModel channelSelectModel;
+    @Persist
+    @Property
+    private List<String> groups;
 
-	@Persist
-	private List<Channel> channels;
+    @Persist
+    @Property
+    private SelectModel channelSelectModel;
 
-	@Persist
-	@Property
-	private List<String> categories;
+    @Persist
+    private List<Channel> channels;
 
-	@Persist
-	@Property
-	private List<String> genres;
+    @Persist
+    @Property
+    private List<String> categories;
 
-	@Property
-	private Long epgDetailUseId;
-	
-	@Property
-	private String epgDetailChannelName;
+    @Persist
+    @Property
+    private List<String> genres;
 
-	@SetupRender
-	public void setupRender() {
-		String channelId = request.getParameter("channelId");
-		String searchTime = request.getParameter("searchTime");
-		
-		Optional<Channel> channel;
+    @Property
+    private Long epgDetailUseId;
 
-		if (channelId != null) {
-			channel = dataService.getChannel(getChannelUuid(), channelId);
-		} else {
-			channel = Optional.empty();
-		}
-		
-		if (epgCriteria.isReset() || channel.isPresent()) {
-			epgCriteria.setReset(false);
-			
-			groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
+    @Property
+    private String epgDetailChannelName;
 
-			if (channel.isPresent()) {
-				epgCriteria.setChannelGroup(channel.get().getGroup());
-				epgCriteria.setChannel(channel.get());
-				
-				channels = dataService.getChannelsInGroup(getChannelUuid(), channel.get().getGroup()).get();
-			} else {
-				if (groups.size() > 0) {
-					channels = dataService.getChannelsInGroup(getChannelUuid(), groups.get(0)).orElse(Collections.emptyList());
-					epgCriteria.setChannelGroup(groups.get(0));
-				} else {
-					channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
-					epgCriteria.setChannelGroup(null);
-				}
-	
-				if (channels.size() > 0) {
-					epgCriteria.setChannel(channels.get(0));
-				}
-			}
-		}
+    @SetupRender
+    public void setupRender() {
+        String channelId = request.getParameter("channelId");
+        String searchTime = request.getParameter("searchTime");
 
-		if (searchTime != null) {
-			epgCriteria.setTime(Long.parseLong(searchTime));
-		}
-		
-		updateData();
-	}
+        Optional<Channel> channel;
 
-	public void updateData(List<String> genres, List<String> categories) {
-		this.genres = genres;
-		this.categories = categories;
-	}
+        if (channelId != null) {
+            channel = dataService.getChannel(getChannelUuid(), channelId);
+        } else {
+            channel = Optional.empty();
+        }
 
-	public void onValueChangedFromGroup(String selectedGroup) {
-		epgCriteria.setChannelGroup(selectedGroup);
+        if (epgCriteria.isReset() || channel.isPresent()) {
+            epgCriteria.setReset(false);
 
-		// reset category and genre
-		epgCriteria.setCategory(null);
-		epgCriteria.setGenre(null);
+            groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
 
-		if (selectedGroup != null) {
-			channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup).orElse(Collections.emptyList());
-		} else {
-			channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
-		}
+            if (channel.isPresent()) {
+                epgCriteria.setChannelGroup(channel.get().getGroup());
+                epgCriteria.setChannel(channel.get());
 
-		epgCriteria.setChannel(channels.get(0));
+                channels = dataService.getChannelsInGroup(getChannelUuid(), channel.get().getGroup()).get();
+            } else {
+                if (groups.size() > 0) {
+                    channels = dataService.getChannelsInGroup(getChannelUuid(), groups.get(0))
+                            .orElse(Collections.emptyList());
+                    epgCriteria.setChannelGroup(groups.get(0));
+                } else {
+                    channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
+                    epgCriteria.setChannelGroup(null);
+                }
 
-		updateData();
-	}
+                if (channels.size() > 0) {
+                    epgCriteria.setChannel(channels.get(0));
+                }
+            }
+        }
 
-	public void onValueChangedFromChannel1(Channel selectedChannel) {
-		epgCriteria.setChannel(selectedChannel);
-		updateData();
-	}
+        if (searchTime != null) {
+            epgCriteria.setTime(Long.parseLong(searchTime));
+        }
 
-	public void onValueChangedFromChannel2(Channel selectedChannel) {
-		onValueChangedFromChannel1(selectedChannel);
-	}
+        updateData();
+    }
 
-	public void onValueChangedFromGenre(String selectedGenre) {
-		epgCriteria.setGenre(selectedGenre);
-		updateData();
-	}
+    public void updateData(List<String> genres, List<String> categories) {
+        this.genres = genres;
+        this.categories = categories;
+    }
 
-	public void onValueChangedFromCategory(String selectedCategory) {
-		epgCriteria.setCategory(selectedCategory);
-		updateData();
-	}
+    public void onValueChangedFromGroup(String selectedGroup) {
+        epgCriteria.setChannelGroup(selectedGroup);
 
-	public void onSelectedFromSearchText() {
-		updateData();
-	}
+        // reset category and genre
+        epgCriteria.setCategory(null);
+        epgCriteria.setGenre(null);
 
-	public void onSelectedFromResetText() {
-		epgCriteria.setSearchText(null);
-		updateData();
-	}
+        if (selectedGroup != null) {
+            channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup).orElse(Collections.emptyList());
+        } else {
+            channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
+        }
 
-	public void onSelectedFromSearchTime() {
-		updateData();
-	}
+        epgCriteria.setChannel(channels.get(0));
 
-	public void onSelectedFromResetTime() {
-		epgCriteria.setTime(null);
-		updateData();
-	}
+        updateData();
+    }
 
-	public List<Channel> getChannels() {
-		return channels;
-	}
+    public void onValueChangedFromChannel1(Channel selectedChannel) {
+        epgCriteria.setChannel(selectedChannel);
+        updateData();
+    }
 
-	public String getTimeStr() {
-		if (epgCriteria.getTime() != null) {
-			return LocalDateTime.ofInstant(Instant.ofEpochSecond(epgCriteria.getTime()), ZoneId.systemDefault())
-					.toLocalTime().format(localTimeformatter);
-		} else {
-			return null;
-		}
-	}
+    public void onValueChangedFromChannel2(Channel selectedChannel) {
+        onValueChangedFromChannel1(selectedChannel);
+    }
 
-	public void setTimeStr(String st) {
-		int idx = st.indexOf(':');
+    public void onValueChangedFromGenre(String selectedGenre) {
+        epgCriteria.setGenre(selectedGenre);
+        updateData();
+    }
 
-		epgCriteria.setTime( //
-				LocalDateTime.now() //
-						.withHour(Integer.valueOf(st.substring(0, idx))) //
-						.withMinute(Integer.valueOf(st.substring(idx + 1))) //
-						.atZone(ZoneOffset.systemDefault()) //
-						.toEpochSecond());
-	}
-	
-	public boolean isFunction(Function function) {
-		return function == this.function;
-	}
+    public void onValueChangedFromCategory(String selectedCategory) {
+        epgCriteria.setCategory(selectedCategory);
+        updateData();
+    }
 
-	public void onShowEpg(Long useId, String channelName) {
-		epgDetailUseId = useId;
-		epgDetailChannelName = channelName;
-		
-		function = Function.INFO;		
-		epg.showInfoZone();		
-	}
+    public void onSelectedFromSearchText() {
+        updateData();
+    }
 
-	private void updateData() {
-		function = Function.LIST;
-		epg.hideInfoZone();
-		
-		genres = Collections.emptyList();
-		categories = Collections.emptyList();
+    public void onSelectedFromResetText() {
+        epgCriteria.setSearchText(null);
+        updateData();
+    }
 
-		channelEncoder.addChannels(channels);
-		channelSelectModel = selectModelFactory.create(channels, "name");
+    public void onSelectedFromSearchTime() {
+        updateData();
+    }
 
-		componentResources.triggerEvent("updateEpg", null, null);
-		
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(epgCriteriaZone);			
-		}
-	}
+    public void onSelectedFromResetTime() {
+        epgCriteria.setTime(null);
+        updateData();
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public String getTimeStr() {
+        if (epgCriteria.getTime() != null) {
+            return LocalDateTime.ofInstant(Instant.ofEpochSecond(epgCriteria.getTime()), ZoneId.systemDefault())
+                    .toLocalTime().format(localTimeformatter);
+        } else {
+            return null;
+        }
+    }
+
+    public void setTimeStr(String st) {
+        int idx = st.indexOf(':');
+
+        epgCriteria.setTime( //
+                LocalDateTime.now() //
+                        .withHour(Integer.valueOf(st.substring(0, idx))) //
+                        .withMinute(Integer.valueOf(st.substring(idx + 1))) //
+                        .atZone(ZoneOffset.systemDefault()) //
+                        .toEpochSecond());
+    }
+
+    public boolean isFunction(Function function) {
+        return function == this.function;
+    }
+
+    public void onShowEpg(Long useId, String channelName) {
+        epgDetailUseId = useId;
+        epgDetailChannelName = channelName;
+
+        function = Function.INFO;
+        epg.showInfoZone();
+    }
+
+    private void updateData() {
+        function = Function.LIST;
+        epg.hideInfoZone();
+
+        genres = Collections.emptyList();
+        categories = Collections.emptyList();
+
+        channelEncoder.addChannels(channels);
+        channelSelectModel = selectModelFactory.create(channels, "name");
+
+        componentResources.triggerEvent("updateEpg", null, null);
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(epgCriteriaZone);
+        }
+    }
 }

@@ -8,15 +8,15 @@ import vdr.jonglisto.lib.model.VDRView;
 public class SearchTimer {
 
     @SessionAttribute
-	@Property
-	private VDRView currentVdrView;
-	
-	Object onActivate() {
-		if (currentVdrView == null) {
-			// deep jump into this page?
-			return Index.class;
-		}	
-		
-		return null;
-	}
+    @Property
+    private VDRView currentVdrView;
+
+    Object onActivate() {
+        if (currentVdrView == null) {
+            // deep jump into this page?
+            return Index.class;
+        }
+
+        return null;
+    }
 }

@@ -9,15 +9,15 @@ import vdr.jonglisto.lib.model.VDRView;
 public class Recordings {
 
     @SessionAttribute
-	@Property
-	private VDRView currentVdrView;
-	
-	Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
-		if (currentVdrView == null) {
-			// deep jump into this page?
-			return Index.class;
-		}		
-		
-		return null;
-	}
+    @Property
+    private VDRView currentVdrView;
+
+    Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
+        if (currentVdrView == null) {
+            // deep jump into this page?
+            return Index.class;
+        }
+
+        return null;
+    }
 }

@@ -9,35 +9,35 @@ import org.apache.tapestry5.services.ValueEncoderFactory;
 
 import vdr.jonglisto.lib.model.VDR;
 
-public class VDREncoder implements ValueEncoder<VDR>, ValueEncoderFactory<VDR> { 
+public class VDREncoder implements ValueEncoder<VDR>, ValueEncoderFactory<VDR> {
 
-	private Map<String, VDR> vdrs;
+    private Map<String, VDR> vdrs;
 
-	public VDREncoder() {
-		vdrs = new HashMap<>();
-	}
+    public VDREncoder() {
+        vdrs = new HashMap<>();
+    }
 
-	public VDREncoder(List<VDR> ch) {
-		vdrs = new HashMap<>();
-		addVdrs(ch);
-	}
-	
+    public VDREncoder(List<VDR> ch) {
+        vdrs = new HashMap<>();
+        addVdrs(ch);
+    }
+
     @Override
     public String toClient(VDR value) {
-        return value.getUuid(); 
+        return value.getUuid();
     }
-	
+
     @Override
     public VDR toValue(String id) {
-    	return vdrs.get(id);
+        return vdrs.get(id);
     }
 
     @Override
     public ValueEncoder<VDR> create(Class<VDR> type) {
-        return this; 
+        return this;
     }
 
-	public void addVdrs(List<VDR> ch) {
-		ch.stream().forEach(s -> vdrs.put(s.getUuid(), s));
-	}    
+    public void addVdrs(List<VDR> ch) {
+        ch.stream().forEach(s -> vdrs.put(s.getUuid(), s));
+    }
 }

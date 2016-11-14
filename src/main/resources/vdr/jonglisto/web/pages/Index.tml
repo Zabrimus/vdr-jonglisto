@@ -1,89 +1,63 @@
 <html t:type="layout" title="VDR Jonglisto Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
-	<t:loop source="configuredVdrs" value="vdr">
-		<div class="vdrinfo">
-			<table class="status">
-				<thead>
-					<tr>
-						<th colspan="3">
-							${vdr.displayName}&nbsp;
-							<t:eventlink t:event="wol" t:context="vdr.uuid">
-								<img src="${asset:wol.svg}" alt="WOL" class="iconwhsmall" />
-							</t:eventlink>
-						</th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<tr>
-						<td>IP:</td>
-						<td>${vdr.ip}</td>
-						<td>
-							<t:if test="pingHost()">
-								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
-								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
-								</p:else>
-							</t:if>
-						</td>
-					</tr>
-					<tr>
-						<td>SVDR Port:</td>
-						<td>${vdr.svdrpPort}</td>
-						<td>
-							<t:if test="testSvdrp()">
-								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
-								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
-								</p:else>
-							</t:if>
-						</td>
-					</tr>
-					<tr>
-						<td>RestfulApi Port:</td>
-						<td>${vdr.restfulApiPort}</td>
-						<td>
-							<t:if test="testRestfulApi()">
-								<img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
-								<p:else>
-									<img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
-								</p:else>
-							</t:if>
-						</td>
-					</tr>
-					
-					<!-- 
-					<tr>
-						<td colspan="3">
-							Plugins:
-							<table>
-								<t:loop source="plugins" value="plugin">
-									<tr>
-										<td>${plugin.name}</td>
-										<td>${plugin.version}</td>
-									</tr>
-								</t:loop>
-							</table>
-						</td>
-					</tr>
-					
-					<tr>
-						<td colspan="3">
-							Devices:
-							<table>
-								<t:loop source="devices" value="device">
-									<tr>
-										<td>${device.name}</td>
-										<td>${device.channelName}</td>
-									</tr>
-								</t:loop>
-							</table>
-						</td>
-					</tr>
-					-->					
-				</tbody>
-			</table>
-		</div>
-	</t:loop>
-	
+    <t:loop source="configuredVdrs" value="vdr">
+        <div class="vdrinfo">
+            <table class="status">
+                <thead>
+                    <tr>
+                        <th colspan="3">
+                            ${vdr.displayName}&nbsp;
+                            <t:eventlink t:event="wol" t:context="vdr.uuid">
+                                <img src="${asset:wol.svg}" alt="WOL" class="iconwhsmall" />
+                            </t:eventlink>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>IP:</td>
+                        <td>${vdr.ip}</td>
+                        <td>
+                            <t:if test="pingHost()">
+                                <img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
+                                <p:else>
+                                    <img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
+                                </p:else>
+                            </t:if>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SVDR Port:</td>
+                        <td>${vdr.svdrpPort}</td>
+                        <td>
+                            <t:if test="testSvdrp()">
+                                <img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
+                                <p:else>
+                                    <img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
+                                </p:else>
+                            </t:if>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>RestfulApi Port:</td>
+                        <td>${vdr.restfulApiPort}</td>
+                        <td>
+                            <t:if test="testRestfulApi()">
+                                <img src="${asset:ok.svg}" alt="OK" class="iconwhsmall" />
+                                <p:else>
+                                    <img src="${asset:nok.svg}" alt="Not OK" class="iconwhsmall" />
+                                </p:else>
+                            </t:if>
+                        </td>
+                    </tr>
+
+                    <!-- <tr> <td colspan="3"> Plugins: <table> <t:loop source="plugins" value="plugin"> <tr> <td>${plugin.name}</td> <td>${plugin.version}</td> 
+                        </tr> </t:loop> </table> </td> </tr> <tr> <td colspan="3"> Devices: <table> <t:loop source="devices" value="device"> <tr> <td>${device.name}</td> <td>${device.channelName}</td> 
+                        </tr> </t:loop> </table> </td> </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </t:loop>
+
 </html>

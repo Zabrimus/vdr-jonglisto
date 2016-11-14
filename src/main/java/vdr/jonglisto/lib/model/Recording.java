@@ -6,210 +6,210 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Recording {
-	
-	@JsonProperty("number")
-	private Integer number;
-	
-	@JsonProperty("name")
-	private String name;
-	
-	@JsonProperty("file_name")
-	private String fileName;
-	
-	@JsonProperty("relative_file_name")
-	private String relativeFileName;
-	
-	@JsonProperty("duration")
-	private Integer duration;
-	
-	@JsonProperty("frames_per_second")
-	private Integer framesPerSecond;
-	
-	@JsonProperty("is_edited")
-	private Boolean edited;
-	
-	@JsonProperty("filesize_mb")
-	private Integer fileSize;
-	
-	@JsonProperty("channel_id")
-	private String channelId;
-	
-	@JsonProperty("marks")
-	private List<String> marks = new ArrayList<String>();
-	
-	@JsonProperty("event_title")
-	private String eventTitle;
-	
-	@JsonProperty("event_short_text")
-	private String eventShortText;
-	
-	@JsonProperty("event_description")
-	private String eventDescription;
-	
-	@JsonProperty("event_start_time")
-	private Integer eventStartTime;
-	
-	@JsonProperty("event_duration")
-	private Integer eventDuration;
-	
-	@JsonProperty("sync_action")
-	private String syncAction;
-	
-	@JsonProperty("hash")
-	private String hash;
-	
-	@JsonProperty("aux")
-	private String aux;
 
-	public Integer getNumber() {
-		return number;
-	}
+    @JsonProperty("number")
+    private Integer number;
 
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
+    @JsonProperty("name")
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    @JsonProperty("file_name")
+    private String fileName;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @JsonProperty("relative_file_name")
+    private String relativeFileName;
 
-	public String getFileName() {
-		return fileName;
-	}
+    @JsonProperty("duration")
+    private Integer duration;
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    @JsonProperty("frames_per_second")
+    private Integer framesPerSecond;
 
-	public String getRelativeFileName() {
-		return relativeFileName;
-	}
+    @JsonProperty("is_edited")
+    private Boolean edited;
 
-	public void setRelativeFileName(String relativeFileName) {
-		this.relativeFileName = relativeFileName;
-	}
+    @JsonProperty("filesize_mb")
+    private Integer fileSize;
 
-	public Integer getDuration() {
-		return duration;
-	}
+    @JsonProperty("channel_id")
+    private String channelId;
 
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
+    @JsonProperty("marks")
+    private List<String> marks = new ArrayList<String>();
 
-	public Integer getFramesPerSecond() {
-		return framesPerSecond;
-	}
+    @JsonProperty("event_title")
+    private String eventTitle;
 
-	public void setFramesPerSecond(Integer framesPerSecond) {
-		this.framesPerSecond = framesPerSecond;
-	}
+    @JsonProperty("event_short_text")
+    private String eventShortText;
 
-	public Boolean getEdited() {
-		return edited;
-	}
+    @JsonProperty("event_description")
+    private String eventDescription;
 
-	public String getEditedStr() {
-		return edited ? "Y" : "N";
-	}
+    @JsonProperty("event_start_time")
+    private Integer eventStartTime;
 
-	public void setEditedStr(String v) {
-		edited = "Y".equals(v);
-	}
-	
-	public void setEdited(Boolean edited) {
-		this.edited = edited;
-	}
+    @JsonProperty("event_duration")
+    private Integer eventDuration;
 
-	public Integer getFileSize() {
-		return fileSize;
-	}
+    @JsonProperty("sync_action")
+    private String syncAction;
 
-	public void setFileSize(Integer fileSize) {
-		this.fileSize = fileSize;
-	}
+    @JsonProperty("hash")
+    private String hash;
 
-	public String getChannelId() {
-		return channelId;
-	}
+    @JsonProperty("aux")
+    private String aux;
 
-	public void setChannelId(String channelId) {
-		this.channelId = channelId;
-	}
+    public Integer getNumber() {
+        return number;
+    }
 
-	public List<String> getMarks() {
-		return marks;
-	}
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
 
-	public void setMarks(List<String> marks) {
-		this.marks = marks;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getEventTitle() {
-		return eventTitle;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setEventTitle(String eventTitle) {
-		this.eventTitle = eventTitle;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public String getEventShortText() {
-		return eventShortText;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public void setEventShortText(String eventShortText) {
-		this.eventShortText = eventShortText;
-	}
+    public String getRelativeFileName() {
+        return relativeFileName;
+    }
 
-	public String getEventDescription() {
-		return eventDescription;
-	}
+    public void setRelativeFileName(String relativeFileName) {
+        this.relativeFileName = relativeFileName;
+    }
 
-	public void setEventDescription(String eventDescription) {
-		this.eventDescription = eventDescription;
-	}
+    public Integer getDuration() {
+        return duration;
+    }
 
-	public Integer getEventStartTime() {
-		return eventStartTime;
-	}
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
 
-	public void setEventStartTime(Integer eventStartTime) {
-		this.eventStartTime = eventStartTime;
-	}
+    public Integer getFramesPerSecond() {
+        return framesPerSecond;
+    }
 
-	public Integer getEventDuration() {
-		return eventDuration;
-	}
+    public void setFramesPerSecond(Integer framesPerSecond) {
+        this.framesPerSecond = framesPerSecond;
+    }
 
-	public void setEventDuration(Integer eventDuration) {
-		this.eventDuration = eventDuration;
-	}
+    public Boolean getEdited() {
+        return edited;
+    }
 
-	public String getSyncAction() {
-		return syncAction;
-	}
+    public String getEditedStr() {
+        return edited ? "Y" : "N";
+    }
 
-	public void setSyncAction(String syncAction) {
-		this.syncAction = syncAction;
-	}
+    public void setEditedStr(String v) {
+        edited = "Y".equals(v);
+    }
 
-	public String getHash() {
-		return hash;
-	}
+    public void setEdited(Boolean edited) {
+        this.edited = edited;
+    }
 
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
+    public Integer getFileSize() {
+        return fileSize;
+    }
 
-	public String getAux() {
-		return aux;
-	}
+    public void setFileSize(Integer fileSize) {
+        this.fileSize = fileSize;
+    }
 
-	public void setAux(String aux) {
-		this.aux = aux;
-	}
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public List<String> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<String> marks) {
+        this.marks = marks;
+    }
+
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public String getEventShortText() {
+        return eventShortText;
+    }
+
+    public void setEventShortText(String eventShortText) {
+        this.eventShortText = eventShortText;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
+    }
+
+    public Integer getEventStartTime() {
+        return eventStartTime;
+    }
+
+    public void setEventStartTime(Integer eventStartTime) {
+        this.eventStartTime = eventStartTime;
+    }
+
+    public Integer getEventDuration() {
+        return eventDuration;
+    }
+
+    public void setEventDuration(Integer eventDuration) {
+        this.eventDuration = eventDuration;
+    }
+
+    public String getSyncAction() {
+        return syncAction;
+    }
+
+    public void setSyncAction(String syncAction) {
+        this.syncAction = syncAction;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public String getAux() {
+        return aux;
+    }
+
+    public void setAux(String aux) {
+        this.aux = aux;
+    }
 }

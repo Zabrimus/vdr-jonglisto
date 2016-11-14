@@ -1,73 +1,75 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
-	<div class="container-fluid">
-		<div class="row">
-			<t:zone t:id="epgCriteriaZone" id="epgCriteriaZone">
-				<t:if test="isFunction('list')">
-					<t:Form t:id="searchCriteria" async="true">
-						<div>
-							<div class="channelgroup">
-								Kanalgruppe:
-								<br />
-								<t:select t:id="group" model="groups" value="epgCriteria.channelGroup" blankOption="ALWAYS" blankLabel="Alle..." zone="epgCriteriaZone" />
-							</div>
+    <div class="container-fluid">
+        <div class="row">
+            <t:zone t:id="epgCriteriaZone" id="epgCriteriaZone">
+                <t:if test="isFunction('list')">
+                    <t:Form t:id="searchCriteria" async="true">
+                        <div>
+                            <div class="channelgroup">
+                                Kanalgruppe:
+                                <br />
+                                <t:select t:id="group" model="groups" value="epgCriteria.channelGroup" blankOption="ALWAYS" blankLabel="Alle..."
+                                    zone="epgCriteriaZone" />
+                            </div>
 
-							<t:if test="${epgCriteria.channelEnabled}">
-								<div class="channelName">
-									Kanal:
-									<br />
-									<t:if test="${epgCriteria.AllChannelsEnabled}">
-										<t:select t:id="channel1" model="channelSelectModel" encoder="channelEncoder" value="epgCriteria.channel" zone="epgCriteriaZone" blankOption="ALWAYS"
-											blankLabel="Alle..." />
-										<p:else>
-											<t:select t:id="channel2" model="channelSelectModel" encoder="channelEncoder" value="epgCriteria.channel" zone="epgCriteriaZone"
-												blankOption="NEVER" />
-										</p:else>
-									</t:if>
-								</div>
-							</t:if>
+                            <t:if test="${epgCriteria.channelEnabled}">
+                                <div class="channelName">
+                                    Kanal:
+                                    <br />
+                                    <t:if test="${epgCriteria.AllChannelsEnabled}">
+                                        <t:select t:id="channel1" model="channelSelectModel" encoder="channelEncoder" value="epgCriteria.channel" zone="epgCriteriaZone"
+                                            blankOption="ALWAYS" blankLabel="Alle..." />
+                                        <p:else>
+                                            <t:select t:id="channel2" model="channelSelectModel" encoder="channelEncoder" value="epgCriteria.channel"
+                                                zone="epgCriteriaZone" blankOption="NEVER" />
+                                        </p:else>
+                                    </t:if>
+                                </div>
+                            </t:if>
 
-							<div class="genre">
-								Genre:
-								<br />
-								<t:select t:id="genre" model="genres" value="epgCriteria.genre" blankOption="ALWAYS" blankLabel="Alle..." zone="epgCriteriaZone" />
-							</div>
+                            <div class="genre">
+                                Genre:
+                                <br />
+                                <t:select t:id="genre" model="genres" value="epgCriteria.genre" blankOption="ALWAYS" blankLabel="Alle..." zone="epgCriteriaZone" />
+                            </div>
 
-							<div class="category">
-								Kategorie:
-								<br />
-								<t:select t:id="category" model="categories" value="epgCriteria.category" blankOption="ALWAYS" blankLabel="Alle..." zone="epgCriteriaZone" />
-							</div>
+                            <div class="category">
+                                Kategorie:
+                                <br />
+                                <t:select t:id="category" model="categories" value="epgCriteria.category" blankOption="ALWAYS" blankLabel="Alle..."
+                                    zone="epgCriteriaZone" />
+                            </div>
 
-							<div class="searchtext">
-								Stichwort:
-								<br />
-								<t:TextField t:id="text" value="epgCriteria.searchText" size="20" />
-								<t:submit t:id="searchText" value="Search" />&nbsp;
-								<t:submit t:id="resetText" value="Löschen" />
-							</div>
+                            <div class="searchtext">
+                                Stichwort:
+                                <br />
+                                <t:TextField t:id="text" value="epgCriteria.searchText" size="20" />
+                                <t:submit t:id="searchText" value="Search" />&nbsp;
+                                <t:submit t:id="resetText" value="Löschen" />
+                            </div>
 
 
-							<t:if test="${epgCriteria.timeEnabled}">
-								<div class="searchtime">
-									Uhrzeit:
-									<br />
-									<t:TextField t:id="textTime" value="timeStr" size="6" validate="regexp=^[0-9]{2}:[0-9]{2}$" />
-									<t:submit t:id="searchTime" value="Search" />&nbsp;
-									<t:submit t:id="resetTime" value="Löschen" />
-								</div>
-							</t:if>
-						</div>
-					</t:Form>
-				</t:if>
-			</t:zone>
-		</div>
+                            <t:if test="${epgCriteria.timeEnabled}">
+                                <div class="searchtime">
+                                    Uhrzeit:
+                                    <br />
+                                    <t:TextField t:id="textTime" value="timeStr" size="6" validate="regexp=^[0-9]{2}:[0-9]{2}$" />
+                                    <t:submit t:id="searchTime" value="Search" />&nbsp;
+                                    <t:submit t:id="resetTime" value="Löschen" />
+                                </div>
+                            </t:if>
+                        </div>
+                    </t:Form>
+                </t:if>
+            </t:zone>
+        </div>
 
-		<div class="row">
-			<t:body />
-		</div>
-	</div>
+        <div class="row">
+            <t:body />
+        </div>
+    </div>
 
-	<!-- insert epg info zone -->
-	<t:Epg useid="epgDetailUseId" channelName="epgDetailChannelName" />
+    <!-- insert epg info zone -->
+    <t:Epg useid="epgDetailUseId" channelName="epgDetailChannelName" />
 </html>

@@ -10,21 +10,25 @@ import vdr.jonglisto.lib.CommandService;
 import vdr.jonglisto.lib.model.VDR;
 
 public class CommandServiceImpl extends ServiceBase implements CommandService {
-	private Logger log = LoggerFactory.getLogger(CommandService.class);
-	
-	public boolean switchChannel(String vdrUuid, String channelId) {		
-		try {
-			VDR vdr = configuration.getVdr(vdrUuid);
-			
-			org.hampelratte.svdrp.Connection svdrpVdr = new org.hampelratte.svdrp.Connection(vdr.getIp(), vdr.getSvdrpPort(), 5000);			
-			svdrpVdr.send(new CHAN(channelId));			
-			svdrpVdr.close();
-			
-			return true;
-		} catch (IOException e) {
-			log.error("SVDRP Connection failed", e);
-			// alertManager.alert(Duration.SINGLE, Severity.ERROR, "SVDRP Connection zu '" + vdr.getName() + "' nicht erfolgreich: " + e.getMessage());
-			return false;
-		}
-	}
+
+    private Logger log = LoggerFactory.getLogger(CommandService.class);
+
+    public boolean switchChannel(String vdrUuid, String channelId) {
+        try {
+            VDR vdr = configuration.getVdr(vdrUuid);
+
+            org.hampelratte.svdrp.Connection svdrpVdr = new org.hampelratte.svdrp.Connection(vdr.getIp(),
+                    vdr.getSvdrpPort(), 5000);
+            svdrpVdr.send(new CHAN(channelId));
+            svdrpVdr.close();
+
+            return true;
+        } catch (IOException e) {
+            log.error("SVDRP Connection failed", e);
+            // alertManager.alert(Duration.SINGLE, Severity.ERROR, "SVDRP
+            // Connection zu '" + vdr.getName() + "' nicht erfolgreich: " +
+            // e.getMessage());
+            return false;
+        }
+    }
 }

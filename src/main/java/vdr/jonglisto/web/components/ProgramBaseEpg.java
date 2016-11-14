@@ -19,85 +19,84 @@ import vdr.jonglisto.lib.util.EpgSorter;
 
 public abstract class ProgramBaseEpg extends BaseComponent {
 
-	@Persist
-	@Property
-	protected Map<String, Object> epg;
-	
-	@InjectComponent
-	protected EpgLayout epglayout;
-	
-	@InjectComponent
-	protected Zone epgListZone;
-	
-	@SessionAttribute("epgSearchCriteria")
-	@Property
-	protected EpgSearchCriteria epgCriteria;
-	
-	@Inject
-	protected BeanModelSource beanModelSource;
-	
-	@Inject
-	protected Messages messages;
+    @Persist
+    @Property
+    protected Map<String, Object> epg;
 
-	@Persist
-	protected EpgSorter epgSorter;
+    @InjectComponent
+    protected EpgLayout epglayout;
 
-	public String getChannelId() {
-		return epg != null ? (String) epg.get("channelid") : "";
-	}
+    @InjectComponent
+    protected Zone epgListZone;
 
-	public BigInteger getEventId() {
-		return epg != null ? (BigInteger) epg.get("eventid") : BigInteger.valueOf(0);
-	}
+    @SessionAttribute("epgSearchCriteria")
+    @Property
+    protected EpgSearchCriteria epgCriteria;
 
-	public BigInteger getImageId() {
-		return epg != null ? (BigInteger) epg.get("imageid") : BigInteger.valueOf(0);
-	}
-	
-	public Long getUseId() {
-		return epg != null ? (Long) epg.get("useid") : 0;
-	}
+    @Inject
+    protected BeanModelSource beanModelSource;
 
-	
-	public void onSelectGenre(String genre) {
-		epglayout.onValueChangedFromGenre(genre);
-	}
+    @Inject
+    protected Messages messages;
 
-	public void onSelectCategory(String category) {
-		epglayout.onValueChangedFromCategory(category);
-	}
+    @Persist
+    protected EpgSorter epgSorter;
 
-	public void onSwitchChannel(String channelId) {
-		commandService.switchChannel(getHeadUuid(), channelId);
-	}
-	
-	@OnEvent(value = "showEpg")	
-	public void showEpg(Long useId, String channelName) {
-		epglayout.onShowEpg(useId, channelName);
-	}
-	
-	public boolean isRunning() {
-		if (epg != null) {			
-			BigDecimal b = (BigDecimal) epg.get("proz");
-			if (b != null) {
-				return b.intValue() > 0;
-			}
-		}
-		
-		return false;
-	}
-	
-	public Integer getStartTime() {
-		return (Integer) epg.get("starttime");
-	}
-	
-	public Long getEndTime() {
-		return (Long) epg.get("endtime");
-	}
+    public String getChannelId() {
+        return epg != null ? (String) epg.get("channelid") : "";
+    }
 
-	protected String findChannelName(Map<String, Object> selectedEpg) {
-		return epgSorter.getChannelName((String)selectedEpg.get("channelid"));
-	}
-	
-	public abstract String getChannelName();		
+    public BigInteger getEventId() {
+        return epg != null ? (BigInteger) epg.get("eventid") : BigInteger.valueOf(0);
+    }
+
+    public BigInteger getImageId() {
+        return epg != null ? (BigInteger) epg.get("imageid") : BigInteger.valueOf(0);
+    }
+
+    public Long getUseId() {
+        return epg != null ? (Long) epg.get("useid") : 0;
+    }
+
+    public void onSelectGenre(String genre) {
+        epglayout.onValueChangedFromGenre(genre);
+    }
+
+    public void onSelectCategory(String category) {
+        epglayout.onValueChangedFromCategory(category);
+    }
+
+    public void onSwitchChannel(String channelId) {
+        commandService.switchChannel(getHeadUuid(), channelId);
+    }
+
+    @OnEvent(value = "showEpg")
+    public void showEpg(Long useId, String channelName) {
+        epglayout.onShowEpg(useId, channelName);
+    }
+
+    public boolean isRunning() {
+        if (epg != null) {
+            BigDecimal b = (BigDecimal) epg.get("proz");
+            if (b != null) {
+                return b.intValue() > 0;
+            }
+        }
+
+        return false;
+    }
+
+    public Integer getStartTime() {
+        return (Integer) epg.get("starttime");
+    }
+
+    public Long getEndTime() {
+        return (Long) epg.get("endtime");
+    }
+
+    protected String findChannelName(Map<String, Object> selectedEpg) {
+        return epgSorter.getChannelName((String) selectedEpg.get("channelid"));
+    }
+
+    public abstract String getChannelName();
 }

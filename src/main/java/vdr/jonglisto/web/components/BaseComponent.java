@@ -18,64 +18,64 @@ import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.model.VDRView;
 
 public class BaseComponent {
-	
-	@SessionAttribute
-	@Property
-	protected VDRView currentVdrView;
-	
-	@Inject
-	protected AjaxResponseRenderer ajaxResponseRenderer;
-	
-	@Inject
-	protected JavaScriptSupport javaScriptSupport;
-	
-	@Inject
-	protected VdrDataService vdrDataService;
-	
-	@Inject
-	protected ComponentResources componentResources;
 
-	@Inject
-	protected EpgDataService epgDataService;
+    @SessionAttribute
+    @Property
+    protected VDRView currentVdrView;
 
-	@Inject
-	protected EpgImageService epgImageService;
+    @Inject
+    protected AjaxResponseRenderer ajaxResponseRenderer;
 
-	@Inject
-	protected VdrDataService dataService;
+    @Inject
+    protected JavaScriptSupport javaScriptSupport;
 
-	@Inject
-	protected SearchTimerService searchTimerService;
+    @Inject
+    protected VdrDataService vdrDataService;
 
-	@Inject
-	protected Request request;
+    @Inject
+    protected ComponentResources componentResources;
 
-	@Inject
-	protected ComponentResources resources;
+    @Inject
+    protected EpgDataService epgDataService;
 
-	@Inject
-	protected ConfigurationService configuration;
+    @Inject
+    protected EpgImageService epgImageService;
 
-	@Inject
-	protected CommandService commandService;
+    @Inject
+    protected VdrDataService dataService;
 
-	@Inject
-	protected URLEncoder encoder;
+    @Inject
+    protected SearchTimerService searchTimerService;
 
-	protected String getTimerUuid() {
-		return currentVdrView.getTimerVdr().get();
-	}
+    @Inject
+    protected Request request;
 
-	protected String getChannelUuid() {
-		return currentVdrView.getChannelVdr().get();
-	}
-	
-	protected String getHeadUuid() {
-		return currentVdrView.getHeadVdr().get();
-	}
+    @Inject
+    protected ComponentResources resources;
 
-	protected String getRecordingUuid() {
-		return currentVdrView.getRecordingVdr().get();
-	}
-	
+    @Inject
+    protected ConfigurationService configuration;
+
+    @Inject
+    protected CommandService commandService;
+
+    @Inject
+    protected URLEncoder encoder;
+
+    protected String getTimerUuid() {
+        return currentVdrView.getTimerVdr().get();
+    }
+
+    protected String getChannelUuid() {
+        return currentVdrView.getChannelVdr().get();
+    }
+
+    protected String getHeadUuid() {
+        return currentVdrView.getHeadVdr().get();
+    }
+
+    protected String getRecordingUuid() {
+        return currentVdrView.getRecordingVdr().get();
+    }
+
 }

@@ -10,26 +10,27 @@ import org.apache.tapestry5.dom.Visitor;
 @MixinAfter
 public class EnableGridZone {
 
-	@InjectContainer
-	private Grid grid;
+    @InjectContainer
+    private Grid grid;
 
-	private Element element;
+    private Element element;
 
-	void beginRender(MarkupWriter writer) {
-		element = writer.getElement();
-	}
+    void beginRender(MarkupWriter writer) {
+        element = writer.getElement();
+    }
 
-	void  afterRender() {
-		if (grid.getDataSource().getAvailableRows() == 0) {
-			return;
-		}
-		
-		element.visit(new Visitor() {
-			public void visit(Element element) {
-				if ("a".equals(element.getName())) {
-					element.attribute("data-update-zone", "recZone");
-				}
-			}
-		});
-	}
+    void afterRender() {
+        if (grid.getDataSource().getAvailableRows() == 0) {
+            return;
+        }
+
+        element.visit(new Visitor() {
+
+            public void visit(Element element) {
+                if ("a".equals(element.getName())) {
+                    element.attribute("data-update-zone", "recZone");
+                }
+            }
+        });
+    }
 }

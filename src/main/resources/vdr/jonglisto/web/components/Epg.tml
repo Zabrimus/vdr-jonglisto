@@ -1,311 +1,311 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<t:content>
-		<t:zone t:id="epgInfoZone" id="epgInfoZone">
-			<t:if test="visible">
-				<div class="modal fade" tabindex="-1" role="dialog" id="${epgInfoModalId}" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-body">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
-								</button>
-								<br />
+    <t:content>
+        <t:zone t:id="epgInfoZone" id="epgInfoZone">
+            <t:if test="visible">
+                <div class="modal fade" tabindex="-1" role="dialog" id="${epgInfoModalId}" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                </button>
+                                <br />
 
-								<div class="container-fluid">
-									<div class="row col-md-36 epg-header ">
-										<div class="col-md-30">
-											<t:ChannelImage channelName="${channelName}" />
-											${map:epg['v_longstartdate']}, ${map:epg['v_starttime']} - ${map:epg['v_endtime']} , Dauer: ${map:epg['v_duration']}
-										</div>
-										<div class="col-md-6">
-											<t:if test="timer">
-												<t:eventlink t:event="toggleTimerActive" t:context="timer.id">
-													<t:TimerActive value="timer.isActive" recording="timer.isRecording" text="false" />
-												</t:eventlink> &nbsp;
-												
-												<t:eventlink t:event="editTimer" t:context="timer.id" zone="^">
-													<img src="${asset:edit.svg}" alt="Timer bearbeiten" class="iconwh" title="Timer bearbeiten"/>
-												</t:eventlink> &nbsp;
-												
-												<t:eventlink t:event="deleteTimer" t:context="timer.id">
-													<img src="${asset:delete.svg}" alt="Timer löschen" class="iconwh" title="Timer löschen"/>
-												</t:eventlink>
-											</t:if>
-										</div>
-									</div>
+                                <div class="container-fluid">
+                                    <div class="row col-md-36 epg-header ">
+                                        <div class="col-md-30">
+                                            <t:ChannelImage channelName="${channelName}" />
+                                            ${map:epg['v_longstartdate']}, ${map:epg['v_starttime']} - ${map:epg['v_endtime']} , Dauer: ${map:epg['v_duration']}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <t:if test="timer">
+                                                <t:eventlink t:event="toggleTimerActive" t:context="timer.id">
+                                                    <t:TimerActive value="timer.isActive" recording="timer.isRecording" text="false" />
+                                                </t:eventlink> &nbsp;
 
-									<div class="row col-md-36 epg-data">
-										${map:epg['title']}
-									</div>
+                                                <t:eventlink t:event="editTimer" t:context="timer.id" zone="^">
+                                                    <img src="${asset:edit.svg}" alt="Timer bearbeiten" class="iconwh" title="Timer bearbeiten" />
+                                                </t:eventlink> &nbsp;
 
-									<div class="row col-md-36 epg-data">
-										${map:epg['shorttext']}
-									</div>
+                                                <t:eventlink t:event="deleteTimer" t:context="timer.id">
+                                                    <img src="${asset:delete.svg}" alt="Timer löschen" class="iconwh" title="Timer löschen" />
+                                                </t:eventlink>
+                                            </t:if>
+                                        </div>
+                                    </div>
 
-									<div class="row col-md-36">
-										<t:tabGroup active="epgTab">
-											<t:tab name="epg" label="EPG">
-												<div class="row col-md-36">
-													<div class="col-md-12">
-														<t:loop source="imageFilenames" value="filename">
-															<t:epgImage filename="${filename}" scraper="false" />
-														</t:loop>
-													</div>
+                                    <div class="row col-md-36 epg-data">
+                                        ${map:epg['title']}
+                                    </div>
 
-													<div class="col-md-24">
-														<!-- Trigger the reload of EPG data. The TabGroup is otherwise empty -->
-														<t:trigger event="loadEpgData" />
+                                    <div class="row col-md-36 epg-data">
+                                        ${map:epg['shorttext']}
+                                    </div>
 
-														<t:if test="${map:epg['movie_tagline']}">
-															<div class="row col-md-36 epg-data">
-																${map:epg['movie_tagline']}
-															</div>
-														</t:if>
+                                    <div class="row col-md-36">
+                                        <t:tabGroup active="epgTab">
+                                            <t:tab name="epg" label="EPG">
+                                                <div class="row col-md-36">
+                                                    <div class="col-md-12">
+                                                        <t:loop source="imageFilenames" value="filename">
+                                                            <t:epgImage filename="${filename}" scraper="false" />
+                                                        </t:loop>
+                                                    </div>
 
-														<t:if test="${map:epg['season']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Staffel:</strong>
-																${map:epg['season']},
-																<strong>Staffelfolge:</strong>
-																${map:epg['part']}/${map:epg['parts']},
-																<strong>Folge:</strong>
-																${map:epg['number']}
-															</div>
-														</t:if>
+                                                    <div class="col-md-24">
+                                                        <!-- Trigger the reload of EPG data. The TabGroup is otherwise empty -->
+                                                        <t:trigger event="loadEpgData" />
 
-														<t:if test="${map:epg['series_status']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Status:</strong>
-																${map:epg['series_status']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['movie_tagline']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                ${map:epg['movie_tagline']}
+                                                            </div>
+                                                        </t:if>
 
-														<div class="row col-md-36 epg-data">
-															<t:if test="${map:epg['genre']}">
-																<strong>Genre:</strong>
-																${map:epg['genre']},
-															</t:if>
+                                                        <t:if test="${map:epg['season']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Staffel:</strong>
+                                                                ${map:epg['season']},
+                                                                <strong>Staffelfolge:</strong>
+                                                                ${map:epg['part']}/${map:epg['parts']},
+                                                                <strong>Folge:</strong>
+                                                                ${map:epg['number']}
+                                                            </div>
+                                                        </t:if>
 
-															<t:if test="${map:epg['category']}">
-																<strong>Kategorie:</strong>
-																${map:epg['category']},
-															</t:if>
+                                                        <t:if test="${map:epg['series_status']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Status:</strong>
+                                                                ${map:epg['series_status']}
+                                                            </div>
+                                                        </t:if>
 
-															<t:if test="${map:epg['country']}">
-																${map:epg['country']}, ${map:epg['year']}
-															</t:if>
+                                                        <div class="row col-md-36 epg-data">
+                                                            <t:if test="${map:epg['genre']}">
+                                                                <strong>Genre:</strong>
+                                                                ${map:epg['genre']},
+                                                            </t:if>
 
-															<t:if test="${map:epg['series_firstaired']}">
-																, ${map:epg['series_firstaired']}
-															</t:if>
+                                                            <t:if test="${map:epg['category']}">
+                                                                <strong>Kategorie:</strong>
+                                                                ${map:epg['category']},
+                                                            </t:if>
 
-															<t:if test="${map:epg['movie_release_date']}">
-																, ${map:epg['movie_release_date']}
-															</t:if>
+                                                            <t:if test="${map:epg['country']}">
+                                                                ${map:epg['country']}, ${map:epg['year']}
+                                                            </t:if>
 
-															<t:if test="${map:epg['parentalrating']}">
-																<strong>FSK:</strong>
-																${map:epg['parentalrating']}
-															</t:if>
+                                                            <t:if test="${map:epg['series_firstaired']}">
+                                                                , ${map:epg['series_firstaired']}
+                                                            </t:if>
 
-															<t:if test="${map:epg['series_network']}">
-																<strong>Network</strong>
-																:
-																${map:epg['series_network']}
-															</t:if>
-														</div>
+                                                            <t:if test="${map:epg['movie_release_date']}">
+                                                                , ${map:epg['movie_release_date']}
+                                                            </t:if>
 
-														<t:if test="${map:epg['longdescription']}">
-															<div class="row col-md-36 epg-data">
-																${map:epg['longdescription']}
-															</div>
-														</t:if>
+                                                            <t:if test="${map:epg['parentalrating']}">
+                                                                <strong>FSK:</strong>
+                                                                ${map:epg['parentalrating']}
+                                                            </t:if>
 
-														<t:if test="${map:epg['movie_overview']}">
-															<div class="row col-md-36 epg-data">
-																${map:epg['movie_overview']}
-															</div>
-														</t:if>
+                                                            <t:if test="${map:epg['series_network']}">
+                                                                <strong>Network</strong>
+                                                                :
+                                                                ${map:epg['series_network']}
+                                                            </t:if>
+                                                        </div>
 
-														<t:if test="${map:epg['episode_overview']}">
-															<div class="row col-md-36 epg-data">
-																${map:epg['episode_overview']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['longdescription']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                ${map:epg['longdescription']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['series_overview']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Serienübersicht:</strong>
-																${map:epg['series_overview']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['movie_overview']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                ${map:epg['movie_overview']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['actor']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Darsteller:</strong>
-																${map:epg['actor']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['episode_overview']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                ${map:epg['episode_overview']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['director']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Regie:</strong>
-																${map:epg['director']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['series_overview']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Serienübersicht:</strong>
+                                                                ${map:epg['series_overview']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['audio']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Audio:</strong>
-																${map:epg['audio']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['actor']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Darsteller:</strong>
+                                                                ${map:epg['actor']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['flags']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Flags:</strong>
-																${map:epg['flags']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['director']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Regie:</strong>
+                                                                ${map:epg['director']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['shortreview']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Kurzreview:</strong>
-																${map:epg['shortreview']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['audio']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Audio:</strong>
+                                                                ${map:epg['audio']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['tipp']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Bewertung:</strong>
-																${map:epg['tipp']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['flags']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Flags:</strong>
+                                                                ${map:epg['flags']}
+                                                            </div>
+                                                        </t:if>
 
-														<div class="row col-md-36 epg-data">
-															<t:if test="${map:epg['rating']}">
-																<strong>Rating:</strong>
-																${map:epg['rating']}
-															</t:if>
+                                                        <t:if test="${map:epg['shortreview']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Kurzreview:</strong>
+                                                                ${map:epg['shortreview']}
+                                                            </div>
+                                                        </t:if>
 
-															<t:if test="${map:epg['series_rating']}">
-																<strong>IMDb Rating Serie:</strong>
-																${map:epg['series_rating']}
-															</t:if>
+                                                        <t:if test="${map:epg['tipp']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Bewertung:</strong>
+                                                                ${map:epg['tipp']}
+                                                            </div>
+                                                        </t:if>
 
-															<t:if test="${map:epg['episode_rating']}">
-																<strong>IMDb Rating Folge:</strong>
-																${map:epg['episode_rating']}
-															</t:if>
+                                                        <div class="row col-md-36 epg-data">
+                                                            <t:if test="${map:epg['rating']}">
+                                                                <strong>Rating:</strong>
+                                                                ${map:epg['rating']}
+                                                            </t:if>
 
-															<t:if test="${map:epg['movie_vote_average']}">
-																<strong>IMDb Rating:</strong>
-																${map:epg['movie_vote_average']}
-															</t:if>
-														</div>
+                                                            <t:if test="${map:epg['series_rating']}">
+                                                                <strong>IMDb Rating Serie:</strong>
+                                                                ${map:epg['series_rating']}
+                                                            </t:if>
 
-														<t:if test="${map:epg['moderator']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Moderator:</strong>
-																${map:epg['moderator']}
-															</div>
-														</t:if>
+                                                            <t:if test="${map:epg['episode_rating']}">
+                                                                <strong>IMDb Rating Folge:</strong>
+                                                                ${map:epg['episode_rating']}
+                                                            </t:if>
 
-														<t:if test="${map:epg['other']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Andere:</strong>
-																${map:epg['other']}
-															</div>
-														</t:if>
+                                                            <t:if test="${map:epg['movie_vote_average']}">
+                                                                <strong>IMDb Rating:</strong>
+                                                                ${map:epg['movie_vote_average']}
+                                                            </t:if>
+                                                        </div>
 
-														<t:if test="${map:epg['guest']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Gäste:</strong>
-																${map:epg['guest']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['moderator']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Moderator:</strong>
+                                                                ${map:epg['moderator']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['camera']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Kamera:</strong>
-																${map:epg['camera']}
-															</div>
-														</t:if>
+                                                        <t:if test="${map:epg['other']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Andere:</strong>
+                                                                ${map:epg['other']}
+                                                            </div>
+                                                        </t:if>
 
-														<t:if test="${map:epg['merge']}">
-															<div class="row col-md-36 epg-data">
-																<strong>Quelle:</strong>
-																${map:epg['merge']}
-															</div>
-														</t:if>
-													</div>
-												</div>
-											</t:tab>
+                                                        <t:if test="${map:epg['guest']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Gäste:</strong>
+                                                                ${map:epg['guest']}
+                                                            </div>
+                                                        </t:if>
 
-											<t:if test="isMediaTypeAvailable('Banner')">
-												<t:tab name="banner" label="Banner">
-													<t:trigger event="reloadEpgImagesBanner" />
-													<t:delegate to="block:viewImages" />
-												</t:tab>
-											</t:if>
+                                                        <t:if test="${map:epg['camera']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Kamera:</strong>
+                                                                ${map:epg['camera']}
+                                                            </div>
+                                                        </t:if>
 
-											<t:if test="isMediaTypeAvailable('Poster')">
-												<t:tab name="poster" label="Poster">
-													<t:trigger event="reloadEpgImagesPoster" />
-													<t:delegate to="block:viewImages" />
-												</t:tab>
-											</t:if>
+                                                        <t:if test="${map:epg['merge']}">
+                                                            <div class="row col-md-36 epg-data">
+                                                                <strong>Quelle:</strong>
+                                                                ${map:epg['merge']}
+                                                            </div>
+                                                        </t:if>
+                                                    </div>
+                                                </div>
+                                            </t:tab>
 
-											<t:if test="isMediaTypeAvailable('SeasonPoster')">
-												<t:tab name="seasonPoster" label="Serien Poster">
-													<t:trigger event="reloadEpgImagesSeasonPoster" />
-													<t:delegate to="block:viewImages" />
-												</t:tab>
-											</t:if>
+                                            <t:if test="isMediaTypeAvailable('Banner')">
+                                                <t:tab name="banner" label="Banner">
+                                                    <t:trigger event="reloadEpgImagesBanner" />
+                                                    <t:delegate to="block:viewImages" />
+                                                </t:tab>
+                                            </t:if>
 
-											<t:if test="isMediaTypeAvailable('FanArt')">
-												<t:tab name="fanArt" label="Fan Art">
-													<t:trigger event="reloadEpgImagesFanArt" />
-													<t:delegate to="block:viewImages" />
-												</t:tab>
-											</t:if>
+                                            <t:if test="isMediaTypeAvailable('Poster')">
+                                                <t:tab name="poster" label="Poster">
+                                                    <t:trigger event="reloadEpgImagesPoster" />
+                                                    <t:delegate to="block:viewImages" />
+                                                </t:tab>
+                                            </t:if>
 
-											<t:if test="isMediaTypeAvailable('EpisodePic')">
-												<t:tab name="episodePic" label="Episodenbilder">
-													<t:trigger event="reloadEpgImagesEpisodePic" />
-													<t:delegate to="block:viewImages" />
-												</t:tab>
-											</t:if>
+                                            <t:if test="isMediaTypeAvailable('SeasonPoster')">
+                                                <t:tab name="seasonPoster" label="Serien Poster">
+                                                    <t:trigger event="reloadEpgImagesSeasonPoster" />
+                                                    <t:delegate to="block:viewImages" />
+                                                </t:tab>
+                                            </t:if>
 
-											<t:if test="isMediaTypeAvailable('Actor')">
-												<t:tab name="actor" label="Schauspieler">
-													<t:trigger event="reloadEpgImagesActor" />
-													<t:delegate to="block:viewActorImages" />
-												</t:tab>
-											</t:if>
-										</t:tabGroup>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                                            <t:if test="isMediaTypeAvailable('FanArt')">
+                                                <t:tab name="fanArt" label="Fan Art">
+                                                    <t:trigger event="reloadEpgImagesFanArt" />
+                                                    <t:delegate to="block:viewImages" />
+                                                </t:tab>
+                                            </t:if>
 
-				<t:block id="viewImages">
-					<div class="row col-md-36">
-						<t:loop source="allMedia" value="epgMedia">
-							<t:epgImage imageKey="epgMedia" scraper="true" />
-						</t:loop>
-					</div>
-				</t:block>
+                                            <t:if test="isMediaTypeAvailable('EpisodePic')">
+                                                <t:tab name="episodePic" label="Episodenbilder">
+                                                    <t:trigger event="reloadEpgImagesEpisodePic" />
+                                                    <t:delegate to="block:viewImages" />
+                                                </t:tab>
+                                            </t:if>
 
-				<t:block id="viewActorImages">
-					<div class="row col-md-36">
-						<t:loop source="allMedia" value="epgMedia">
-							<t:epgImage imageKey="epgMedia" isActor="true" scraper="true" />
-						</t:loop>
-					</div>
-				</t:block>
-			</t:if>
-		</t:zone>
-	</t:content>
+                                            <t:if test="isMediaTypeAvailable('Actor')">
+                                                <t:tab name="actor" label="Schauspieler">
+                                                    <t:trigger event="reloadEpgImagesActor" />
+                                                    <t:delegate to="block:viewActorImages" />
+                                                </t:tab>
+                                            </t:if>
+                                        </t:tabGroup>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <t:block id="viewImages">
+                    <div class="row col-md-36">
+                        <t:loop source="allMedia" value="epgMedia">
+                            <t:epgImage imageKey="epgMedia" scraper="true" />
+                        </t:loop>
+                    </div>
+                </t:block>
+
+                <t:block id="viewActorImages">
+                    <div class="row col-md-36">
+                        <t:loop source="allMedia" value="epgMedia">
+                            <t:epgImage imageKey="epgMedia" isActor="true" scraper="true" />
+                        </t:loop>
+                    </div>
+                </t:block>
+            </t:if>
+        </t:zone>
+    </t:content>
 </html>

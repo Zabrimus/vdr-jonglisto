@@ -33,7 +33,7 @@
 									${map:epg['v_endtime']}
 								</t:pagelink>
 							</div>
-							
+
 							<t:if test="running">
 								<div class="progress">
 									<div class="progress-bar" role="progressbar" aria-valuenow="${map:epg['proz']}" aria-valuemin="0" aria-valuemax="100" style="width:${map:epg['proz']}%">

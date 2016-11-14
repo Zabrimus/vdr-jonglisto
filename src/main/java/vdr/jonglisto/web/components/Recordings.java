@@ -31,410 +31,415 @@ import vdr.jonglisto.web.model.RecPathTreeAdapter;
 
 public class Recordings extends BaseComponent {
 
-	public enum Function {
-		REVIEW, INFO;
-	}
+    public enum Function {
+        REVIEW, INFO;
+    }
 
-	public enum FormAction {
-		DELETE, MOVE, MOVE_SINGLE, RENAME
-	}
+    public enum FormAction {
+        DELETE, MOVE, MOVE_SINGLE, RENAME
+    }
 
-	private Function function;
-	private FormAction formAction;
+    private Function function;
+    private FormAction formAction;
 
-	@Inject
-	Logger log;
+    @Inject
+    Logger log;
 
-	@InjectComponent
-	private Zone treeZone;
+    @InjectComponent
+    private Zone treeZone;
 
-	@InjectComponent
-	private Zone recZone;
+    @InjectComponent
+    private Zone recZone;
 
-	@InjectComponent
-	private Zone childZone;
+    @InjectComponent
+    private Zone childZone;
 
-	@InjectComponent
-	private Zone recordingInfoZone;
-	
-	@InjectComponent
-	protected Epg epg;
-	
-	@InjectComponent
-	private Tree tree;
+    @InjectComponent
+    private Zone recordingInfoZone;
 
-	@InjectComponent(value = "recordingGrid")
-	private Grid grid;
+    @InjectComponent
+    protected Epg epg;
 
-	@InjectComponent
-	private Form recForm;
+    @InjectComponent
+    private Tree tree;
 
-	@Property
-	private String recordingInfoModalId = "recordingInfo";
+    @InjectComponent(value = "recordingGrid")
+    private Grid grid;
 
-	@Property
-	private TreeNode<RecPathTree> treeNode;
+    @InjectComponent
+    private Form recForm;
 
-	@Property
-	private RecPathTree recPath;
+    @Property
+    private String recordingInfoModalId = "recordingInfo";
 
-	@Persist
-	@Property
-	private RecPathTree selectedRecPath;
+    @Property
+    private TreeNode<RecPathTree> treeNode;
 
-	private RecPathTree root;
+    @Property
+    private RecPathTree recPath;
 
-	@Persist
-	@Property
-	private TreeModel<RecPathTree> treeModel;
+    @Persist
+    @Property
+    private RecPathTree selectedRecPath;
 
-	@Persist
-	@Property
-	private List<RecordingInfo> recordings;
+    private RecPathTree root;
 
-	@Persist
-	@Property
-	private List<RecPathSummary> summary;
+    @Persist
+    @Property
+    private TreeModel<RecPathTree> treeModel;
 
-	@Property
-	private RecPathSummary pathSummary;
+    @Persist
+    @Property
+    private List<RecordingInfo> recordings;
 
-	@Persist
-	@Property
-	private RecordingInfo recording;
+    @Persist
+    @Property
+    private List<RecPathSummary> summary;
 
-	@Property
-	private boolean selectAllRecording;
-
-	@Property
-	private boolean hasChilds;
-
-	@Property
-	private String renameName;
+    @Property
+    private RecPathSummary pathSummary;
 
-	@Property
-	private String renameFilename;
-
-	@Property
-	private String moveFilename;
-
-	@Property
-	private String targetDirSingle;
-
-	@Persist
-	@Property
-	private String targetDir;
-
-	private String fileName;
-
-	private List<String> recordingsToChange;
-
-	void pageReset() {
-		componentResources.discardPersistentFieldChanges();
-	}
-
-	void setupRender() {
-		function = Function.REVIEW;
-
-		updateTree();
-		onSelectSubDir(treeModel.getRootNodes().get(0).getId());
-	}
-
-	private JavaScriptCallback makeScriptToShowInfoModal() {
-		return new JavaScriptCallback() {
-			public void run(JavaScriptSupport javascriptSupport) {
-				javaScriptSupport.require("dialogmodal").invoke("activate").with(recordingInfoModalId,
-						new JSONObject());
-			}
-		};
-	}
-
-	public void onRecPathSelected(String treeNodeId) {
-		TreeNode<RecPathTree> node = treeModel.getById(treeNodeId);
-		selectedRecPath = node.getValue();
-
-		targetDir = selectedRecPath.getFullPath().replaceAll("~", "/");
-		recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.isRoot() ? "" : selectedRecPath.getFullPath());
-
-		summary = new ArrayList<RecPathSummary>();
-
-		if (node.getHasChildren()) {
-			for (TreeNode<RecPathTree> rpt : node.getChildren()) {
-				RecPathSummary s = vdrDataService.getRecSummary(getRecordingUuid(), rpt.getValue().getFullPath());
-				s.setName(rpt.getValue().name);
-				s.setNodeId(rpt.getId());
-				summary.add(s);
-			}
-		}
-
-		hasChilds = (selectedRecPath != null) && (selectedRecPath.children != null) && (selectedRecPath.children.size() > 0);
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(treeZone).addRender(childZone).addRender(recZone);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public void onSelectSubDir(String treeNodeId) {
-		tree.getDefaultTreeExpansionModel().markExpanded(treeModel.getById(treeNodeId));
-		onRecPathSelected(treeNodeId);
-	}
-
-	public String getTotalDuration() {
-		if (recordings != null) {
-			long result = 0;
-			for (RecordingInfo s : recordings) {
-				result += s.getDurationLong();
-			}
-
-			return DateTimeUtil.toDuration(result);
-		} else {
-			return null;
-		}
-	}
-
-	public String getTotalSize() {
-		if (recordings != null) {
-			long result = 0;
-			for (RecordingInfo s : recordings) {
-				result += s.getFileSize();
-			}
-
-			return String.valueOf(result);
-		} else {
-			return null;
-		}
-	}
-
-	public boolean isSelected() {
-		return false;
-	}
-
-	public void setSelected(boolean checkbox) {
-		if (recordingsToChange == null) {
-			recordingsToChange = new ArrayList<String>();
-		}
-
-		if (checkbox) {
-			recordingsToChange.add(fileName);
-		}
-	}
-
-	public boolean isFunction(Function function) {
-		return function == this.function;
-	}
-
-	public void onRenameRecording(String file, String name) {
-		renameName = name;
-		renameFilename = file;
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	public void onDeleteRecording(String file) {
-		vdrDataService.deleteRecording(getRecordingUuid(), file);
-		recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	public void onMoveRecording(String file) {
-		targetDirSingle = selectedRecPath.getFullPath().replaceAll("~", "/");
-		moveFilename = file;
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	public void onViewDetails(String file) {
-		function = Function.INFO;
-		recording = vdrDataService.getRecording(getRecordingUuid(), file);
-
-		epg.showInfoZone();
-		
-		
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addCallback(makeScriptToShowInfoModal()).addRender(recordingInfoZone);
-		}
-		
-	}
-
-	public void onMoveRecordings() {
-		formAction = FormAction.MOVE;
-	}
-
-	public void onDeleteRecordings() {
-		formAction = FormAction.DELETE;
-	}
-
-	public void onSaveRename() {
-		formAction = FormAction.RENAME;
-	}
-
-	public void onSaveMove() {
-		formAction = FormAction.MOVE_SINGLE;
-	}
-
-	public boolean onCancelRename() {
-		renameName = renameFilename = null;
-		formAction = null;
-		return true;
-	}
-
-	public boolean onCancelMove() {
-		targetDirSingle = moveFilename = null;
-		formAction = null;
-		return true;
-	}
-
-	void onValidateFromRecForm() {
-		// INFO: Validierungen können hier vorgenommen werden.
-		if (formAction == null) {
-			return;
-		}
-
-		switch (formAction) {
-		case DELETE:
-			break;
-
-		case MOVE:
-			break;
-
-		case MOVE_SINGLE:
-			break;
-
-		case RENAME:
-			if ((renameName == null) || (renameFilename == null) || StringUtils.isEmpty(renameName)) {
-				recForm.recordError("Der neue Name darf nicht leer sein!");
-			}
-			break;
-		}
-	}
-
-	void onSuccess() {
-		if (formAction != null) {
-			switch (formAction) {
-			case DELETE:
-				vdrDataService.deleteRecordings(getRecordingUuid(), recordingsToChange);
-				recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
-				break;
-
-			case MOVE:
-				vdrDataService.moveRecordings(getRecordingUuid(), recordingsToChange, targetDir);
-				updateTree();
-				onSelectSubDir(treeModel.getRootNodes().get(0).getId());
-				break;
-
-			case MOVE_SINGLE:
-				vdrDataService.moveRecording(getRecordingUuid(), moveFilename, targetDirSingle);
-				moveFilename = null;
-				updateTree();
-				onSelectSubDir(treeModel.getRootNodes().get(0).getId());
-				break;
-
-			case RENAME:
-				vdrDataService.renameRecording(getRecordingUuid(), renameFilename, renameName);
-				recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
-				renameName = renameFilename = null;
-				break;
-
-			}
-		}
-
-		formAction = null;
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	void onFailure() {
-		renameName = renameFilename = null;
-		formAction = null;
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	@SuppressWarnings( { "unchecked", "rawtypes" } )
-	public void onSort(String column) {
-		grid.getSortModel().updateSort(column);
-		
-		BeanComparator beanComparator = new BeanComparator(column);
-		Collections.sort(recordings, beanComparator);
-
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(recZone);
-		}
-	}
-
-	public String getFileName() {
-		fileName = recording.getFileName();
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getMoveTarget() {
-		return targetDir;
-	}
-
-	public void setMoveTarget(String target) {
-		targetDir = target;
-	}
-
-	public boolean renameThis() {
-		return recording.getFileName().equals(renameFilename);
-	}
-
-	public boolean moveThis() {
-		return recording.getFileName().equals(moveFilename);
-	}
-
-	public boolean showLinkOnly() {
-		return !renameThis() && !moveThis();
-	}
-
-	public String getNodeClass() {
-		if ((selectedRecPath != null) && recPath.uuid.equals(selectedRecPath.uuid)) {
-			return "selected";
-		}
-
-		return "";
-	}
-	
-	private void updateTree() {		
-		// INFO: update and sync are not working as expected. Perhaps i have to organize the database entries myself? I need to read the documentation. 
-		// vdrDataService.fullRecSync(getRecordingUuid());
-		// vdrDataService.recSync(getRecordingUuid());
-		vdrDataService.recUpdate(getRecordingUuid());
-
-		List<String> directories = vdrDataService.getRecDirectories(getRecordingUuid());
-
-		root = new RecPathTree(null, "Video");
-
-		for (String path : directories) {
-			root.addChild(path);
-		}
-
-		ValueEncoder<RecPathTree> recPathEncoder = new ValueEncoder<RecPathTree>() {
-			public String toClient(RecPathTree stuff) {
-				return stuff.uuid;
-			}
-
-			public RecPathTree toValue(String uuid) {
-				return root.searchSubTree(uuid);
-			}
-		};
-
-		treeModel = new DefaultTreeModel<RecPathTree>(recPathEncoder, new RecPathTreeAdapter(false), root);
-	}
+    @Persist
+    @Property
+    private RecordingInfo recording;
+
+    @Property
+    private boolean selectAllRecording;
+
+    @Property
+    private boolean hasChilds;
+
+    @Property
+    private String renameName;
+
+    @Property
+    private String renameFilename;
+
+    @Property
+    private String moveFilename;
+
+    @Property
+    private String targetDirSingle;
+
+    @Persist
+    @Property
+    private String targetDir;
+
+    private String fileName;
+
+    private List<String> recordingsToChange;
+
+    void pageReset() {
+        componentResources.discardPersistentFieldChanges();
+    }
+
+    void setupRender() {
+        function = Function.REVIEW;
+
+        updateTree();
+        onSelectSubDir(treeModel.getRootNodes().get(0).getId());
+    }
+
+    private JavaScriptCallback makeScriptToShowInfoModal() {
+        return new JavaScriptCallback() {
+
+            public void run(JavaScriptSupport javascriptSupport) {
+                javaScriptSupport.require("dialogmodal").invoke("activate").with(recordingInfoModalId,
+                        new JSONObject());
+            }
+        };
+    }
+
+    public void onRecPathSelected(String treeNodeId) {
+        TreeNode<RecPathTree> node = treeModel.getById(treeNodeId);
+        selectedRecPath = node.getValue();
+
+        targetDir = selectedRecPath.getFullPath().replaceAll("~", "/");
+        recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(),
+                selectedRecPath.isRoot() ? "" : selectedRecPath.getFullPath());
+
+        summary = new ArrayList<RecPathSummary>();
+
+        if (node.getHasChildren()) {
+            for (TreeNode<RecPathTree> rpt : node.getChildren()) {
+                RecPathSummary s = vdrDataService.getRecSummary(getRecordingUuid(), rpt.getValue().getFullPath());
+                s.setName(rpt.getValue().name);
+                s.setNodeId(rpt.getId());
+                summary.add(s);
+            }
+        }
+
+        hasChilds = (selectedRecPath != null) && (selectedRecPath.children != null)
+                && (selectedRecPath.children.size() > 0);
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(treeZone).addRender(childZone).addRender(recZone);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void onSelectSubDir(String treeNodeId) {
+        tree.getDefaultTreeExpansionModel().markExpanded(treeModel.getById(treeNodeId));
+        onRecPathSelected(treeNodeId);
+    }
+
+    public String getTotalDuration() {
+        if (recordings != null) {
+            long result = 0;
+            for (RecordingInfo s : recordings) {
+                result += s.getDurationLong();
+            }
+
+            return DateTimeUtil.toDuration(result);
+        } else {
+            return null;
+        }
+    }
+
+    public String getTotalSize() {
+        if (recordings != null) {
+            long result = 0;
+            for (RecordingInfo s : recordings) {
+                result += s.getFileSize();
+            }
+
+            return String.valueOf(result);
+        } else {
+            return null;
+        }
+    }
+
+    public boolean isSelected() {
+        return false;
+    }
+
+    public void setSelected(boolean checkbox) {
+        if (recordingsToChange == null) {
+            recordingsToChange = new ArrayList<String>();
+        }
+
+        if (checkbox) {
+            recordingsToChange.add(fileName);
+        }
+    }
+
+    public boolean isFunction(Function function) {
+        return function == this.function;
+    }
+
+    public void onRenameRecording(String file, String name) {
+        renameName = name;
+        renameFilename = file;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    public void onDeleteRecording(String file) {
+        vdrDataService.deleteRecording(getRecordingUuid(), file);
+        recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    public void onMoveRecording(String file) {
+        targetDirSingle = selectedRecPath.getFullPath().replaceAll("~", "/");
+        moveFilename = file;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    public void onViewDetails(String file) {
+        function = Function.INFO;
+        recording = vdrDataService.getRecording(getRecordingUuid(), file);
+
+        epg.showInfoZone();
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addCallback(makeScriptToShowInfoModal()).addRender(recordingInfoZone);
+        }
+
+    }
+
+    public void onMoveRecordings() {
+        formAction = FormAction.MOVE;
+    }
+
+    public void onDeleteRecordings() {
+        formAction = FormAction.DELETE;
+    }
+
+    public void onSaveRename() {
+        formAction = FormAction.RENAME;
+    }
+
+    public void onSaveMove() {
+        formAction = FormAction.MOVE_SINGLE;
+    }
+
+    public boolean onCancelRename() {
+        renameName = renameFilename = null;
+        formAction = null;
+        return true;
+    }
+
+    public boolean onCancelMove() {
+        targetDirSingle = moveFilename = null;
+        formAction = null;
+        return true;
+    }
+
+    void onValidateFromRecForm() {
+        // INFO: Validierungen können hier vorgenommen werden.
+        if (formAction == null) {
+            return;
+        }
+
+        switch (formAction) {
+        case DELETE:
+            break;
+
+        case MOVE:
+            break;
+
+        case MOVE_SINGLE:
+            break;
+
+        case RENAME:
+            if ((renameName == null) || (renameFilename == null) || StringUtils.isEmpty(renameName)) {
+                recForm.recordError("Der neue Name darf nicht leer sein!");
+            }
+            break;
+        }
+    }
+
+    void onSuccess() {
+        if (formAction != null) {
+            switch (formAction) {
+            case DELETE:
+                vdrDataService.deleteRecordings(getRecordingUuid(), recordingsToChange);
+                recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
+                break;
+
+            case MOVE:
+                vdrDataService.moveRecordings(getRecordingUuid(), recordingsToChange, targetDir);
+                updateTree();
+                onSelectSubDir(treeModel.getRootNodes().get(0).getId());
+                break;
+
+            case MOVE_SINGLE:
+                vdrDataService.moveRecording(getRecordingUuid(), moveFilename, targetDirSingle);
+                moveFilename = null;
+                updateTree();
+                onSelectSubDir(treeModel.getRootNodes().get(0).getId());
+                break;
+
+            case RENAME:
+                vdrDataService.renameRecording(getRecordingUuid(), renameFilename, renameName);
+                recordings = vdrDataService.getRecordingsInPath(getRecordingUuid(), selectedRecPath.getFullPath());
+                renameName = renameFilename = null;
+                break;
+
+            }
+        }
+
+        formAction = null;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    void onFailure() {
+        renameName = renameFilename = null;
+        formAction = null;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public void onSort(String column) {
+        grid.getSortModel().updateSort(column);
+
+        BeanComparator beanComparator = new BeanComparator(column);
+        Collections.sort(recordings, beanComparator);
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(recZone);
+        }
+    }
+
+    public String getFileName() {
+        fileName = recording.getFileName();
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getMoveTarget() {
+        return targetDir;
+    }
+
+    public void setMoveTarget(String target) {
+        targetDir = target;
+    }
+
+    public boolean renameThis() {
+        return recording.getFileName().equals(renameFilename);
+    }
+
+    public boolean moveThis() {
+        return recording.getFileName().equals(moveFilename);
+    }
+
+    public boolean showLinkOnly() {
+        return !renameThis() && !moveThis();
+    }
+
+    public String getNodeClass() {
+        if ((selectedRecPath != null) && recPath.uuid.equals(selectedRecPath.uuid)) {
+            return "selected";
+        }
+
+        return "";
+    }
+
+    private void updateTree() {
+        // INFO: update and sync are not working as expected. Perhaps i have to
+        // organize the database entries myself? I need to read the
+        // documentation.
+        // vdrDataService.fullRecSync(getRecordingUuid());
+        // vdrDataService.recSync(getRecordingUuid());
+        vdrDataService.recUpdate(getRecordingUuid());
+
+        List<String> directories = vdrDataService.getRecDirectories(getRecordingUuid());
+
+        root = new RecPathTree(null, "Video");
+
+        for (String path : directories) {
+            root.addChild(path);
+        }
+
+        ValueEncoder<RecPathTree> recPathEncoder = new ValueEncoder<RecPathTree>() {
+
+            public String toClient(RecPathTree stuff) {
+                return stuff.uuid;
+            }
+
+            public RecPathTree toValue(String uuid) {
+                return root.searchSubTree(uuid);
+            }
+        };
+
+        treeModel = new DefaultTreeModel<RecPathTree>(recPathEncoder, new RecPathTreeAdapter(false), root);
+    }
 }

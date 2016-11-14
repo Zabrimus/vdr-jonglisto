@@ -1,9 +1,9 @@
-define(["jquery", "bootstrap/modal"], function($) {
-    
+define([ "jquery", "bootstrap/modal" ], function($) {
+
     var activate = function(modalId, options) {
         $('#' + modalId).modal(options);
     }
-    
+
     var hide = function(modalId) {
         var $modal = $('#' + modalId);
 
@@ -13,11 +13,11 @@ define(["jquery", "bootstrap/modal"], function($) {
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
         }
-    }    
-    
+    }
+
     return {
         activate : activate,
         hide : hide
     }
-    
+
 });

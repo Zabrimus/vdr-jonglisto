@@ -11,18 +11,18 @@ import org.apache.tapestry5.corelib.components.Grid;
 @MixinAfter
 public class DisableGridSorting {
 
-	@InjectContainer
-	private Grid grid;
+    @InjectContainer
+    private Grid grid;
 
-	void setupRender() {
-		if (grid.getDataSource().getAvailableRows() == 0)
-			return;
+    void setupRender() {
+        if (grid.getDataSource().getAvailableRows() == 0)
+            return;
 
-		BeanModel<?> model = grid.getDataModel();
-		List<String> propertyNames = model.getPropertyNames();
-		for (String propName : propertyNames) {
-			PropertyModel propModel = model.get(propName);
-			propModel.sortable(false);
-		}
-	}
+        BeanModel<?> model = grid.getDataModel();
+        List<String> propertyNames = model.getPropertyNames();
+        for (String propName : propertyNames) {
+            PropertyModel propModel = model.get(propName);
+            propModel.sortable(false);
+        }
+    }
 }

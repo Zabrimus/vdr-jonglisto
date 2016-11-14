@@ -9,17 +9,22 @@ import vdr.jonglisto.lib.model.RecordingNamingMode;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 
 public interface EpgDataService {
-		
-	public Map<String, Object> getEpgDataForUseId(Long id);
-	public Map<String, Object> getEpgDataForRecording(String recFilename);
-	public Map<String, Object> getMediaIdsForUseId(Long id);
-	
-	public List<Map<String, Object>> getEpgData(Collection<Channel> channels, EpgSearchCriteria criteria);
-	public List<Map<String, Object>> getEpgDayData(EpgSearchCriteria epgCriteria);	
-	public List<Map<String, Object>> getEpgChannelData(EpgSearchCriteria epgCriteria);
-	
-	public String getVdrTimerName(Long id, RecordingNamingMode naming_mode);
-	
-	public List<String> getGenres();
-	public List<String> getCategories();
+
+    public Map<String, Object> getEpgDataForUseId(Long id);
+
+    public Map<String, Object> getEpgDataForRecording(String recFilename);
+
+    public Map<String, Object> getMediaIdsForUseId(Long id);
+
+    public List<Map<String, Object>> getEpgData(Collection<Channel> channels, EpgSearchCriteria criteria);
+
+    public List<Map<String, Object>> getEpgDayData(EpgSearchCriteria epgCriteria);
+
+    public List<Map<String, Object>> getEpgChannelData(EpgSearchCriteria epgCriteria);
+
+    public String getVdrTimerName(Long id, RecordingNamingMode naming_mode);
+
+    public List<String> getGenres();
+
+    public List<String> getCategories();
 }

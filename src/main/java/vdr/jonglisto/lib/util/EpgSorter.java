@@ -8,89 +8,89 @@ import java.util.TreeMap;
 
 import vdr.jonglisto.lib.model.Channel;
 
-
 public class EpgSorter {
-	
-	private Map<String, Channel> channels;
-	
-	public EpgSorter(List<Channel> ch) {
-		channels = new TreeMap<String, Channel>();
-		for (Channel s : ch) {
-			channels.put(s.getId(), s);
-		}
-	}
 
-	public String getChannelName(String channelId) {
-		try {
-			String result = channels.get(channelId).getName();
-			return result != null ? result : "";
-		} catch (Exception e) {
-			return "";
-		}
-	}
-	
-	public Collection<Channel> getChannels() {
-		return channels.values();
-	}
-	
-	public List<Map<String, Object>> sort(List<Map<String, Object>> epgData) {
-		return internalSort(epgData);
-	}
-	
-	private List<Map<String, Object>> internalSort(List<Map<String, Object>> whole) {
-		int center;
+    private Map<String, Channel> channels;
 
-		if (whole.size() <= 1)
-			return whole;
-		else {
-			center = whole.size() / 2;
+    public EpgSorter(List<Channel> ch) {
+        channels = new TreeMap<String, Channel>();
+        for (Channel s : ch) {
+            channels.put(s.getId(), s);
+        }
+    }
 
-			List<Map<String, Object>> left  = new ArrayList<Map<String, Object>>(whole.subList(0, center));
-			List<Map<String, Object>> right = new ArrayList<Map<String, Object>>(whole.subList(center, whole.size()));
-			
-			left = sort(left);
-			right = sort(right);
+    public String getChannelName(String channelId) {
+        try {
+            String result = channels.get(channelId).getName();
+            return result != null ? result : "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
-			merge(left, right, whole);
+    public Collection<Channel> getChannels() {
+        return channels.values();
+    }
 
-		}
-		return whole;
-	}
+    public List<Map<String, Object>> sort(List<Map<String, Object>> epgData) {
+        return internalSort(epgData);
+    }
 
-	private void merge(List<Map<String, Object>> left, List<Map<String, Object>> right, List<Map<String, Object>> whole) {
+    private List<Map<String, Object>> internalSort(List<Map<String, Object>> whole) {
+        int center;
 
-		int leftIndex = 0;
-		int rightIndex = 0;
-		int wholeIndex = 0;
+        if (whole.size() <= 1)
+            return whole;
+        else {
+            center = whole.size() / 2;
 
-		while (leftIndex < left.size() && rightIndex < right.size()) {
-			Channel a = channels.get(left.get(leftIndex).get("channelid"));
-			Channel b = channels.get(right.get(rightIndex).get("channelid"));
-			
-			if (a.getNumber().compareTo(b.getNumber()) < 0) {
-				whole.set(wholeIndex, left.get(leftIndex));
-				leftIndex++;
-			} else {
-				whole.set(wholeIndex, right.get(rightIndex));
-				rightIndex++;
-			}
-			wholeIndex++;
-		}
+            List<Map<String, Object>> left = new ArrayList<Map<String, Object>>(whole.subList(0, center));
+            List<Map<String, Object>> right = new ArrayList<Map<String, Object>>(whole.subList(center, whole.size()));
 
-		List<Map<String, Object>> rest;
-		int restIndex;
-		if (leftIndex >= left.size()) {
-			rest = right;
-			restIndex = rightIndex;
-		} else {
-			rest = left;
-			restIndex = leftIndex;
-		}
+            left = sort(left);
+            right = sort(right);
 
-		for (int i = restIndex; i < rest.size(); i++) {
-			whole.set(wholeIndex, rest.get(i));
-			wholeIndex++;
-		}
-	}
+            merge(left, right, whole);
+
+        }
+        return whole;
+    }
+
+    private void merge(List<Map<String, Object>> left, List<Map<String, Object>> right,
+            List<Map<String, Object>> whole) {
+
+        int leftIndex = 0;
+        int rightIndex = 0;
+        int wholeIndex = 0;
+
+        while (leftIndex < left.size() && rightIndex < right.size()) {
+            Channel a = channels.get(left.get(leftIndex).get("channelid"));
+            Channel b = channels.get(right.get(rightIndex).get("channelid"));
+
+            if (a.getNumber().compareTo(b.getNumber()) < 0) {
+                whole.set(wholeIndex, left.get(leftIndex));
+                leftIndex++;
+            } else {
+                whole.set(wholeIndex, right.get(rightIndex));
+                rightIndex++;
+            }
+            wholeIndex++;
+        }
+
+        List<Map<String, Object>> rest;
+        int restIndex;
+        if (leftIndex >= left.size()) {
+            rest = right;
+            restIndex = rightIndex;
+        } else {
+            rest = left;
+            restIndex = leftIndex;
+        }
+
+        for (int i = restIndex; i < rest.size(); i++) {
+            whole.set(wholeIndex, rest.get(i));
+            wholeIndex++;
+        }
+    }
 
 }

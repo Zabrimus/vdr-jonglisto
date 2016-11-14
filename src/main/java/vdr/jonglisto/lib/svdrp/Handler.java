@@ -11,33 +11,33 @@ import org.slf4j.LoggerFactory;
 
 public class Handler implements Runnable {
 
-	private Logger log = LoggerFactory.getLogger(Handler.class);
-	
-	private final Socket client;
+    private Logger log = LoggerFactory.getLogger(Handler.class);
 
-	public Handler(Socket client) {
-		this.client = client;
-	}
+    private final Socket client;
 
-	public void run() {
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()))) {
-			
-			String input;
+    public Handler(Socket client) {
+        this.client = client;
+    }
 
-			while ((input = in.readLine()) != null) {
-				log.debug("Received message from " + Thread.currentThread().getName() + " : " + input);
+    public void run() {
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()))) {
 
-				switch (input.toLowerCase()) {
-				case "help": 
-					writer.write("Help requested. Have to be implemented :)");
-					writer.newLine();
-					writer.flush();
-				}
-			}
-		} catch (Exception e) {
-			log.error("Error", e);
-		}
-	}
+            String input;
+
+            while ((input = in.readLine()) != null) {
+                log.debug("Received message from " + Thread.currentThread().getName() + " : " + input);
+
+                switch (input.toLowerCase()) {
+                case "help":
+                    writer.write("Help requested. Have to be implemented :)");
+                    writer.newLine();
+                    writer.flush();
+                }
+            }
+        } catch (Exception e) {
+            log.error("Error", e);
+        }
+    }
 
 }

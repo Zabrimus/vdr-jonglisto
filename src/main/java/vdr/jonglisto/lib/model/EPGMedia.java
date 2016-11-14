@@ -2,130 +2,130 @@ package vdr.jonglisto.lib.model;
 
 public class EPGMedia {
 
-	public enum MediaType {
-		All, Banner, Poster, SeasonPoster, FanArt, EpisodePic, Actor
-	}
+    public enum MediaType {
+        All, Banner, Poster, SeasonPoster, FanArt, EpisodePic, Actor
+    }
 
-	public enum Type {
-		Series, Movie
-	}
-	
-	private MediaType tabType;
-	private Type type;
-	
-	// primary key for series_media
-	private long seriesId;
-	private long seasonNumber;
-	private long episodeId;
-	
-	// primary key for movie_media
-	private long movieId;
-	
-	// common key for series_media and movie_media
-	private int mediaType;
-	private long actorId;
+    public enum Type {
+        Series, Movie
+    }
 
-	// additional information
-	private String actorName;
-	private String actorRole;
-	private Integer actorSortOrder;
+    private MediaType tabType;
+    private Type type;
 
-	public EPGMedia() {	
-	}
+    // primary key for series_media
+    private long seriesId;
+    private long seasonNumber;
+    private long episodeId;
 
-	public Type getType() {
-		return type;
-	}
+    // primary key for movie_media
+    private long movieId;
 
-	public void setType(Type type) {
-		this.type = type;
-	}
+    // common key for series_media and movie_media
+    private int mediaType;
+    private long actorId;
 
-	public long getSeriesId() {
-		return seriesId;
-	}
+    // additional information
+    private String actorName;
+    private String actorRole;
+    private Integer actorSortOrder;
 
-	public void setSeriesId(long seriesId) {
-		this.seriesId = seriesId;
-	}
+    public EPGMedia() {
+    }
 
-	public long getSeasonNumber() {
-		return seasonNumber;
-	}
+    public Type getType() {
+        return type;
+    }
 
-	public void setSeasonNumber(long seasonNumber) {
-		this.seasonNumber = seasonNumber;
-	}
+    public void setType(Type type) {
+        this.type = type;
+    }
 
-	public long getEpisodeId() {
-		return episodeId;
-	}
+    public long getSeriesId() {
+        return seriesId;
+    }
 
-	public void setEpisodeId(long episodeId) {
-		this.episodeId = episodeId;
-	}
+    public void setSeriesId(long seriesId) {
+        this.seriesId = seriesId;
+    }
 
-	public long getMovieId() {
-		return movieId;
-	}
+    public long getSeasonNumber() {
+        return seasonNumber;
+    }
 
-	public void setMovieId(long movieId) {
-		this.movieId = movieId;
-	}
+    public void setSeasonNumber(long seasonNumber) {
+        this.seasonNumber = seasonNumber;
+    }
 
-	public int getMediaType() {
-		return mediaType;
-	}
+    public long getEpisodeId() {
+        return episodeId;
+    }
 
-	public void setMediaType(int mediaType) {
-		this.mediaType = mediaType;
-	}
+    public void setEpisodeId(long episodeId) {
+        this.episodeId = episodeId;
+    }
 
-	public long getActorId() {
-		return actorId;
-	}
+    public long getMovieId() {
+        return movieId;
+    }
 
-	public void setActorId(long actorId) {
-		this.actorId = actorId;
-	}
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
+    }
 
-	public String getActorName() {
-		return actorName;
-	}
+    public int getMediaType() {
+        return mediaType;
+    }
 
-	public void setActorName(String actorName) {
-		this.actorName = actorName;
-	}
+    public void setMediaType(int mediaType) {
+        this.mediaType = mediaType;
+    }
 
-	public String getActorRole() {
-		return actorRole;
-	}
+    public long getActorId() {
+        return actorId;
+    }
 
-	public void setActorRole(String actorRole) {
-		this.actorRole = actorRole;
-	}
+    public void setActorId(long actorId) {
+        this.actorId = actorId;
+    }
 
-	public Integer getActorSortOrder() {
-		return actorSortOrder;
-	}
+    public String getActorName() {
+        return actorName;
+    }
 
-	public void setActorSortOrder(Integer actorSortOrder) {
-		this.actorSortOrder = actorSortOrder;
-	}
+    public void setActorName(String actorName) {
+        this.actorName = actorName;
+    }
 
-	public MediaType getTabType() {
-		return tabType;
-	}
+    public String getActorRole() {
+        return actorRole;
+    }
 
-	public void setTabType(MediaType tabType) {
-		this.tabType = tabType;
-	}
+    public void setActorRole(String actorRole) {
+        this.actorRole = actorRole;
+    }
 
-	@Override
-	public String toString() {
-		return "EPGMedia [tabType=" + tabType + ", type=" + type + ", seriesId=" + seriesId + ", seasonNumber="
-				+ seasonNumber + ", episodeId=" + episodeId + ", movieId=" + movieId + ", mediaType=" + mediaType
-				+ ", actorId=" + actorId + ", actorName=" + actorName + ", actorRole=" + actorRole + ", actorSortOrder="
-				+ actorSortOrder + "]";
-	}
+    public Integer getActorSortOrder() {
+        return actorSortOrder;
+    }
+
+    public void setActorSortOrder(Integer actorSortOrder) {
+        this.actorSortOrder = actorSortOrder;
+    }
+
+    public MediaType getTabType() {
+        return tabType;
+    }
+
+    public void setTabType(MediaType tabType) {
+        this.tabType = tabType;
+    }
+
+    @Override
+    public String toString() {
+        return "EPGMedia [tabType=" + tabType + ", type=" + type + ", seriesId=" + seriesId + ", seasonNumber="
+                + seasonNumber + ", episodeId=" + episodeId + ", movieId=" + movieId + ", mediaType=" + mediaType
+                + ", actorId=" + actorId + ", actorName=" + actorName + ", actorRole=" + actorRole + ", actorSortOrder="
+                + actorSortOrder + "]";
+    }
 }

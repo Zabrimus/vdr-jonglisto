@@ -23,32 +23,34 @@ import org.apache.tapestry5.services.PropertyConduitSource;
  * MIT License
  */
 public class MapBindingFactory implements BindingFactory {
-	private final PropertyConduitSource source;
-	private final StringInterner interner;
-	private static final Pattern EXPRESSION_PATTERN = Pattern.compile("^(.*)\\[(.*?)\\]$");
 
-	public MapBindingFactory(PropertyConduitSource source, StringInterner interner) {
-		super();
-		this.source = source;
-		this.interner = interner;
-	}
+    private final PropertyConduitSource source;
+    private final StringInterner interner;
+    private static final Pattern EXPRESSION_PATTERN = Pattern.compile("^(.*)\\[(.*?)\\]$");
 
-	public Binding newBinding(String description, ComponentResources container, ComponentResources component, String expression, Location location) {
-		Object target = container.getComponent();
-		Class<?> targetClass = target.getClass();
+    public MapBindingFactory(PropertyConduitSource source, StringInterner interner) {
+        super();
+        this.source = source;
+        this.interner = interner;
+    }
 
-		Matcher matcher = EXPRESSION_PATTERN.matcher(expression);
-		if (!matcher.matches()) {
-			String msg = String.format("Expression %s does not match %s", expression, EXPRESSION_PATTERN.pattern());
-			throw new TapestryException(msg, location, null);
-		}
+    public Binding newBinding(String description, ComponentResources container, ComponentResources component,
+            String expression, Location location) {
+        Object target = container.getComponent();
+        Class<?> targetClass = target.getClass();
 
-		PropertyConduit mapConduit = source.create(targetClass, matcher.group(1));
-		PropertyConduit keyConduit = source.create(targetClass, matcher.group(2));
+        Matcher matcher = EXPRESSION_PATTERN.matcher(expression);
+        if (!matcher.matches()) {
+            String msg = String.format("Expression %s does not match %s", expression, EXPRESSION_PATTERN.pattern());
+            throw new TapestryException(msg, location, null);
+        }
 
-		String toString = interner.format("MapPropBinding[%s %s(%s)]", description, container.getCompleteId(),
-				expression);
+        PropertyConduit mapConduit = source.create(targetClass, matcher.group(1));
+        PropertyConduit keyConduit = source.create(targetClass, matcher.group(2));
 
-		return new MapBinding(location, target, mapConduit, keyConduit, toString);
-	}
+        String toString = interner.format("MapPropBinding[%s %s(%s)]", description, container.getCompleteId(),
+                expression);
+
+        return new MapBinding(location, target, mapConduit, keyConduit, toString);
+    }
 }

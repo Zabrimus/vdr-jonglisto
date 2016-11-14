@@ -8,18 +8,18 @@ import vdr.jonglisto.lib.model.RecPathTree;
 
 public class RecPathTreeAdapter implements TreeModelAdapter<RecPathTree> {
 
-	private boolean withLeafs = true;
-	
-	public RecPathTreeAdapter(boolean withLeafs) {
-		this.withLeafs = withLeafs;
-	}
-	
-	public boolean isLeaf(RecPathTree node) {
-		if (withLeafs) {
-			return !hasChildren(node);
-		} else {
-			return false;
-		}
+    private boolean withLeafs = true;
+
+    public RecPathTreeAdapter(boolean withLeafs) {
+        this.withLeafs = withLeafs;
+    }
+
+    public boolean isLeaf(RecPathTree node) {
+        if (withLeafs) {
+            return !hasChildren(node);
+        } else {
+            return false;
+        }
     }
 
     public boolean hasChildren(RecPathTree node) {

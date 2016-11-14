@@ -1,25 +1,31 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 	<t:content>
-		<ul class="nav nav-stacked nav-pills">			
-			<t:loop source="pageNames" value="page">			
+		<ul class="nav nav-stacked nav-pills">
+			<t:loop source="pageNames" value="page">
 				<t:any element="li" class="${prop:classForPage}">
 					<t:if test="vdrSelected">
-					   <t:pagelink page="${page.page}" t:parameters="{'reset':'true'}">${page.name}</t:pagelink>
+						<t:pagelink page="${page.page}" t:parameters="{'reset':'true'}">${page.name}</t:pagelink>
 					</t:if>
-					
+
 					<t:if test="vdrSelected" negate="true">
-					   ${page.name}
-					</t:if>					
-				</t:any>			
-			</t:loop>			
+						${page.name}
+					</t:if>
+				</t:any>
+			</t:loop>
 		</ul>
 
 		<t:if test="developerMode">
-			<br/><br/><br/>			
+			<br />
+			<br />
+			<br />
 			<ul class="nav nav-stacked nav-pills">
 				<li>Developer-Seiten</li>
-				<li><t:pageLink page="t5dashboard" >Dashboard</t:pageLink></li>
-				<li><t:pageLink page="ExceptionReport" >Exception</t:pageLink></li>
+				<li>
+					<t:pageLink page="t5dashboard">Dashboard</t:pageLink>
+				</li>
+				<li>
+					<t:pageLink page="ExceptionReport">Exception</t:pageLink>
+				</li>
 			</ul>
 		</t:if>
 	</t:content>

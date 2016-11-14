@@ -1,8 +1,10 @@
 /**
- * A simple mixin for attaching javascript that updates a zone on any client-side event.
+ * A simple mixin for attaching javascript that updates a zone on any
+ * client-side event.
  * Based on http://tinybits.blogspot.com/2010/03/new-and-better-zoneupdater.html
  *
- * copied from tapestry jumpstart http://jumpstart.doublenegative.com.au/jumpstart7/examples/ajax/onevent
+ * copied from tapestry jumpstart
+ * http://jumpstart.doublenegative.com.au/jumpstart7/examples/ajax/onevent
  */
 package vdr.jonglisto.web.mixins;
 
@@ -22,7 +24,8 @@ public class ZoneUpdater {
     // Parameters
 
     /**
-     * The event to listen for on the client. If not specified, zone update can only be triggered manually through
+     * The event to listen for on the client. If not specified, zone update can
+     * only be triggered manually through
      * calling updateZone on the JS object.
      */
     @Parameter(name = "clientEvent", defaultPrefix = BindingConstants.LITERAL)
@@ -57,8 +60,7 @@ public class ZoneUpdater {
      */
     @Parameter(name = "addValue", defaultPrefix = BindingConstants.LITERAL)
     private String addValue;
-    
-    
+
     // Useful bits and pieces
 
     @Inject
@@ -77,6 +79,7 @@ public class ZoneUpdater {
 
     void afterRender() {
         String listenerURI = componentResources.createEventLink(event, context).toAbsoluteURI(secure);
-        javaScriptSupport.require("zone-updater").with(attachedTo.getClientId(), clientEvent, listenerURI, zone, addValue != null ? addValue : new JSONLiteral(null));
+        javaScriptSupport.require("zone-updater").with(attachedTo.getClientId(), clientEvent, listenerURI, zone,
+                addValue != null ? addValue : new JSONLiteral(null));
     }
 }

@@ -24,79 +24,79 @@ import vdr.jonglisto.web.pages.Index;
 @Meta("tapestry.persistence-strategy=conversation")
 public class Layout extends BaseComponent {
 
-	enum Mode {
-		VIEW, VDR;
-	}
+    enum Mode {
+        VIEW, VDR;
+    }
 
-	@Inject
-	private ConversationManager conversationManager;
+    @Inject
+    private ConversationManager conversationManager;
 
-	@Inject
-	protected ComponentResources componentResources;
+    @Inject
+    protected ComponentResources componentResources;
 
-	@Persist("session")
-	private String conversationId;
-	
-	@Property
-	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
-	private String title;
+    @Persist("session")
+    private String conversationId;
 
-	@Property
-	private String pageName;
+    @Property
+    @Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+    private String title;
 
-	@Property
-	private VDRView view;
+    @Property
+    private String pageName;
 
-	@Property
-	@Inject
-	@Symbol(SymbolConstants.APPLICATION_VERSION)
-	private String appVersion;
+    @Property
+    private VDRView view;
 
-	@SessionAttribute
-	@Property
-	private Type type;
+    @Property
+    @Inject
+    @Symbol(SymbolConstants.APPLICATION_VERSION)
+    private String appVersion;
 
-	public void setupRender() {
-		if (!conversationManager.isActiveConversation(conversationId)) {
-			conversationId = conversationManager.createConversation(componentResources.getPageName(), 60, true);
-		}
-	}
+    @SessionAttribute
+    @Property
+    private Type type;
 
-	public String getClassForView() {
-		return currentVdrView.getDisplayName().equals(view.getDisplayName()) ? "active" : null;
-	}
+    public void setupRender() {
+        if (!conversationManager.isActiveConversation(conversationId)) {
+            conversationId = conversationManager.createConversation(componentResources.getPageName(), 60, true);
+        }
+    }
 
-	public List<VDRView> getViews() {
-		if (type == null) {
-			// set default type and view
-			type = Type.View;
-			currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
-					.sorted().findFirst().get();
-		}
+    public String getClassForView() {
+        return currentVdrView.getDisplayName().equals(view.getDisplayName()) ? "active" : null;
+    }
 
-		return configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).sorted()
-				.collect(Collectors.toList());
-	}
+    public List<VDRView> getViews() {
+        if (type == null) {
+            // set default type and view
+            type = Type.View;
+            currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
+                    .sorted().findFirst().get();
+        }
 
-	public void onSelectView(String displayName) {
-		currentVdrView = configuration.getConfiguredViews().values().stream()
-				.filter(s -> s.getDisplayName().equals(displayName)).findFirst().get();
-		type = currentVdrView.getType();
-	}
+        return configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).sorted()
+                .collect(Collectors.toList());
+    }
 
-	public Object onToggleViewType() {
-		if (type == Type.VDR) {
-			type = Type.View;
-		} else {
-			type = Type.VDR;
-		}
+    public void onSelectView(String displayName) {
+        currentVdrView = configuration.getConfiguredViews().values().stream()
+                .filter(s -> s.getDisplayName().equals(displayName)).findFirst().get();
+        type = currentVdrView.getType();
+    }
 
-		currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
-				.findFirst().get();
-		return Index.class;
-	}
+    public Object onToggleViewType() {
+        if (type == Type.VDR) {
+            type = Type.View;
+        } else {
+            type = Type.VDR;
+        }
 
-	public boolean showVdrList() {
-		return type == Type.VDR;
-	}
+        currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
+                .findFirst().get();
+        return Index.class;
+    }
+
+    public boolean showVdrList() {
+        return type == Type.VDR;
+    }
 }
