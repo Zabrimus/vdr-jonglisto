@@ -1,14 +1,12 @@
 package vdr.jonglisto.web.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -20,8 +18,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.SelectModelFactory;
 
-import vdr.jonglisto.lib.ConfigurationService;
-import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.SearchTimer;
 import vdr.jonglisto.lib.model.VDR;
@@ -31,7 +27,7 @@ import vdr.jonglisto.web.services.GlobalValues;
 public class SearchTimerView extends BaseComponent {
 
     public enum Function {
-        LIST, EDIT, EPG, NEWTIMER;
+        LIST, EDIT, EPG;
     }
 
     @Inject
@@ -50,10 +46,13 @@ public class SearchTimerView extends BaseComponent {
     private Zone searchTimerListZone;
 
     @Inject
-    private Block view;
+    private Block viewBlock;
 
     @Inject
-    private Block edit;
+    private Block editBlock;
+
+    @Inject
+    private Block epgBlock;
 
     @Property
     private BeanModel<Object> searchTimerModel;
@@ -73,6 +72,10 @@ public class SearchTimerView extends BaseComponent {
 
     @Property
     private Function function;
+
+    @Persist
+    @Property
+    private Function lastFunction;
 
     @Property
     @Persist
@@ -114,6 +117,8 @@ public class SearchTimerView extends BaseComponent {
     @Property
     private VDR selectedVdr;
 
+    
+    
     void setupRender() {
         searchTimers = searchTimerService.getSearchTimers();
         function = Function.LIST;
@@ -146,13 +151,27 @@ public class SearchTimerView extends BaseComponent {
     }
 
     public void onExecuteSearchTimer(Long id) {
-        // TODO: implement this
-        System.err.println("execute search timer is not yet implemented");
-
+        lastFunction = function;
+        function = Function.EPG;
+        
+//!     
+        
         List<Map<String, Object>> result = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
-        System.err.println("Result:" + result);
+        
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(searchTimerListZone);
+        }
     }
 
+    public void onBack() {
+        function = lastFunction;
+        lastFunction = null;
+        
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(searchTimerListZone);
+        }
+    }
+    
     public void onEditSearchTimer(Long id) {
         function = Function.EDIT;
         searchTimer = searchTimerService.getSearchTimer(id);
@@ -259,19 +278,7 @@ public class SearchTimerView extends BaseComponent {
     void onCancel() {
         searchTimerId = null;
     }
-
-    public boolean isListFunction() {
-        return function == Function.LIST || function == Function.NEWTIMER;
-    }
-
-    public boolean isEditFunction() {
-        return function == Function.EDIT || function == Function.NEWTIMER;
-    }
-
-    public boolean isNewSearchTimerFunction() {
-        return function == Function.NEWTIMER;
-    }
-
+    
     public String getTimerAction() {
         switch (searchTimer.getType()) {
         case "R":
@@ -303,13 +310,16 @@ public class SearchTimerView extends BaseComponent {
     public Object getActiveBlock() {
         switch (function) {
         case EDIT:
-            return edit;
+            return editBlock;
 
         case LIST:
-            return view;
+            return viewBlock;
 
+        case EPG:
+            return epgBlock;
+            
         default:
-            return view;
+            return viewBlock;
         }
     }
 

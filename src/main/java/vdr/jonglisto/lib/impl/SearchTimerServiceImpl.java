@@ -427,7 +427,7 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
         }
 
         // Wochentage (WEEKDAYS)
-        if (weekdays > 0) {
+        if ((weekdays != null) && (weekdays > 0)) {
             sb.append(" and (:WEEKDAYS & (1 << weekday(from_unixtime(e.CNT_STARTTIME)))) <> 0");
         }
 
