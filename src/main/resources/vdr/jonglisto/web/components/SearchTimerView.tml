@@ -365,6 +365,8 @@
         
         <t:block t:id="epgBlock">
             <div>Hallo EPG</div>
+       
+            <t:SearchTimerResult useIds="searchResult" />
             
             <t:eventlink event="back" class="btn btn-default">${message:timer_back}</t:eventlink>
         </t:block>

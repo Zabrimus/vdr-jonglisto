@@ -116,8 +116,10 @@ public class SearchTimerView extends BaseComponent {
     @Persist
     @Property
     private VDR selectedVdr;
-
     
+    @Persist
+    @Property
+    List<Map<String, Object>> searchResult;
     
     void setupRender() {
         searchTimers = searchTimerService.getSearchTimers();
@@ -153,10 +155,8 @@ public class SearchTimerView extends BaseComponent {
     public void onExecuteSearchTimer(Long id) {
         lastFunction = function;
         function = Function.EPG;
-        
-//!     
-        
-        List<Map<String, Object>> result = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
+
+        searchResult = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
         
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(searchTimerListZone);
