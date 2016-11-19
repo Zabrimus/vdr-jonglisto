@@ -8,8 +8,8 @@ import org.apache.tapestry5.PropertyConduit;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MapPropertyConduit implements PropertyConduit {
 
-    private final String key;
-    private final Class<?> type;
+    protected final String key;
+    protected final Class<?> type;
 
     public MapPropertyConduit(String key, Class<?> type) {
         super();

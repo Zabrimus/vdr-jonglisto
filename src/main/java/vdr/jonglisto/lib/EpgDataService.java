@@ -11,6 +11,8 @@ import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 public interface EpgDataService {
 
     public Map<String, Object> getEpgDataForUseId(Long id);
+    
+    public List<Map<String, Object>> getEpgDataForUseIds(List<Map<String, Object>> useIds);
 
     public Map<String, Object> getEpgDataForRecording(String recFilename);
 

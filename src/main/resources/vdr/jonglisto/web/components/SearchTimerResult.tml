@@ -1,40 +1,24 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
     <t:content>
         <t:zone t:id="epgListZone" id="epgListZone">
-            <!-- <t:grid source="epgData" row="epg" model="epgModel" t:mixins="EnableGridZone" inplace="true"> -->
-            <t:grid source="epgData" row="epg" model="epgModel">
-                <p:timeCell>
-                    <div>
-                        <t:pagelink page="programTime" parameters="{'searchTime':startTime}">
-                            ${map:epg['v_starttime']}
-                        </t:pagelink>
-                        -
-                        <t:pagelink page="programTime" parameters="{'searchTime':endTime}">
-                            ${map:epg['v_endtime']}
-                        </t:pagelink>
-                    </div>
-                </p:timeCell>
-
+            <div class="row">
+                <strong>Anzahl der Suchergebnisse: ${count}</strong><br/>
+            </div>
+            
+            <t:grid source="epgData" row="epgMap" model="epgModel" inplace="true">
                 <p:titleCell>
                     <t:eventlink t:event="showEpg" t:context="[useId,channelName]" zone="^">
-                        <strong>${map:epg['title']}</strong>
+                        <strong>${map:epgMap['title']}</strong>
                     </t:eventlink>
                     <br />
-                    ${map:epg['shorttext']}
+                    ${map:epgMap['shorttext']}
                 </p:titleCell>
-
-                <p:genreCell>
-                    ${map:epg['genre']}
-                </p:genreCell>
-
-                <p:categoryCell>
-                    ${map:epg['category']}
-                </p:categoryCell>
-
+                
                 <p:channelidCell>
                     <t:ChannelImage channelName="channelName" />
                 </p:channelidCell>
 
+                <!-- 
                 <p:actionCell>
                     <t:pagelink page="timer" parameters="{'newTimerUseId':useId, 'channelName':channelName}">
                         <img src="${asset:record.svg}" alt="Record Timer" data-toggle="tooltip" title="Timer anlegen" class="iconwhlarge tooltipTop" />
@@ -44,7 +28,11 @@
                         <img src="${asset:umschalten.svg}" alt="Channel Switch" data-toggle="tooltip" title="TV umschalten" class="iconwhlarge tooltipTop" />
                     </t:eventlink>
                 </p:actionCell>
+                -->
             </t:grid>
         </t:zone>
+        
+        <!-- insert epg info zone -->
+        <t:Epg useid="epgDetailUseId" channelName="epgDetailChannelName" />        
     </t:content>
 </html>

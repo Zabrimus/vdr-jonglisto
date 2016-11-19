@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -220,6 +222,31 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
         }
     }
 
+    public List<Map<String, Object>> getEpgDataForUseIds(List<Map<String, Object>> useIds) {
+        Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+        try (Connection con = sql2o.open()) {
+            // filter useids
+            String ids = useIds.stream().map(s -> ((Long)s.get("cnt_useid")).toString()).collect(Collectors.joining(","));
+            
+            if (StringUtils.isEmpty(ids)) {
+                // no result found
+                return Collections.emptyList();
+            }
+            
+            List<Map<String, Object>> epg = con.createQuery(selectFromView + " WHERE cnt_useid in (" + ids + ")")
+                    .addParameter("unixtime", System.currentTimeMillis() / 1000L) //
+                    .executeAndFetchTable() //
+                    .asList();
+
+            // Make a copy of the list. Currently it is immutable.
+            List<Map<String, Object>> result = new ArrayList<>();
+            result.addAll(epg);
+
+            return result;
+        }
+    }
+    
     public Map<String, Object> getEpgDataForRecording(String recFilename) {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
 

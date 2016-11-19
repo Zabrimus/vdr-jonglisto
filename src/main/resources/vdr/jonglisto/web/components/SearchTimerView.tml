@@ -364,11 +364,13 @@
         </t:block>
         
         <t:block t:id="epgBlock">
-            <div>Hallo EPG</div>
-       
-            <t:SearchTimerResult useIds="searchResult" />
-            
-            <t:eventlink event="back" class="btn btn-default">${message:timer_back}</t:eventlink>
+            <fieldset class="fieldset-border">
+                <legend class="legend-border">Suchergebnisse</legend>
+                
+                <t:SearchTimerResult useIds="searchResult" />
+                
+                <t:eventlink event="back" class="btn btn-default">${message:timer_back}</t:eventlink>
+            </fieldset>
         </t:block>
     </t:content>
 </html>

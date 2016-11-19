@@ -27,13 +27,10 @@ import vdr.jonglisto.lib.model.RecPathSummary;
 import vdr.jonglisto.lib.model.RecPathTree;
 import vdr.jonglisto.lib.model.RecordingInfo;
 import vdr.jonglisto.lib.util.DateTimeUtil;
+import vdr.jonglisto.lib.util.Function;
 import vdr.jonglisto.web.model.RecPathTreeAdapter;
 
 public class Recordings extends BaseComponent {
-
-    public enum Function {
-        REVIEW, INFO;
-    }
 
     public enum FormAction {
         DELETE, MOVE, MOVE_SINGLE, RENAME

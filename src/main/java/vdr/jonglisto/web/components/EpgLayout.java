@@ -21,13 +21,10 @@ import org.apache.tapestry5.services.SelectModelFactory;
 
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
+import vdr.jonglisto.lib.util.Function;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
 
 public class EpgLayout extends BaseComponent {
-
-    public enum Function {
-        LIST, INFO;
-    }
 
     private static DateTimeFormatter localTimeformatter = DateTimeFormatter.ofPattern("HH:mm");
 

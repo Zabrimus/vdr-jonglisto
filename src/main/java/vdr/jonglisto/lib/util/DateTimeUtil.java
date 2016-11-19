@@ -22,6 +22,10 @@ public class DateTimeUtil {
         return date.format(dateFormatter);
     }
 
+    public static String toDate(Long unixTime) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTime), ZoneId.systemDefault()).toLocalDate().format(dateFormatter);
+    }
+
     public static String toRestfulDate(LocalDateTime date) {
         return date.format(diffDateFormatter);
     }

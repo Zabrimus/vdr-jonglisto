@@ -16,19 +16,17 @@ import org.apache.tapestry5.internal.services.StringValueEncoder;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
 
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.SearchTimer;
 import vdr.jonglisto.lib.model.VDR;
+import vdr.jonglisto.lib.util.Function;
 import vdr.jonglisto.web.encoder.VDREncoder;
 import vdr.jonglisto.web.services.GlobalValues;
 
 public class SearchTimerView extends BaseComponent {
-
-    public enum Function {
-        LIST, EDIT, EPG;
-    }
 
     @Inject
     protected BeanModelSource beanModelSource;
@@ -36,6 +34,9 @@ public class SearchTimerView extends BaseComponent {
     @Inject
     protected Messages messages;
 
+    @Inject
+    private Request request;
+    
     @Inject
     SelectModelFactory selectModelFactory;
 
@@ -70,12 +71,9 @@ public class SearchTimerView extends BaseComponent {
     @Property
     private String currentChannel;
 
-    @Property
-    private Function function;
-
     @Persist
     @Property
-    private Function lastFunction;
+    private Function function;
 
     @Property
     @Persist
@@ -122,8 +120,13 @@ public class SearchTimerView extends BaseComponent {
     List<Map<String, Object>> searchResult;
     
     void setupRender() {
+        String reset = request.getParameter("reset");
+        
+        if ((function == null) || ((reset != null) && "true".equals(reset))) {
+            function = Function.LIST;    
+        }
+        
         searchTimers = searchTimerService.getSearchTimers();
-        function = Function.LIST;
 
         categoryModel = selectModelFactory.create(globalValues.getCategories());
         categoryEncoder = new StringValueEncoder();
@@ -153,7 +156,6 @@ public class SearchTimerView extends BaseComponent {
     }
 
     public void onExecuteSearchTimer(Long id) {
-        lastFunction = function;
         function = Function.EPG;
 
         searchResult = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
@@ -164,16 +166,16 @@ public class SearchTimerView extends BaseComponent {
     }
 
     public void onBack() {
-        function = lastFunction;
-        lastFunction = null;
+        function = Function.LIST;
         
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(searchTimerListZone);
         }
     }
     
-    public void onEditSearchTimer(Long id) {
+    public void onEditSearchTimer(Long id) {        
         function = Function.EDIT;
+        
         searchTimer = searchTimerService.getSearchTimer(id);
         searchTimerId = id;
 
@@ -276,7 +278,12 @@ public class SearchTimerView extends BaseComponent {
     }
 
     void onCancel() {
+        function = Function.LIST;
         searchTimerId = null;
+
+        if (request.isXHR()) {
+            ajaxResponseRenderer.addRender(searchTimerListZone);
+        }
     }
     
     public String getTimerAction() {
