@@ -1,0 +1,12 @@
+LSTO [items_per_page]
+    Print the OSD contents. Each line starts with a prefix denoting the
+    type of information which follows:
+      T: OSD title
+      C: column layout (the tab stops)
+      I: menu item
+      S: selected menu item
+      X: textblock
+      R/G/Y/B: color key help titles
+      M: status message
+    The optional parameter 'items_per_page' limits the amount of items
+    returned.

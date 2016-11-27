@@ -1,0 +1,10 @@
+PLAY <number> [ begin | <position> ]
+    Play the recording with the given number. Before a recording can be
+    played, an LSTR command must have been executed in order to retrieve
+    the recording numbers.
+    The keyword 'begin' plays the recording from its very beginning, while
+    a <position> (given as hh:mm:ss[.ff] or framenumber) starts at that
+    position. If neither 'begin' nor a <position> are given, replay is resumed
+    at the position where any previous replay was stopped, or from the beginning
+    by default. To control or stop the replay session, use the usual remote
+    control keypresses via the HITK command.

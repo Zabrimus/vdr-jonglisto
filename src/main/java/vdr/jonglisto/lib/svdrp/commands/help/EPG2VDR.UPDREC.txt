@@ -1,0 +1,2 @@
+UPDREC
+    Trigger update of recordings

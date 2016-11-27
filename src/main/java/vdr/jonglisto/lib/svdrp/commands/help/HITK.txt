@@ -1,0 +1,5 @@
+HITK [ <key> ... ]
+    Hit the given remote control key. Without option a list of all
+    valid key names is given. If more than one key is given, they are
+    entered into the remote control queue in the given sequence. There
+    can be up to 31 keys.

@@ -1,0 +1,5 @@
+LSTR [ <number> [ path ] ]
+    List recordings. Without option, all recordings are listed. Otherwise
+    the information for the given recording is listed. If a recording
+    number and the keyword 'path' is given, the actual file name of that
+    recording's directory is listed.

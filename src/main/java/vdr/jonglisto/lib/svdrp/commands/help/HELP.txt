@@ -1,0 +1,2 @@
+HELP [ <topic> ]
+    The HELP command gives help info.

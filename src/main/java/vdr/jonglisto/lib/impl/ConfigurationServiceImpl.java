@@ -76,4 +76,19 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public boolean isDeveloperMode() {
         return configuration.isDeveloperMode();
     }
+
+    public String getVersion() {
+        return configuration.getVersion();
+    }
+
+    @Override
+    public long getRemoteOsdSleepTime() {
+        return configuration.getRemoteOsdSleepTime();
+    }
+
+    @Override
+    public long getRemoteOsdIncSleepTime() {
+        return configuration.getRemoteOsdIncSleepTime();
+    }
+
 }

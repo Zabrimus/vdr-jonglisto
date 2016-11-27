@@ -1,0 +1,2 @@
+DELC <number>
+    Delete channel.

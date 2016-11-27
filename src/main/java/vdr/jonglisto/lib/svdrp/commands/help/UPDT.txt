@@ -1,0 +1,4 @@
+UPDT <settings>
+    Updates a timer. Settings must be in the same format as returned
+    by the LSTT command. If a timer with the same channel, day, start
+    and stop time does not yet exist, it will be created.

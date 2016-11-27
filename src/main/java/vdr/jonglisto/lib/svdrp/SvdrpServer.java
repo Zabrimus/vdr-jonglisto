@@ -9,16 +9,18 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Server implements Runnable {
+public class SvdrpServer implements Runnable {
 
-    private Logger log = LoggerFactory.getLogger(Server.class);
+    private Logger log = LoggerFactory.getLogger(SvdrpServer.class);
 
     private int port;
     private int countExecutor;
-
-    public Server(int port, int countExecutor) {
+    private boolean running;
+    
+    public SvdrpServer(int port, int countExecutor) {
         this.port = port;
         this.countExecutor = countExecutor;
+        running = true;
     }
 
     public void run() {
@@ -27,7 +29,7 @@ public class Server implements Runnable {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             executor = Executors.newFixedThreadPool(countExecutor);
 
-            while (true) {
+            while (running) {
                 Socket clientSocket = serverSocket.accept();
                 Runnable worker = new Handler(clientSocket);
                 executor.execute(worker);
@@ -39,5 +41,9 @@ public class Server implements Runnable {
                 executor.shutdown();
             }
         }
+    }
+    
+    public void initStop() {
+        running = false;
     }
 }

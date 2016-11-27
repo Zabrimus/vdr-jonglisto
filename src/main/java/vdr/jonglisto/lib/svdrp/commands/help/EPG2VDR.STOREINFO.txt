@@ -1,0 +1,2 @@
+STOREIFO
+    Trigger store of recordin info files

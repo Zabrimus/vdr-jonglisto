@@ -17,7 +17,6 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONLiteral;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
-import org.json.JSONObject;
 
 public class ZoneUpdater {
 

@@ -1,0 +1,3 @@
+REMO [ on | off ]
+    Turns the remote control on or off. Without a parameter, the current
+    status of the remote control is reported.

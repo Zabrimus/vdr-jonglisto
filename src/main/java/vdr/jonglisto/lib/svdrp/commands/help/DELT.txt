@@ -1,0 +1,2 @@
+DELT <number>
+    Delete timer.

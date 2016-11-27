@@ -1,0 +1,3 @@
+NEWT <settings>
+    Create a new timer. Settings must be in the same format as returned
+    by the LSTT command.

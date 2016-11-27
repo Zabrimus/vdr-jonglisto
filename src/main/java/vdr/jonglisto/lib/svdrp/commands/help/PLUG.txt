@@ -1,0 +1,10 @@
+PLUG <name> [ help | main ] [ <command> [ <options> ]]
+    Send a command to a plugin.
+    The PLUG command without any parameters lists all plugins.
+    If only a name is given, all commands known to that plugin are listed.
+    If a command is given (optionally followed by parameters), that command
+    is sent to the plugin, and the result will be displayed.
+    The keyword 'help' lists all the SVDRP commands known to the named plugin.
+    If 'help' is followed by a command, the detailed help for that command is
+    given. The keyword 'main' initiates a call to the main menu function of the
+    given plugin.

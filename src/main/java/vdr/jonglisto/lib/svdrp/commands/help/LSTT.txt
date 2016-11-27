@@ -1,0 +1,6 @@
+LSTT [ <number> ] [ id ]
+    List timers. Without option, all timers are listed. Otherwise
+    only the given timer is listed. If the keyword 'id' is given, the
+    channels will be listed with their unique channel ids instead of
+    their numbers. This command lists only the timers that are defined
+    locally on this VDR, not any remote timers from other VDRs.

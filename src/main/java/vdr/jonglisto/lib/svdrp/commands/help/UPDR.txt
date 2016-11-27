@@ -1,0 +1,3 @@
+UPDR
+    Initiates a re-read of the recordings directory, which is the SVDRP
+    equivalent to 'touch .update'.

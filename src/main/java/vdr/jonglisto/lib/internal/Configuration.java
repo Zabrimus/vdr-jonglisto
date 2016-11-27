@@ -36,6 +36,7 @@ import vdr.jonglisto.lib.model.RecordingNamingMode;
 import vdr.jonglisto.lib.model.VDR;
 import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.VDRView.Type;
+import vdr.jonglisto.lib.svdrp.SvdrpServer;
 
 public class Configuration {
 
@@ -100,6 +101,7 @@ public class Configuration {
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
 
     private int prodVersion = 1;
+    private String version = "0.0.3-snapshot";
 
     private Logger log = LoggerFactory.getLogger(Configuration.class);
 
@@ -118,12 +120,22 @@ public class Configuration {
     private boolean useSyncMap = false;
     private boolean developerMode = false;
 
+    private Integer svdrpPort;
+    private SvdrpServer svdrpServer;
+    
+    private long remoteOsdSleepTime = 200L;
+    private long remoteOsdIncSleepTime = 200L;
+    
     private Configuration(String pathname) {
         initConfiguration(pathname);
     }
 
     public static Configuration getInstance() {
         return instance;
+    }
+    
+    public String getVersion() {
+        return version;
     }
 
     public VDR getVdr(String uuid) {
@@ -170,6 +182,14 @@ public class Configuration {
 
     public String getChannelImagePath() {
         return channelImagePath;
+    }
+    
+    public long getRemoteOsdSleepTime() {
+        return remoteOsdSleepTime;
+    }
+
+    public long getRemoteOsdIncSleepTime() {
+        return remoteOsdIncSleepTime;
     }
 
     public void sendWol(String uuid) {
@@ -281,12 +301,17 @@ public class Configuration {
     }
 
     public void shutdown() {
+        log.info("SVDRP Server shutdown started ...");
+        if (svdrpServer != null) {
+            svdrpServer.initStop();
+        }
+
         log.info("HSQLDB shutdown started ...");
 
         if (dbServer != null) {
             dbServer.stop();
             dbServer.shutdown();
-        }
+        }        
     }
 
     @SuppressWarnings("unchecked")
@@ -303,6 +328,16 @@ public class Configuration {
 
             developerMode = Boolean.valueOf((String) config.get("developer_mode"));
 
+            svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
+            
+            if (config.get("remoteOsdSleepTime") != null) {
+                remoteOsdSleepTime = Long.parseLong((String)config.get("remoteOsdSleepTime"));
+            }
+            
+            if (config.get("remoteOsdIncSleepTime") != null) {
+                remoteOsdIncSleepTime = Long.parseLong((String)config.get("remoteOsdIncSleepTime"));
+            }
+            
             Map<String, Object> dbConfig;
             // create DataSource for epg2vdr
             dbConfig = (Map<String, Object>) config.get("epg2vdr");
@@ -405,6 +440,9 @@ public class Configuration {
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });
+            
+            // start SVDRP server
+            startSvdrpServer();            
         } catch (IOException e) {
             System.err.println("Error while reading " + pathname + ": " + e.getMessage());
             System.exit(1);
@@ -566,5 +604,18 @@ public class Configuration {
         dbServer.setDatabaseName(0, "jonglisto");
         dbServer.setSilent(true);
         dbServer.start();
+    }
+    
+    private void startSvdrpServer() {
+        if ((svdrpPort == null) || (svdrpPort == 0)) {
+            log.error("SVDRP Port is not configured. Server will not be started.");
+            return;
+        }
+        
+        svdrpServer = new SvdrpServer(svdrpPort, 10);
+        Thread thread = new Thread(svdrpServer);
+        thread.start();
+        
+        log.info("SVDRP Server started at port " + svdrpPort);
     }
 }

@@ -1,0 +1,6 @@
+DELR <number>
+    Delete the recording with the given number. Before a recording can be
+    deleted, an LSTR command must have been executed in order to retrieve
+    the recording numbers. The numbers don't change during subsequent DELR
+    commands. CAUTION: THERE IS NO CONFIRMATION PROMPT WHEN DELETING A
+    RECORDING - BE SURE YOU KNOW WHAT YOU ARE DOING!

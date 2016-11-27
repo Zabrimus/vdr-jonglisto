@@ -7,17 +7,13 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
-import com.github.sommeri.less4j.core.parser.LessParser.function_return;
-
 import vdr.jonglisto.web.conduit.EpgMapReadOnlyPropertyConduit;
 import vdr.jonglisto.web.conduit.MapPropertyConduit;
-import vdr.jonglisto.web.pages.Index;
 
 public class SearchTimerResult extends BaseComponent { 
 

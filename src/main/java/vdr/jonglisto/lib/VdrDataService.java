@@ -1,6 +1,5 @@
 package vdr.jonglisto.lib;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +9,7 @@ import vdr.jonglisto.lib.model.Plugin;
 import vdr.jonglisto.lib.model.RecPathSummary;
 import vdr.jonglisto.lib.model.RecordingInfo;
 import vdr.jonglisto.lib.model.Timer;
+import vdr.jonglisto.lib.model.osd.TextOsd;
 
 public interface VdrDataService {
 
@@ -82,4 +82,16 @@ public interface VdrDataService {
     public void moveRecordings(String vdrUuid, List<String> recordingsToChange, String destination);
 
     public void moveRecording(String vdrUuid, String sourceFilename, String destination);
+    
+    /*
+     * OSD and keyboard
+     */
+    public TextOsd getOsd(String vdrUuid);
+    
+    public void processKey(String vdrUuid, String key);
+
+    public void processString(String vdrUuid, String string);
+
+    // TODO: keyboard sequence
+
 }

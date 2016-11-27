@@ -1,0 +1,6 @@
+VOLU [ <number> | + | - | mute ]
+    Set the audio volume to the given number (which is limited to the range
+    0...255). If the special options '+' or '-' are given, the volume will
+    be turned up or down, respectively. The option 'mute' will toggle the
+    audio muting. If no option is given, the current audio volume level will
+    be returned.

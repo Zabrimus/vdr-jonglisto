@@ -1,0 +1,4 @@
+MODT <number> on | off | <settings>
+    Modify a timer. Settings must be in the same format as returned
+    by the LSTT command. The special keywords 'on' and 'off' can be
+    used to easily activate or deactivate a timer.

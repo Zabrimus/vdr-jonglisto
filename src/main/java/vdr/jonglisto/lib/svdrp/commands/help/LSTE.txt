@@ -1,0 +1,6 @@
+LSTE [ <channel> ] [ now | next | at <time> ]
+    List EPG data. Without any parameters all data of all channels is
+    listed. If a channel is given (either by number or by channel ID),
+    only data for that channel is listed. 'now', 'next', or 'at <time>'
+    restricts the returned data to present events, following events, or
+    events at the given time (which must be in time_t form).

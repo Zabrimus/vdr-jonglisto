@@ -1,7 +1,10 @@
 {
-  "useRecordingSyncMap" : "false",
-  
+  "useRecordingSyncMap" : "false",  
   "developer_mode": "false",
+  
+  "svdrpPort": "5000",
+  "remoteOsdSleepTime": "200",
+  "remoteOsdIncSleepTime": "200",
 
   "epg2vdr": {
     "url": "jdbc:mysql://server:3307/epg2vdr",

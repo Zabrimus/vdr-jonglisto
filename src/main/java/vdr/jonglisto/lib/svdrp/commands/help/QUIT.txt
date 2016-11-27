@@ -1,0 +1,3 @@
+QUIT
+    Exit vdr (SVDRP).
+    You can also hit Ctrl-D to exit.

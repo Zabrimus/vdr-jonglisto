@@ -1,0 +1,4 @@
+PING
+    Used by peer-to-peer connections between VDRs to keep the connection
+    from timing out. May be used at any time and simply returns a line of
+    the form '<hostname> is alive'.

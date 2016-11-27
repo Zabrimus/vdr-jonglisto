@@ -1,0 +1,2 @@
+RELOAD
+    Reload all events from database to EPG

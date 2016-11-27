@@ -1,0 +1,6 @@
+CLRE [ <number> | <name> | <id> ]
+    Clear the EPG list of the given channel number, name or id.
+    Without option it clears the entire EPG list.
+    After a CLRE command, no further EPG processing is done for 10
+    seconds, so that data sent with subsequent PUTE commands doesn't
+    interfere with data from the broadcasters.

@@ -12,7 +12,7 @@ public class EpgMapReadOnlyPropertyConduit extends MapPropertyConduit {
         // return only values which are well known
         
         if (key.equals("time_from_to")) {
-            return (((Map)instance).get("v_starttime") + " - " + ((Map)instance).get("v_endtime")); 
+            return (((Map<?, ?>)instance).get("v_starttime") + " - " + ((Map<?, ?>)instance).get("v_endtime")); 
         }
         
         return super.get(instance);

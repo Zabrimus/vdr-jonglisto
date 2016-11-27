@@ -1,0 +1,2 @@
+STAT disk
+    Return information about disk usage (total, free, percent).

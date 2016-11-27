@@ -1,0 +1,4 @@
+Plugin epg2vdr v1.1.6 - epg2vdr plugin
+SVDRP commands:
+    UPDATE    RELOAD    STATE     TIMERJOB  UPDREC    
+    STOREIFO

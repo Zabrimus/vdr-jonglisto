@@ -1,0 +1,10 @@
+GRAB <filename> [ <quality> [ <sizex> <sizey> ] ]
+    Grab the current frame and save it to the given file. Images can
+    be stored as JPEG or PNM, depending on the given file name extension.
+    The quality of the grabbed image can be in the range 0..100, where 100
+    (the default) means \"best\" (only applies to JPEG). The size parameters
+    define the size of the resulting image (default is full screen).
+    If the file name is just an extension (.jpg, .jpeg or .pnm) the image
+    data will be sent to the SVDRP connection encoded in base64. The same
+    happens if '-' (a minus sign) is given as file name, in which case the
+    image format defaults to JPEG.");

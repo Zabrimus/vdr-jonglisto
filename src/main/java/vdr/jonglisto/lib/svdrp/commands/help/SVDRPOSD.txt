@@ -1,0 +1,4 @@
+Plugin svdrposd v1.0.0 - Publish OSD menu via SVDRP
+SVDRP commands:
+    LSTO      OSDT      OSDI      OSDX      OSDH      
+    OSDM

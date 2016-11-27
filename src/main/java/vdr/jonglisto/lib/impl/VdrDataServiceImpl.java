@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import vdr.jonglisto.lib.VdrDataService;
+import vdr.jonglisto.lib.exception.Http404Exception;
 import vdr.jonglisto.lib.exception.NetworkException;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.Device;
@@ -35,11 +37,12 @@ import vdr.jonglisto.lib.model.Recording;
 import vdr.jonglisto.lib.model.RecordingInfo;
 import vdr.jonglisto.lib.model.Timer;
 import vdr.jonglisto.lib.model.VDR;
+import vdr.jonglisto.lib.model.osd.TextOsd;
 import vdr.jonglisto.lib.util.JonglistoUtil;
 
 public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
-    private Logger log = LoggerFactory.getLogger(VdrDataService.class);
+    Logger log = LoggerFactory.getLogger(VdrDataService.class);
 
     protected ObjectMapper mapper;
     protected Pattern eventIdPattern = Pattern.compile("<eventid>(.*)<\\/eventid>");
@@ -200,8 +203,6 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
                     syncId = con.createQuery("select current value for seq_recording_sync from (VALUES(0))") //
                             .executeScalar(Integer.class);
-
-                    log.debug("new syncId created for " + vdrUuid + " -> " + syncId);
                 }
 
                 syncIdStr = "?" + createSyncStr(vdrUuid, syncId);
@@ -450,6 +451,38 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     }
 
     /*
+     * OSD
+     */
+    public TextOsd getOsd(String vdrUuid) {
+        try {
+            JSONObject json = getJsonData(vdrUuid, "osd.json");
+            if (json.get("TextOsd") != null) {
+                return mapper.readValue(json.get("TextOsd").toString(), TextOsd.class);
+            } else {
+                return null;
+            }
+        } catch (Http404Exception h404) {
+            return null;
+        } catch (Exception e) {
+            // could happen, if VDR is down
+            log.debug("NetworkException for getOsd, " + vdrUuid, e);
+            return null;
+        }
+    }
+
+    public void processKey(String vdrUuid, String key) {
+        String kbd = StringUtils.capitalize(key.toLowerCase());
+        post(vdrUuid, "remote/" + kbd, null);
+    }
+
+    public void processString(String vdrUuid, String string) {
+        String kbd = StringUtils.capitalize(string.toLowerCase());        
+        post(vdrUuid, "remote/kbd", "{'kbd':'" + kbd.replaceAll("'", "\"") + "'}");
+    }
+
+    // TODO: OSD keyboard sequence
+    
+    /*
      * private helper functions
      */
 
@@ -601,9 +634,8 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     /*
      * conversion methods
      */
-
     @SuppressWarnings("unchecked")
-    private <T> List<T> convertJSONArrayToList(JSONArray array, Class<T> clazz) {
+    protected <T> List<T> convertJSONArrayToList(JSONArray array, Class<T> clazz) {
         List<T> result = new ArrayList<>();
 
         array.forEach(s -> {
@@ -621,7 +653,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
         return result;
     }
 
-    private <T> List<T> convertJSONArrayToList(JSONArray array, String key, Class<T> clazz) {
+    protected <T> List<T> convertJSONArrayToList(JSONArray array, String key, Class<T> clazz) {
         List<T> result = new ArrayList<>();
 
         array.forEach(s -> {
@@ -638,13 +670,12 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     /*
      * low level rest api methods
      */
-
     private String getVdrRestUrl(String vdrUuid) {
         VDR v = configuration.getVdr(vdrUuid);
         return "http://" + v.getIp() + ":" + v.getRestfulApiPort() + "/";
     }
 
-    private JSONObject getJsonData(String vdrUuid, String path) {
+    protected JSONObject getJsonData(String vdrUuid, String path) {
         JSONObject result;
         HttpResponse<String> jsonResponse;
 
@@ -666,8 +697,13 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
             if (jsonResponse == null) {
                 throw new NetworkException("unknown error: Keine Antwort erhalten");
             } else {
-                throw new NetworkException("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
-                        + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
+                if (jsonResponse.getStatus() == 404) {
+                    throw new Http404Exception("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
+                            + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
+                } else {
+                    throw new NetworkException("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
+                            + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
+                }
             }
         }
 
@@ -755,4 +791,5 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
         JSONArray array = new JSONObject(post(vdrUuid, urlPart, body)).getJSONArray(name);
         return convertJSONArrayToList(array, clazz);
     }
+
 }

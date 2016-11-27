@@ -1,0 +1,2 @@
+OSDM
+    Return the current OSD status message.

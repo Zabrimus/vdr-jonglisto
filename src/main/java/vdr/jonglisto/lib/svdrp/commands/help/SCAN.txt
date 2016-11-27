@@ -1,0 +1,3 @@
+SCAN
+    Forces an EPG scan. If this is a single DVB device system, the scan
+    will be done on the primary device unless it is currently recording.

@@ -1,0 +1,4 @@
+POLL timers
+    Used by peer-to-peer connections between VDRs to inform other machines
+    about changes to timers. The receiving VDR shall use LSTT to query the
+    remote machine's timers and update its list of timers accordingly.

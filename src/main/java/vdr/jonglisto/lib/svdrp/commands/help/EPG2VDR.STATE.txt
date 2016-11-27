@@ -1,0 +1,2 @@
+STATE <state>
+    For internal usage

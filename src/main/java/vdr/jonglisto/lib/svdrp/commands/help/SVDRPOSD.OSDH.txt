@@ -1,0 +1,4 @@
+OSDH
+    Return the current OSD color key help titles. Each color is
+    returned on a line of its own, prefixed by R:, G:, Y: or B:,
+    respectively. For unused help buttons only the prefix is returned.

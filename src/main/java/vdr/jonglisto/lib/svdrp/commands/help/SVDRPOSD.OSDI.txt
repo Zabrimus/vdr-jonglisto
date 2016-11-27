@@ -1,0 +1,8 @@
+OSDI [items_per_page]
+    Return up to 'items_per_page' OSD entries. All items are returned
+    if the argument is missing or 0.
+    If applicable, the column layout is printed first, followed by
+    the actual entries. The layout part consists of one line per
+    column. Each line starts with the prefix C: followed by the width.
+    The prefix I: is used for all items except for the selected item
+    which is prefixed by S:.

@@ -1,0 +1,10 @@
+NEXT [ abs | rel ]
+    Show the next timer event. If no option is given, the output will be
+    in human readable form. With option 'abs' the absolute time of the next
+    event will be given as the number of seconds since the epoch (time_t
+    format), while with option 'rel' the relative time will be given as the
+    number of seconds from now until the event. If the absolute time given
+    is smaller than the current time, or if the relative time is less than
+    zero, this means that the timer is currently recording and has started
+    at the given time. The first value in the resulting line is the number
+    of the timer.

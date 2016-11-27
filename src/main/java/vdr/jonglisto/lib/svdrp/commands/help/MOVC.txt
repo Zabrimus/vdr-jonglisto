@@ -1,0 +1,2 @@
+MOVC <number> <to>
+    Move a channel to a new position.

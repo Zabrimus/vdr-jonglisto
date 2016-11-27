@@ -1,0 +1,8 @@
+PUTE [ file ]
+    Put data into the EPG list. The data entered has to strictly follow the
+    format defined in vdr(5) for the 'epg.data' file.  A '.' on a line
+    by itself terminates the input and starts processing of the data (all
+    entered data is buffered until the terminating '.' is seen).
+    If a file name is given, epg data will be read from this file (which
+    must be accessible under the given name from the machine VDR is running
+    on). In case of file input, no terminating '.' shall be given.

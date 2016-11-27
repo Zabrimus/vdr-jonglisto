@@ -1,0 +1,6 @@
+LSTC [ :groups | <number> | <name> | <id> ]
+    List channels. Without option, all channels are listed. Otherwise
+    only the given channel is listed. If a name is given, all channels
+    containing the given string as part of their name are listed.
+    If ':groups' is given, all channels are listed including group
+    separators. The channel number of a group separator is always 0.

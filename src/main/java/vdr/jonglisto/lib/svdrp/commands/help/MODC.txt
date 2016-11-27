@@ -1,0 +1,3 @@
+MODC <number> <settings>
+    Modify a channel. Settings must be in the same format as returned
+    by the LSTC command.

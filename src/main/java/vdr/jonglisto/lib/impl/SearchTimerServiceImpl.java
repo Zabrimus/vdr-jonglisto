@@ -9,8 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -19,8 +17,6 @@ import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.model.SearchTimer;
 
 public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerService {
-
-    private Logger log = LoggerFactory.getLogger(SearchTimerServiceImpl.class);
 
     public List<SearchTimer> getSearchTimers() {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
@@ -95,8 +91,6 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
                     ":episodename, :season, :seasonpart, :category, :genre, :year, :tipp, :noepgmatch, :type, :state, :namingmode, :active, :source, :hits, :vdruuid, :weekdays, "
                     + //
                     ":nextdays, :starttime, :endtime, :directory, :priority, :lifetime, :vps, :childlock)";
-
-            System.err.println("INSERT called...");
 
             Query query = con.createQuery(sql);
             query.getParamNameToIdxMap().keySet().stream()

@@ -1,0 +1,2 @@
+OSDX
+    Return the textblock which is currently shown on the OSD.

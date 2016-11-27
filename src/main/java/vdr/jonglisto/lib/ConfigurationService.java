@@ -40,4 +40,10 @@ public interface ConfigurationService {
     public boolean useRecordingSyncMap();
 
     public boolean isDeveloperMode();
+
+    public String getVersion();
+
+    public long getRemoteOsdSleepTime();
+
+    public long getRemoteOsdIncSleepTime();
 }

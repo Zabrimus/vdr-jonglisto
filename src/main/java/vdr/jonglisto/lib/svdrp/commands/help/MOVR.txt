@@ -1,0 +1,5 @@
+MOVR <number> <new name>
+    Move the recording with the given number. Before a recording can be
+    moved, an LSTR command must have been executed in order to retrieve
+    the recording numbers. The numbers don't change during subsequent MOVR
+    commands.

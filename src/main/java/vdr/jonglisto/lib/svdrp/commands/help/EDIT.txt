@@ -1,0 +1,4 @@
+EDIT <number>
+    Edit the recording with the given number. Before a recording can be
+    edited, an LSTR command must have been executed in order to retrieve
+    the recording numbers.

@@ -1,0 +1,4 @@
+CHAN [ + | - | <number> | <name> | <id> ]
+    Switch channel up, down or to the given channel number, name or id.
+    Without option (or after successfully switching to the channel)
+    it returns the current channel number and name.

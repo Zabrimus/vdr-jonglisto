@@ -1,0 +1,3 @@
+MESG <message>
+    Displays the given message on the OSD. The message will be queued
+    and displayed whenever this is suitable.

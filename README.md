@@ -13,6 +13,7 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 ### Requirements
 * a runnning vdr-epg-daemon, especially the mysql database
 * vdr restfulapi plugin, at least version 0.2.6.5
+* optional remoteosd/svdrpservice plugin (See <http://vdr.schmirler.de/>) 
 * java 8
 
 ### Channel logos
@@ -21,6 +22,9 @@ This jar have to created only at the very first build or if there exists some ne
 
 ### Theme
 The application currently use a theme from <https://bootswatch.com/cerulean/>. If you want to change the default theme, change build.less in directory tools/build-bootstrap and start build.sh in the same directory.
+
+### SVDRP Server
+The application start an own svdrp server and therefore an OSD. The OSD implements the protocol from the svdrposd/remoteosd plugin. At this moment the internal server handles only requests for OSDs of the other configured VDR instances. The svdrposd plugin is not neccessary, because the proxy gets the remote osd via restfulapi-plugin.
 
 ### Build instructions 
 
@@ -46,9 +50,29 @@ There exist multiple possibilities to build and start the application.
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
 
  
-* **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. But be aware: This needs the most recent version! It is safe to set this value to "false", otherwise your recordings could be deleted/corrupted/diced. You are warned.
+* **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. It is safe to set this value to "false". This feature really needs at least 0.2.6.5 of restfulapi plugin. 
 ```json
 	"useRecordingSyncMap" : "false"
+```
+
+* **developer_mode:** enable this feature to see some more developer pages, which are only useful while developing the application. 
+```json
+	"developer_mode" : "false"
+```
+
+* **svdrpPort:** enable the internal svdrp server. At this moment the server is a remoteosd/svdrposd proxy. More to come... 
+```json
+	"useRecordingSyncMap" : "false"
+```
+
+* **remoteOsdSleepTime:** Sleep time in ms before the remote osd will be loaded. This highly depends on your system configuration. 
+```json
+	"remoteOsdSleepTime" : "200"
+```
+
+* **remoteOsdIncSleepTime:** Sleep time in ms in next retry before the remote osd will be loaded. This highly depends on your system configuration. 
+```json
+	"remoteOsdIncSleepTime" : "false"
 ```
 	
 * **epg2vdr:** configuration of the mysql connector to epg2vdr database.
