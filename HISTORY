@@ -1,3 +1,7 @@
+0.0.3-snaphot:
+- implemented svdrp server
+- implemented svdrposd/remoteosd protocol (jonglisto has now an own OSD)
+
 0.0.2:
 - implemented search timers, epg2vdr based
 - new theme
