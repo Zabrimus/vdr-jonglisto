@@ -62,7 +62,7 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 
 * **svdrpPort:** enable the internal svdrp server. At this moment the server is a remoteosd/svdrposd proxy. More to come... 
 ```json
-	"useRecordingSyncMap" : "false"
+	"svdrpPort" : "5000"
 ```
 
 * **remoteOsdSleepTime:** Sleep time in ms before the remote osd will be loaded. This highly depends on your system configuration. 
