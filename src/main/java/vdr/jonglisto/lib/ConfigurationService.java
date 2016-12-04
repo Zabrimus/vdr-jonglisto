@@ -50,4 +50,6 @@ public interface ConfigurationService {
     public long getRemoteOsdIncSleepTime();
     
     public String getSvdrpScript();
+    
+    public String getEpg2VdrScript();
 }

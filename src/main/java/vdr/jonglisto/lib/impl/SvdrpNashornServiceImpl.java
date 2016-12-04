@@ -19,14 +19,14 @@ public class SvdrpNashornServiceImpl extends NashornServiceImpl implements Svdrp
     }
 
     public SvdrpOutput callTimerScript(SvdrpInput tInput) throws NoSuchMethodException, ScriptException {
-        return mapToObject(callFunction("preprocessTimer", tInput), SvdrpOutput.class);
+        return mapToObject(callNashornFunction("preprocessTimer", tInput), SvdrpOutput.class);
     }
     
     public SvdrpOutput callRouteScript(SvdrpInput tInput) throws NoSuchMethodException, ScriptException {
-        return mapToObject(callFunction("route", tInput), SvdrpOutput.class);
+        return mapToObject(callNashornFunction("route", tInput), SvdrpOutput.class);
     }
     
     public SvdrpOutput callFilterScript(SvdrpInput tInput) throws NoSuchMethodException, ScriptException {
-        return mapToObject(callFunction("filter", tInput), SvdrpOutput.class);
+        return mapToObject(callNashornFunction("filter", tInput), SvdrpOutput.class);
     }
 }

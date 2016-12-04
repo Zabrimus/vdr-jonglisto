@@ -29,4 +29,6 @@ public interface EpgDataService {
     public List<String> getGenres();
 
     public List<String> getCategories();
+    
+    public List<Map<String, Object>> selectGeneric(String sql);
 }

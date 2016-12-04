@@ -127,6 +127,7 @@ public class Configuration {
     private long remoteOsdIncSleepTime = 200L;
     
     private String svdrpScript;
+    private String epg2vdrScript;
     
     private Configuration(String pathname) {
         initConfiguration(pathname);
@@ -196,6 +197,10 @@ public class Configuration {
     
     public String getSvdrpScript() {
         return svdrpScript;
+    }
+
+    public String getEpg2VdrScript() {
+        return epg2vdrScript;
     }
 
     public void sendWol(String uuid) {
@@ -338,7 +343,7 @@ public class Configuration {
             
             Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");            
             svdrpScript = (String)scripts.get("svdrp");
-            
+            epg2vdrScript = (String)scripts.get("epg2vdr");
             
             if (config.get("remoteOsdSleepTime") != null) {
                 remoteOsdSleepTime = Long.parseLong((String)config.get("remoteOsdSleepTime"));

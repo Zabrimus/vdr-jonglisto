@@ -411,4 +411,14 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
                     .executeAndFetch(String.class);
         }
     }
+    
+    public List<Map<String, Object>> selectGeneric(String sql) {
+        Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+        try (Connection con = sql2o.open()) {
+            return con.createQuery(sql) //
+                    .executeAndFetchTable() //
+                    .asList();
+        }
+    }
 }

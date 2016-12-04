@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import vdr.jonglisto.lib.CommandService;
 import vdr.jonglisto.lib.ConfigurationService;
+import vdr.jonglisto.lib.Epg2VdrNashornService;
 import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.EpgImageService;
 import vdr.jonglisto.lib.SearchTimerService;
@@ -37,6 +38,7 @@ import vdr.jonglisto.lib.SvdrpNashornService;
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.impl.CommandServiceImpl;
 import vdr.jonglisto.lib.impl.ConfigurationServiceImpl;
+import vdr.jonglisto.lib.impl.Epg2VdrNashornServiceImpl;
 import vdr.jonglisto.lib.impl.EpgDataServiceImpl;
 import vdr.jonglisto.lib.impl.EpgImageServiceImpl;
 import vdr.jonglisto.lib.impl.SearchTimerServiceImpl;
@@ -64,6 +66,7 @@ public class AppModule {
         binder.bind(CommandService.class, CommandServiceImpl.class);
         binder.bind(SearchTimerService.class, SearchTimerServiceImpl.class);
         binder.bind(SvdrpNashornService.class, SvdrpNashornServiceImpl.class);
+        binder.bind(Epg2VdrNashornService.class, Epg2VdrNashornServiceImpl.class);
         binder.bind(ChannelEncoder.class);
         binder.bind(GlobalLogoFilename.class);
         binder.bind(GlobalValues.class);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 
 import vdr.jonglisto.lib.model.osd.OsdItem;
 import vdr.jonglisto.lib.model.osd.TextOsd;
@@ -18,7 +19,17 @@ public class SVDRPOSD extends CommandBase {
     public void doTheWork(Socket client, BufferedWriter writer, String command, String subCommand) {
         OsdProvider osd = OsdProviderCache.getOsdProvider(client);
 
-        switch (subCommand.toUpperCase()) {
+        Matcher matcher = cmdPattern.matcher(subCommand);
+        
+        String cmd;
+        if (matcher.matches()) {
+            cmd = matcher.group(1);
+        } else {
+            send(writer, 554, "command error");
+            return;
+        }
+        
+        switch (cmd.toUpperCase()) {
         case "LSTO":
             send(writer, 920, createOsd(osd));
             break;

@@ -23,8 +23,10 @@ This jar have to created only at the very first build or if there exists some ne
 ### Theme
 The application currently use a theme from <https://bootswatch.com/cerulean/>. If you want to change the default theme, change build.less in directory tools/build-bootstrap and start build.sh in the same directory.
 
-### SVDRP Server
-The application start an own svdrp server and therefore an OSD. The OSD implements the protocol from the svdrposd/remoteosd plugin. At this moment the internal server handles only requests for OSDs of the other configured VDR instances. The svdrposd plugin is not neccessary, because the proxy gets the remote osd via restfulapi-plugin.
+### SVDRP Server and OSD
+The application start an own svdrp server and therefore an OSD. The OSD implements the protocol from the svdrposd/remoteosd plugin. 
+At this moment the internal server handles requests for OSDs of the other configured VDR instances. The svdrposd plugin is not neccessary, because the proxy gets the remote osd via restfulapi-plugin.
+A highly configurable menu entry for epg2vdr is also possible (see script samples/epg2vdr). Currently some status information from epg2vdr database could be selected.
 
 ### Remote Timers proxy
 The SVDRP server is now able to route every remote timers request to another VDR instance. In this case all SVDRP commands are translated to restfulapi calls. The timer configuration can be changed by the new internal script engine which uses the Java Nashorn implementation (javascript). Samples could be found in folder samples. The remote timers plugin have to be configured accordingly to point to jonglisto server and svdrp port.
@@ -32,6 +34,7 @@ Currently the commands LSTR and EDIT are not implemented.
 
 ### Nashorn integration
 For determining the routing of the SVDRP commands and modifying remote timers timer requests, the Java Nashorn library (javascript) is integrated. Samples could be found in folder samples. 
+
 
 ### Build instructions 
 
@@ -82,9 +85,10 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 	"remoteOsdIncSleepTime" : "false"
 ```
 
-* **NashornScripts:** Configuration of the existing javascripts, which are used internally. Currently only an SVDRP script is necessary.
+* **NashornScripts:** Configuration of the existing javascripts, which are used internally. Currently SVDRP and epg2vdr script is necessary.
 ```json
 	"svdrp" : "/etc/jonglisto/svdrp.js"
+	"epg2vdr": "/etc/jonglisto/epg2vdr.js"
 ```
 
 * **epg2vdr:** configuration of the mysql connector to epg2vdr database.

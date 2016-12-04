@@ -99,7 +99,8 @@
   ], 
   
   "NashornScripts": {  
-       "svdrp": "/etc/jonglisto/svdrp.js"
+       "svdrp": "/etc/jonglisto/svdrp.js",
+       "epg2vdr": "/etc/jonglisto/epg2vdr.js"
   } 
   	   
 }
