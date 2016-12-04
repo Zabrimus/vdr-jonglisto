@@ -9,6 +9,8 @@ public class VDR {
     private int svdrpPort;
     private int restfulApiPort;
 
+    private String alias;
+    
     private String timerAux = "";
     private int timerMinusMin = 5;
     private int timerPlusMin = 5;
@@ -112,11 +114,20 @@ public class VDR {
         this.defaultRecordingNamingMode = defaultRecordingNamingMode;
     }
 
+    public String getAlias() {
+        return alias;
+    }
+    
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
     @Override
     public String toString() {
         return "VDR [uuid=" + uuid + ", ip=" + ip + ", displayName=" + displayName + ", mac=" + mac + ", svdrpPort="
-                + svdrpPort + ", restfulApiPort=" + restfulApiPort + ", timerAux=" + timerAux + ", timerMinusMin="
-                + timerMinusMin + ", timerPlusMin=" + timerPlusMin + ", timerPrio=" + timerPrio + ", timerLifetime="
-                + timerLifetime + "]";
+                + svdrpPort + ", restfulApiPort=" + restfulApiPort + ", alias=" + alias + ", timerAux=" + timerAux
+                + ", timerMinusMin=" + timerMinusMin + ", timerPlusMin=" + timerPlusMin + ", timerPrio=" + timerPrio
+                + ", timerLifetime=" + timerLifetime + ", defaultRecordingNamingMode=" + defaultRecordingNamingMode
+                + "]";
     }
 }

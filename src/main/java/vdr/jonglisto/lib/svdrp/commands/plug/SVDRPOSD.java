@@ -15,12 +15,10 @@ import vdr.jonglisto.lib.svdrp.commands.CommandBase;
 
 public class SVDRPOSD extends CommandBase {
 
-    public void doTheWork(Socket client, BufferedWriter writer, List<String> args) throws Exception {
-        String command = args.remove(0).toUpperCase();
-
+    public void doTheWork(Socket client, BufferedWriter writer, String command, String subCommand) {
         OsdProvider osd = OsdProviderCache.getOsdProvider(client);
 
-        switch (command) {
+        switch (subCommand.toUpperCase()) {
         case "LSTO":
             send(writer, 920, createOsd(osd));
             break;

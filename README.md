@@ -26,6 +26,13 @@ The application currently use a theme from <https://bootswatch.com/cerulean/>. I
 ### SVDRP Server
 The application start an own svdrp server and therefore an OSD. The OSD implements the protocol from the svdrposd/remoteosd plugin. At this moment the internal server handles only requests for OSDs of the other configured VDR instances. The svdrposd plugin is not neccessary, because the proxy gets the remote osd via restfulapi-plugin.
 
+### Remote Timers proxy
+The SVDRP server is now able to route every remote timers request to another VDR instance. In this case all SVDRP commands are translated to restfulapi calls. The timer configuration can be changed by the new internal script engine which uses the Java Nashorn implementation (javascript). Samples could be found in folder samples. The remote timers plugin have to be configured accordingly to point to jonglisto server and svdrp port.
+Currently the commands LSTR and EDIT are not implemented.
+
+### Nashorn integration
+For determining the routing of the SVDRP commands and modifying remote timers timer requests, the Java Nashorn library (javascript) is integrated. Samples could be found in folder samples. 
+
 ### Build instructions 
 
 There exist multiple possibilities to build and start the application. 
@@ -74,7 +81,12 @@ The main configuration file jonglisto.json must be copied to /etc/jonglisto. The
 ```json
 	"remoteOsdIncSleepTime" : "false"
 ```
-	
+
+* **NashornScripts:** Configuration of the existing javascripts, which are used internally. Currently only an SVDRP script is necessary.
+```json
+	"svdrp" : "/etc/jonglisto/svdrp.js"
+```
+
 * **epg2vdr:** configuration of the mysql connector to epg2vdr database.
  ```json
 	"epg2vdr": {

@@ -81,4 +81,9 @@ public class DateTimeUtil {
 
         return String.format("%02d:%02d", hours, minutes);
     }
+    
+    public static LocalDateTime toLocalDateTime(String date, int time) {
+        String toParse = String.format("%sT%02d:%02d:00", date, time/100, time%100);
+        return LocalDateTime.parse(toParse);
+    }
 }

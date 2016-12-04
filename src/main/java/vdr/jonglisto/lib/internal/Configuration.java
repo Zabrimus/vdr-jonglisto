@@ -126,6 +126,8 @@ public class Configuration {
     private long remoteOsdSleepTime = 200L;
     private long remoteOsdIncSleepTime = 200L;
     
+    private String svdrpScript;
+    
     private Configuration(String pathname) {
         initConfiguration(pathname);
     }
@@ -190,6 +192,10 @@ public class Configuration {
 
     public long getRemoteOsdIncSleepTime() {
         return remoteOsdIncSleepTime;
+    }
+    
+    public String getSvdrpScript() {
+        return svdrpScript;
     }
 
     public void sendWol(String uuid) {
@@ -330,6 +336,10 @@ public class Configuration {
 
             svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
             
+            Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");            
+            svdrpScript = (String)scripts.get("svdrp");
+            
+            
             if (config.get("remoteOsdSleepTime") != null) {
                 remoteOsdSleepTime = Long.parseLong((String)config.get("remoteOsdSleepTime"));
             }
@@ -378,7 +388,7 @@ public class Configuration {
             try (Connection con = sql2oEpg2vdr.open()) {
                 configuredVdr = con.createQuery("select uuid, name displayName, ip, svdrp svdrpPort, mac from vdrs") //
                         .executeAndFetch(VDR.class) //
-                        .stream() //
+                        .stream() //                        
                         .map(s -> addinfo(s, vdrConfig, aliases)) //
                         .filter(s -> s.getRestfulApiPort() > 0) //
                         .collect(Collectors.toMap(VDR::getUuid, c -> c));
@@ -461,6 +471,9 @@ public class Configuration {
             vdr.setMac(StringUtils.defaultIfBlank((String) c.get("mac"), vdr.getMac()));
             vdr.setSvdrpPort(vdr.getSvdrpPort() == 0 ? (Integer) c.get("svdrpPort") : vdr.getSvdrpPort());
             vdr.setRestfulApiPort(c.get("restfulApiPort") != null ? (Integer) c.get("restfulApiPort") : 8002);
+            
+            // find the alias name
+            vdr.setAlias(aliases.entrySet().stream().filter(s -> s.getValue().equals(vdr.getUuid())).findFirst().get().getKey());            
 
             @SuppressWarnings("unchecked")
             Map<String, Object> vc = (Map<String, Object>) c.get("config");

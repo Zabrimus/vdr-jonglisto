@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +16,12 @@ import vdr.jonglisto.lib.svdrp.commands.Command;
 
 public class Handler implements Runnable {
 
-    private Logger log = LoggerFactory.getLogger(Handler.class);
+    private static Logger log = LoggerFactory.getLogger(Handler.class);
 
+    // Group 1: Command
+    // Group 4: Arguments
+    private static Pattern cmdPattern = Pattern.compile("^(.*?)(( )+(.*?))?$");
+    
     private final Socket client;
 
     public Handler(Socket client) {
@@ -41,11 +44,11 @@ public class Handler implements Runnable {
                     log.debug("Received command from " + Thread.currentThread().getName() + " : " + input);
                 }
 
-                List<String> args = Arrays.stream(input.split(" ")).collect(Collectors.toList());
-
-                String commandName = args.remove(0).toUpperCase();
+                // List<String> args = Arrays.stream(input.split(" ")).collect(Collectors.toList());
+                String[] args = splitCmd(input);
+                String commandName = args[0].toUpperCase();
                 String subCommandName = null;
-
+                
                 // special cases
                 if ("QUIT".equals(commandName)) {
                     writer.write("221 jonglisto closing connection\n");
@@ -63,25 +66,23 @@ public class Handler implements Runnable {
                 if ("PLUG".equals(commandName)) {
                     packageName = packageName + "plug.";
                     try {
-                        commandName = args.remove(0).toUpperCase();
+                        args = splitCmd(args[1]);
+                        commandName = args[0].toUpperCase();
                     } catch (Exception e) {
                         commandName = "plugoverview";
                     }
                     
-                    if (args.size() == 0) {
+                    if (args[0] == null) {
                         callHelp = true;
-                    } else if ((args.size() >= 1) && "HELP".equals(args.get(0).toUpperCase())) {
-                        if (args.size() >= 2) {
-                            subCommandName = args.get(1).toUpperCase();
-                        }
-                        
+                    } else if ((args[1] != null) && "HELP".equals(args[0].toUpperCase())) {
+                        subCommandName = args[1].toUpperCase();                        
                         callHelp = true;
                     }
                 } else if ("HELP".equals(commandName)) {
-                    if (args.size() > 0) {
-                        commandName = args.get(0).toUpperCase();
-                        callHelp = true;
-                    }                    
+                    if (args[1] != null) {
+                        commandName = args[1].toUpperCase();                        
+                    }
+                    callHelp = true;
                 }
 
                 Command cmd = null;
@@ -106,7 +107,8 @@ public class Handler implements Runnable {
                         if (callHelp) {
                             cmd.printHelp(commandName, subCommandName, writer);
                         } else {
-                            cmd.doTheWork(client, writer, args);
+                            log.debug("Args: " + args[0] + " -> " + args[1]);
+                            cmd.doTheWork(client, writer, args[0], args[1]);
                         }
                     } catch (IOException ioException) {
                         // do nothing more
@@ -122,5 +124,18 @@ public class Handler implements Runnable {
         } catch (Exception e) {
             log.error("Error", e);
         }
+    }
+    
+ 
+    private String[] splitCmd(String cmd) {
+        String[] result = new String[2];
+        Matcher matcher = cmdPattern.matcher(cmd);
+        
+        if (matcher.matches()) {
+            result[0] = matcher.group(1);
+            result[1] = matcher.group(4);
+        }
+        
+        return result;
     }
 }

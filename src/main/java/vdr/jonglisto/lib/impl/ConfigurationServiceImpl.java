@@ -2,6 +2,7 @@ package vdr.jonglisto.lib.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.sql2o.Sql2o;
 
@@ -55,6 +56,16 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
     @Override
+    public VDR getVdrByAlias(String alias) {
+        Optional<VDR> v = configuration.getSortedVdrList().stream().filter(s -> s.getAlias().equals(alias)).findFirst();
+        if (v.isPresent()) {
+            return v.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public Sql2o getSql2oEpg2vdr() {
         return configuration.getSql2oEpg2vdr();
     }
@@ -81,14 +92,15 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return configuration.getVersion();
     }
 
-    @Override
     public long getRemoteOsdSleepTime() {
         return configuration.getRemoteOsdSleepTime();
     }
 
-    @Override
     public long getRemoteOsdIncSleepTime() {
         return configuration.getRemoteOsdIncSleepTime();
     }
 
+    public String getSvdrpScript() {
+        return configuration.getSvdrpScript();
+    }
 }

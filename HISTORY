@@ -1,6 +1,8 @@
 0.0.3-snaphot:
 - implemented svdrp server
 - implemented svdrposd/remoteosd protocol (jonglisto has now an own OSD)
+- implemented Nashorn (javascript) integration
+- implemented proxying remote timers request to another VDR instance. Uses both Nashorn and the new SVDRP server.
 
 0.0.2:
 - implemented search timers, epg2vdr based

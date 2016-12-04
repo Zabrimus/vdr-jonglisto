@@ -33,14 +33,17 @@ import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.EpgImageService;
 import vdr.jonglisto.lib.SearchTimerService;
+import vdr.jonglisto.lib.SvdrpNashornService;
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.impl.CommandServiceImpl;
 import vdr.jonglisto.lib.impl.ConfigurationServiceImpl;
 import vdr.jonglisto.lib.impl.EpgDataServiceImpl;
 import vdr.jonglisto.lib.impl.EpgImageServiceImpl;
 import vdr.jonglisto.lib.impl.SearchTimerServiceImpl;
+import vdr.jonglisto.lib.impl.SvdrpNashornServiceImpl;
 import vdr.jonglisto.lib.impl.VdrDataServiceImpl;
 import vdr.jonglisto.lib.model.EPGMedia;
+import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
 
@@ -60,13 +63,14 @@ public class AppModule {
         binder.bind(EpgImageService.class, EpgImageServiceImpl.class);
         binder.bind(CommandService.class, CommandServiceImpl.class);
         binder.bind(SearchTimerService.class, SearchTimerServiceImpl.class);
+        binder.bind(SvdrpNashornService.class, SvdrpNashornServiceImpl.class);
         binder.bind(ChannelEncoder.class);
         binder.bind(GlobalLogoFilename.class);
         binder.bind(GlobalValues.class);
     }
 
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
-        configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.1");
+        configuration.override(SymbolConstants.APPLICATION_VERSION, Constants.version);
         configuration.override(SymbolConstants.PRODUCTION_MODE, false);
     }
 

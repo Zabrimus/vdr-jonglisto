@@ -96,6 +96,11 @@
       "timers" : "stream2",
       "recordings" : [ "stream2", "pivdr2" ]
     }
-  ]  
+  ], 
+  
+  "NashornScripts": {  
+       "svdrp": "/etc/jonglisto/svdrp.js"
+  } 
+  	   
 }
 		
