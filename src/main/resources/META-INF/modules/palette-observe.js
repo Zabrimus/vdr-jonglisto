@@ -11,10 +11,6 @@ define(
                 function observe() {
                     var listenerURIWithValue = listenerURI;
 
-                    // var test =
-                    // $element.parentNode.findFirst("input[type=hidden]");
-                    // alert("Test: " + test.val());
-
                     alert(JSON.stringify($element.parent().parent(), null, 4));
 
                     var test = $element.parent().parent();

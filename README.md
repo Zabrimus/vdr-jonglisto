@@ -35,6 +35,8 @@ Currently the commands LSTR and EDIT are not implemented.
 ### Nashorn integration
 For determining the routing of the SVDRP commands and modifying remote timers timer requests, the Java Nashorn library (javascript) is integrated. Samples could be found in folder samples. 
 
+### SVDRP console
+It is possible to send a SVDRP command to all configured VDR instances and see the result.
 
 ### Build instructions 
 

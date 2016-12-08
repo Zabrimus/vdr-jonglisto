@@ -4,6 +4,7 @@
 - implemented Nashorn (javascript) integration
 - implemented proxying remote timers request to another VDR instance. Uses both Nashorn and the new SVDRP server.
 - implemented a new OSD menu entry (epg2vdr) which can be highly configured by a Nashorn script. See samples/epg2vdr.
+- implemented a SVDRP console to all configured VDR instances
 
 0.0.2:
 - implemented search timers, epg2vdr based

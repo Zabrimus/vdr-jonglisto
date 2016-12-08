@@ -5,7 +5,7 @@
 // Based on http://tinybits.blogspot.com/2010/03/new-and-better-zoneupdater.html
 // and some help from Inge Solvoll.
 //
-// copied from tapestry jumstart http://jumpstart.doublenegative.com.au/jumpstart7/examples/ajax/onevent
+// copied from tapestry jumpstart http://jumpstart.doublenegative.com.au/jumpstart7/examples/ajax/onevent
 
 define([ "jquery", "t5/core/zone" ],
         function($, zoneManager) {
