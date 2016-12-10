@@ -337,6 +337,14 @@ public class Configuration {
 
             useSyncMap = Boolean.valueOf((String) config.get("useRecordingSyncMap"));
 
+            // INFO:
+            // Es gibt immer noch seltsame Probleme, nachdem umfangreiche Änderungen 
+            // an den Aufnahmen vorgenommen wurden.
+            // Die interne Datenbank wurde nicht korrekt aktualisiert. Bis zur genaueren
+            // Analyse und einem Fix, ist es auf jeden Fall besser, erstmal auf die
+            // RecordingSyncMap zu verzichten. Nur zur Sicherheit.
+            useSyncMap = false;
+            
             developerMode = Boolean.valueOf((String) config.get("developer_mode"));
 
             svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
@@ -519,9 +527,10 @@ public class Configuration {
 
         Integer currentVersion = isDatabaseVersion(prodVersion);
 
-        if (currentVersion == null) {
-            createDatabase(prodVersion);
-        } else if (currentVersion < prodVersion) {
+        // always call createDatabase
+        createDatabase(prodVersion);
+        
+        if (currentVersion < prodVersion) {
             upgradeDatabase(currentVersion, prodVersion);
         }
 

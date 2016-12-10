@@ -1,0 +1,8 @@
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+
+    <t:content>
+        <div class="container-fluid">
+            Channelmap Konfigurator
+        </div>
+    </t:content>
+</html>

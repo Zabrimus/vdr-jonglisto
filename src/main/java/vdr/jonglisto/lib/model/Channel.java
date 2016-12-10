@@ -15,6 +15,9 @@ public class Channel {
 
     @JsonProperty("group")
     private String group;
+    
+    @JsonProperty("is_radio")
+    private Boolean radio;
 
     public static Channel emptyChannel = new Channel("", "");
 
@@ -57,9 +60,18 @@ public class Channel {
     public void setGroup(String group) {
         this.group = group;
     }
+    
+    public Boolean getRadio() {
+        return radio;
+    }
+    
+    public void setRadio(Boolean radio) {
+        this.radio = radio;
+    }
 
     @Override
     public String toString() {
-        return "Channel [id=" + id + ", name=" + name + ", number=" + number + ", group=" + group + "]";
+        return "Channel [id=" + id + ", name=" + name + ", number=" + number + ", group=" + group + ", radio=" + radio
+                + "]";
     }
 }

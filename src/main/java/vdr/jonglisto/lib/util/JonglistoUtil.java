@@ -4,9 +4,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Collectors;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
+
+import org.apache.commons.lang3.StringUtils;
 
 import vdr.jonglisto.lib.model.Channel;
 
@@ -44,4 +50,68 @@ public class JonglistoUtil {
 
         return sb.toString();
     }
+
+    public static String zipBase64(String inputStr) {
+        byte[] input = null;
+        try {
+            input = inputStr.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // cannot happen, because UTF-8 is always valid
+            return null;
+        }
+
+        byte[] output = new byte[1000];
+        Deflater compresser = new Deflater();
+        compresser.setInput(input);
+        compresser.finish();
+        int len = compresser.deflate(output);
+        compresser.end();
+
+        byte[] shortOut = new byte[len];
+        System.arraycopy(output, 0, shortOut, 0, len);
+
+        String asB64 = Base64.getEncoder().encodeToString(shortOut);
+        return asB64;
+    }
+
+    public static String unzipBase64(String inputStr) {
+        byte[] asBytes = Base64.getDecoder().decode(inputStr);
+        Inflater decompresser = new Inflater();
+        decompresser.setInput(asBytes, 0, asBytes.length);
+
+        try {
+            byte[] result = new byte[500];
+            int resultLength = decompresser.inflate(result);
+            decompresser.end();
+            String outputString = new String(result, 0, resultLength, "UTF-8");
+            return outputString;
+        } catch (UnsupportedEncodingException | DataFormatException e) {
+            return null;
+        }
+    }
+
+    public static String channelNameNormalize(String input) {
+        return StringUtils.stripAccents(input)  //
+        .replaceAll("\\&", "and")  //
+        .replaceAll("\\+", "plus") //
+        .replaceAll("\\*", "star") //
+        .replaceAll("HD 1", "1 HD") //
+        .replaceAll("HD 2", "2 HD") //
+        .replaceAll("HD 3", "3 HD") //
+        .replaceAll("HD 4", "4 HD") //
+        .replaceAll("HD 5", "5 HD") //
+        .replaceAll("HD 6", "6 HD") //
+        .replaceAll("HD 7", "7 HD") //
+        .replaceAll("HD 8", "8 HD") //
+        .replaceAll("HD 9", "9 HD") //
+        .replaceAll("\\w*\\(S\\)$", "") // 
+        .replaceAll("\\w*HD$", "") //
+        .replaceAll("\\w*\\(HD\\)$", "") //
+        .replaceAll("II", "2") //
+        .replaceAll("III", "3") //
+        .replaceAll("7", "sieben") //
+        .replaceAll("[^A-Za-z0-9]", "") //
+        .toLowerCase();       
+}
+
 }

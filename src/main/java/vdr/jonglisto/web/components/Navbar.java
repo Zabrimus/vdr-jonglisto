@@ -53,6 +53,7 @@ public class Navbar extends BaseComponent {
         pages.add(new NavPage("Aufnahmen", "recordings"));
         pages.add(new NavPage("Suchtimer", "searchTimer"));
         pages.add(new NavPage("SVDRP Konsole", "svdrpConsole"));
+        pages.add(new NavPage("Channelmap", "channelMap"));
     }
 
     public List<NavPage> getPageNames() {

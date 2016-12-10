@@ -89,36 +89,5 @@ public class ChannelImage extends BaseComponent {
 
     private InputStream getResourceAsStream(String channel) {
         return logoCache.getResource(channel);
-
-        /*
-         * if ((channel != null) && (channel.length() > 0)) {
-         * // new version, try to find the logo in logo.jar
-         * String filename = StringUtils.stripAccents(channel)//
-         * .replaceAll("\\&", "and")//
-         * .replaceAll("\\+", "plus")//
-         * .replaceAll("\\*", "star");
-         * 
-         * String filename2 = filename.replaceAll("[^A-Za-z0-9]",
-         * "").toLowerCase();
-         * 
-         * InputStream inputStream =
-         * this.getClass().getClassLoader().getResourceAsStream("/logo/" +
-         * filename2 + ".png");
-         * 
-         * if (inputStream == null) {
-         * // try to find similar channel images
-         * filename2 = filename.replaceAll("\\w*\\(S\\)$",
-         * "").replaceAll("\\w*HD$", "").replaceAll("[^A-Za-z0-9]",
-         * "").toLowerCase();
-         * inputStream =
-         * this.getClass().getClassLoader().getResourceAsStream("/logo/" +
-         * filename2 + ".png");
-         * }
-         * 
-         * return inputStream;
-         * }
-         * 
-         * return null;
-         */
     }
 }
