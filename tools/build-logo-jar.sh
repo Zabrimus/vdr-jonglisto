@@ -2,7 +2,7 @@
 
 # Clone or pull repo
 if [ -d picicon-repo ]; then
-    (cd git-pill-repo; git pull)
+    (cd picicon-repo; git pull)
 else
     git clone --depth 1 https://github.com/picons/picons-source.git picicon-repo
 fi;
