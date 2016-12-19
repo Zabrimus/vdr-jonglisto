@@ -38,6 +38,10 @@ For determining the routing of the SVDRP commands and modifying remote timers ti
 ### SVDRP console
 It is possible to send a SVDRP command to all configured VDR instances and see the result.
 
+### channelmap.conf editor (epg2vdr daemon)
+The configuration of channelmap.conf for the epg2vdr daemon can be done via Jonglisto. It supports currently different epg provider (all german). The mapping could be done via drag and drop. The configuration itself is saved into the internal database. If the configuration is done well, the included auto-mapping tool will create a reasonable channelmap.conf.
+Included is a configuration which is reasonable for my cable provider. 
+
 ### Build instructions 
 
 There exist multiple possibilities to build and start the application. 

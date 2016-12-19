@@ -1,5 +1,7 @@
 package vdr.jonglisto.lib.model.channelmap;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -47,6 +49,15 @@ public class IdModel {
     public String getNormalizedName() {
         return normalizedName;
     }
+
+	public String getNormalizedName(Map<String, String> channelNameMapping) {
+		String norm = channelNameMapping.get(name);
+		if (norm != null) {
+			return norm;
+		} else {
+			return normalizedName;
+		}
+	}
 
     public int getProviderId() {
         return providerId;

@@ -90,31 +90,42 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
         return list.size() > 0 ? Optional.of(list.get(0)) : Optional.empty();
     }
 
-    public Optional<List<Channel>> getChannels(String vdrUuid) {
-        return getJsonList(vdrUuid, "channels/.json", "channels", Channel.class);
+    public Optional<List<Channel>> getChannels(String vdrUuid, boolean includeRadio) {
+        Optional<List<Channel>> ch = getJsonList(vdrUuid, "channels/.json", "channels", Channel.class);
+
+        if (!includeRadio && ch.isPresent()) {
+            return Optional.of(ch.get().stream().filter(s -> !s.getRadio()).collect(Collectors.toList()));
+        }
+        
+        return ch;
     }
 
     public Optional<List<String>> getGroups(String vdrUuid) {
         return getJsonList(vdrUuid, "channels/groups.json", "groups", String.class);
     }
 
-    public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group) {
+    public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group, boolean includeRadio) {
         if (group != null) {
-            return getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group), "channels", "name",
-                    Channel.class);
+            Optional<List<Channel>> ch = getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group), "channels", "name", Channel.class);
+            
+            if (!includeRadio && ch.isPresent()) {
+                return Optional.of(ch.get().stream().filter(s -> !s.getRadio()).collect(Collectors.toList()));
+            }
+            
+            return ch; 
         } else {
-            return getChannels(vdrUuid);
+            return getChannels(vdrUuid, includeRadio);
         }
     }
 
-    public Optional<List<Channel>> getChannelsMap(String vdrUuid) {
+    public Optional<List<Channel>> getChannelsMap(String vdrUuid, boolean includeRadio) {
         // get List of channels in VDR
-        return filterChannels(getChannels(vdrUuid));
+        return filterChannels(getChannels(vdrUuid, includeRadio));
     }
 
-    public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group) {
+    public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group, boolean includeRadio) {
         // get List of channels in VDR
-        return filterChannels(getChannelsInGroup(vdrUuid, group));
+        return filterChannels(getChannelsInGroup(vdrUuid, group, includeRadio));
     }
 
     /*

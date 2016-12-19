@@ -1,8 +1,178 @@
-<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter"
+    xmlns:etc="tapestry-library:EddysonTapestryExtensions">
 
     <t:content>
-        <div class="container-fluid">
-            Channelmap Konfigurator
-        </div>
+        <t:zone t:id="mappingConfigZone" id="mappingConfigZone">
+            <t:form class="form-horizontal" t:id="channelmapform" t:zone="^">
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">Konfiguration der EPG Provider</legend>
+                    <div class="col-sm-30">
+                        <div class="col-sm-6">
+                            <t:label for="mainprov" />
+                            <t:select t:id="mainprov" label="message:mainprov" />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <t:label for="secprov" />
+                            <t:select t:id="secprov" label="message:secprov" />
+                        </div>
+
+                        <div class="col-sm-6">
+                            <t:label for="epgdatapin" />
+                            <t:TextField t:id="epgdatapin" value="epgdatapin" label="message:epgdata_pin" size="25" />
+                        </div>
+                        <div class="col-sm-8">
+                            <t:linksubmit t:event="readproviderids" class="btn btn-default">${message:read_provider_ids}</t:linksubmit>
+                            <t:linksubmit t:event="saveproviderconfig" class="btn btn-default">${message:save_provider_config}</t:linksubmit>
+                        </div>
+                    </div>
+                </fieldset>
+            </t:form>
+
+            <t:form class="form-horizontal" t:id="channelform" t:zone="^">
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">Kanalauswahl</legend>
+                    <div class="col-sm-32">
+                        <div class="col-sm-16">
+                            <t:channelSelectPalette2 selectedChannels="selectedChannels" includeRadio="false" />
+                            <t:linksubmit t:event="updateSelectedChannels" class="btn btn-default">${message:update_selected_channels}</t:linksubmit>
+                        </div>
+                    </div>
+                </fieldset>
+            </t:form>
+        </t:zone>
+
+        <t:zone t:id="mappingZone" id="mappingZone">
+            <fieldset class="fieldset-border">
+                <legend class="legend-border">Kanalmapping</legend>
+                <div class="row">
+                    <t:eventlink t:event="autoMapping" class="btn btn-default" zone="^">${message:auto_mapping}</t:eventlink>&nbsp;
+                    <t:eventlink t:event="resetMapping" class="btn btn-default" zone="^">${message:reset_mapping}</t:eventlink>&nbsp;
+                    <t:eventlink t:event="saveMapping" class="btn btn-default" zone="^">${message:save_mapping}</t:eventlink>&nbsp;&nbsp;&nbsp;
+                    <t:eventlink t:event="download" class="btn btn-default">${message:download_mapping}</t:eventlink>&nbsp;
+                    
+                    <t:if test="showTvmIds">
+                        <t:eventlink t:event="hideTvmIds" class="btn btn-default" zone="^">${message:hide_tvmids}</t:eventlink>&nbsp;
+                    </t:if>
+
+                    <t:if test="showTvmIds" negate="true">
+                        <t:eventlink t:event="showTvmIds" class="btn btn-default" zone="^">${message:show_tvmids}</t:eventlink>&nbsp;
+                    </t:if>
+
+                    <t:if test="showTvspIds">
+                        <t:eventlink t:event="hideTvspIds" class="btn btn-default" zone="^">${message:hide_tvspids}</t:eventlink>&nbsp;
+                    </t:if>
+
+                    <t:if test="showTvspIds" negate="true">
+                        <t:eventlink t:event="showTvspIds" class="btn btn-default" zone="^">${message:show_tvspids}</t:eventlink>&nbsp;
+                    </t:if>
+                    
+                    <t:if test="showEpgdataIds">
+                        <t:eventlink t:event="hideEpgdataIds" class="btn btn-default" zone="^">${message:hide_epgdataids}</t:eventlink>&nbsp;
+                    </t:if>
+
+                    <t:if test="showEpgdataIds" negate="true">
+                        <t:eventlink t:event="showEpgdataIds" class="btn btn-default" zone="^">${message:show_epgdataids}</t:eventlink>&nbsp;
+                    </t:if>
+
+                    <t:if test="showEpgdataIds" negate="true">
+                        <t:eventlink t:event="deleteNameMapping" class="btn btn-default" zone="^">${message:delete_name_mapping}</t:eventlink>&nbsp;
+                    </t:if>
+                    
+                    <p></p>
+                </div>
+                
+                <div class="col-sm-32">
+                    <table class="table table-sm table-striped table-bordered">
+                        <tr>
+                            <th>Kanäle</th>
+                            <th colspan="${tvmColspan}">TVM</th>
+                            <th colspan="${tvspColspan}">TVSP</th>
+                            <th colspan="${epgdataColspan}">epgdata</th>
+                        </tr>
+
+                        <t:loop source="sortedMapData" value="data" index="mapDataIndex">
+                            <tr>
+                                <td class="dropme" data-channel-drop="${normalizedChannel}">
+                                    <div>
+                                        <span class="dragme" data-channel-drag="${normalizedChannel}" data-channel-name="${normalizedChannel}">
+                                            <t:loop source="channels" value="channel">
+                                                <span class="btn btn-default">${channel.name}</span>
+                                            </t:loop>
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td class="dropme1" data-id-drop1="${normalizedChannel}">
+                                    <div>
+                                        <t:loop source="getEpgIds(1)" value="idModel">
+                                            <span class="dragme1 btn btn-default" data-id-drag1="${normalizedChannel}" data-id-name1="${idModel.normalizedName}">${idModel.name}</span>
+                                        </t:loop>
+                                    </div>
+                                </td>
+
+                                <t:if test="insertId1Column">
+                                    <td rowspan="${countRows}">
+                                        <div class="dropme1" data-id-drop1="delete">
+                                            <t:loop source="getAllEpgIds(1)" value="idModel" index="idDataIndex">
+                                                <span class="dragme1 btn btn-default" data-id-drag1="${idModel.normalizedName}" data-id-name1="${idModel.normalizedName}">${idModel.name}</span>
+                                                
+                                                <t:if test="doInsertLineBreak()">
+                                                    <br/>
+                                                </t:if>
+                                            </t:loop>
+                                        </div>
+                                    </td>
+                                </t:if>
+
+                                <td class="dropme2" data-id-drop2="${normalizedChannel}">
+                                    <div>
+                                        <t:loop source="getEpgIds(2)" value="idModel">
+                                            <span class="btn btn-default" data-id-drag2="${normalizedChannel}" data-id-name2="${idModel.normalizedName}">${idModel.name}</span>
+                                        </t:loop>
+                                    </div>
+                                </td>
+
+                                <t:if test="insertId2Column">
+                                    <td rowspan="${countRows}">
+                                        <div class="dropme2" data-id-drop2="delete">
+                                            <t:loop source="getAllEpgIds(2)" value="idModel" index="idDataIndex">                                            
+                                                <span class="dragme2 btn btn-default" data-id-drag2="${idModel.normalizedName}" data-id-name2="${idModel.normalizedName}">${idModel.name}</span>
+                                                
+                                                <t:if test="doInsertLineBreak()">
+                                                    <br/>
+                                                </t:if>                                                
+                                            </t:loop>
+                                        </div>
+                                    </td>
+                                </t:if>
+
+                                <td class="dropme3" data-id-drop3="${normalizedChannel}">
+                                    <div>
+                                        <t:loop source="getEpgIds(3)" value="idModel">
+                                            <span class="btn btn-default" data-id-drag3="${normalizedChannel}" data-id-name3="${idModel.normalizedName}">${idModel.name}</span>
+                                        </t:loop>
+                                    </div>
+                                </td>
+                                
+                                <t:if test="insertId3Column">
+                                    <td rowspan="${countRows}">
+                                        <div class="dropme3" data-id-drop3="delete">
+                                            <t:loop source="getAllEpgIds(3)" value="idModel" index="idDataIndex">
+                                                <span class="dragme3 btn btn-default" data-id-drag3="${idModel.normalizedName}" data-id-name3="${idModel.normalizedName}">${idModel.name}</span>
+                                                
+                                                <t:if test="doInsertLineBreak()">
+                                                    <br/>
+                                                </t:if>                                                
+                                            </t:loop>
+                                        </div>
+                                    </td>
+                                </t:if>                                
+                            </tr>
+                        </t:loop>
+                    </table>
+                </div>
+            </fieldset>
+        </t:zone>
     </t:content>
 </html>

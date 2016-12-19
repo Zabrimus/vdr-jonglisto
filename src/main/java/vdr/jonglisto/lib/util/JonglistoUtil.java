@@ -51,6 +51,28 @@ public class JonglistoUtil {
         return sb.toString();
     }
 
+    public static byte[] zip(String inputStr) {
+        byte[] input = null;
+        try {
+            input = inputStr.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // cannot happen, because UTF-8 is always valid
+            return null;
+        }
+
+        byte[] output = new byte[64 * 1000];
+        Deflater compresser = new Deflater();
+        compresser.setInput(input);
+        compresser.finish();
+        int len = compresser.deflate(output);
+        compresser.end();
+
+        byte[] shortOut = new byte[len];
+        System.arraycopy(output, 0, shortOut, 0, len);
+        
+        return shortOut;
+    }
+    
     public static String zipBase64(String inputStr) {
         byte[] input = null;
         try {
@@ -91,27 +113,27 @@ public class JonglistoUtil {
     }
 
     public static String channelNameNormalize(String input) {
-        return StringUtils.stripAccents(input)  //
-        .replaceAll("\\&", "and")  //
-        .replaceAll("\\+", "plus") //
-        .replaceAll("\\*", "star") //
-        .replaceAll("HD 1", "1 HD") //
-        .replaceAll("HD 2", "2 HD") //
-        .replaceAll("HD 3", "3 HD") //
-        .replaceAll("HD 4", "4 HD") //
-        .replaceAll("HD 5", "5 HD") //
-        .replaceAll("HD 6", "6 HD") //
-        .replaceAll("HD 7", "7 HD") //
-        .replaceAll("HD 8", "8 HD") //
-        .replaceAll("HD 9", "9 HD") //
-        .replaceAll("\\w*\\(S\\)$", "") // 
-        .replaceAll("\\w*HD$", "") //
-        .replaceAll("\\w*\\(HD\\)$", "") //
-        .replaceAll("II", "2") //
-        .replaceAll("III", "3") //
-        .replaceAll("7", "sieben") //
-        .replaceAll("[^A-Za-z0-9]", "") //
-        .toLowerCase();       
-}
-
+    	return StringUtils.stripAccents(input)  //
+    	        .replaceAll("\\&", "and")  //
+    	        .replaceAll("\\+", "plus") //
+    	        .replaceAll("\\*", "star") //
+    	        .replaceAll("HD 1", "1") //
+    	        .replaceAll("HD 2", "2") //
+    	        .replaceAll("HD 3", "3") //
+    	        .replaceAll("HD 4", "4") //
+    	        .replaceAll("HD 5", "5") //
+    	        .replaceAll("HD 6", "6") //
+    	        .replaceAll("HD 7", "7") //
+    	        .replaceAll("HD 8", "8") //
+    	        .replaceAll("HD 9", "9") //
+    	        .replaceAll("II", "2") //
+    	        .replaceAll("III", "3") //
+    	        .replaceAll("7", "sieben") // 
+    	        .replaceAll("\\s+\\(*HD\\)*$", "") //
+			    .replaceAll("\\s+\\(S\\)$", "") //
+				.replaceAll("\\s+\\(*HD\\)*$", "") //
+    	        .replaceAll("[^A-Za-z0-9]", "") //
+    	        .trim() //
+    	        .toLowerCase();
+    }
 }

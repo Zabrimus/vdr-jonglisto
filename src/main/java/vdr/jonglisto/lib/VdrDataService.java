@@ -25,15 +25,15 @@ public interface VdrDataService {
      */
     public Optional<Channel> getChannel(String vdrUuid, String channelId);
 
-    public Optional<List<Channel>> getChannels(String vdrUuid);
+    public Optional<List<Channel>> getChannels(String vdrUuid, boolean includeRadio);
 
     public Optional<List<String>> getGroups(String vdrUuid);
 
-    public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group);
+    public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group, boolean includeRadio);
 
-    public Optional<List<Channel>> getChannelsMap(String vdrUuid);
+    public Optional<List<Channel>> getChannelsMap(String vdrUuid, boolean includeRadio);
 
-    public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group);
+    public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group, boolean includeRadio);
 
     /*
      * Timer

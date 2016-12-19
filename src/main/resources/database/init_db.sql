@@ -107,3 +107,354 @@ when not matched then insert values vals.id, vals.name, vals.url, enabled
 when matched then update set url = vals.url, enabled = vals.enabled;;
 
 
+
+-- channel name mapping
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('NDR', 'ndrfshh')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('NDR HH', 'ndrfshh')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('sportdigital.tv', 'sportdigital')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('BBC Entertainment', 'bbc')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('H3', 'hrfernsehen')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('EURONEWS', 'euronewsd')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('euronews', 'euronewsd')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('WDR', 'wdrdusseldorf')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('AutoMotorSportChannel', 'automotorundsportchannel')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Auto Motor Sport', 'automotorundsportchannel')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Handshake 2 Deutschland', 'h2dhandshake2deutschland')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('RTL Television', 'rtl')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Glitz*', 'tntglitz')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SWR', 'swrfernsehenbw')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SWR BW', 'swrfernsehenbw')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SKY Action', 'skycinemaaction')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sky Action', 'skycinemaaction')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('National Geographic Wild', 'natgeowild')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('NDR NI', 'ndrfsnds')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('EUROSPORT', 'eurosport1')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('BloombergTV', 'bloomberg')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('BR Fernsehen Süd', 'brfernsehennord')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('B3', 'brfernsehennord')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('BR', 'brfernsehennord')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('NDR MV', 'ndrfsmv')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SWR RP', 'swrfernsehenrp')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Fox Serie', 'fox')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Fox Serie (S)', 'fox')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('FOX Channel', 'fox')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Kabel', 'kabeleins')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('QVC Beauty & Style', 'qvcbeauty')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Disney SD', 'disney')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Disney Channel', 'disney')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Comedy Central', 'vivacomedycentral')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('VIVA', 'vivacomedycentral')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SKY Comedy', 'skycinemacomedy')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sky Comedy', 'skycinemacomedy')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('E! Entertainment Television', 'eentertainment')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('AXN Action', 'axn')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Silverline', 'silverlinemoviechannel')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SKY Cinema Hits', 'skyhits')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('S RTL', 'superrtl')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('NDR SH', 'ndrfssh')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Nickelodeon/Nicknight', 'nickelodeon')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Nick', 'nickelodeon')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('CNN International', 'cnn')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sony Entertainment', 'sonytv')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sony Entertainment Television', 'sonytv')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Discovery Channel (S)', 'discovery')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Discovery Channel', 'discovery')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('MDR', 'mdrsanhalt')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('MDR Thüringen', 'mdrsanhalt')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('MDR Sachsen-Anhalt', 'mdrsanhalt')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('MDR Sachsen', 'mdrsanhalt')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SCI FI', 'syfy')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('13th Street Universal', '13thstreet')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Home Shopping Europe', 'hse24')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('History Channel', 'history')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('ARD', 'daserste')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SKY Emotion', 'skycinemaemotion')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sky Emotion', 'skycinemaemotion')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Wetter Fernsehen', 'deutscheswetterfernsehen')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('DW (Europe)', 'deutscheswetterfernsehen')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('SKY Nostalgie', 'skycinemanostalgie')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Sky Nostalgie', 'skycinemanostalgie')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('National Geographic (S)', 'natgeo')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('National Geographic', 'natgeo')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('Blue Movie', 'bluemovie1')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('DELUXE MUSIC TV', 'deluxemusic')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;
+
+merge into CHANNEL_NAME_MAPPING as c 
+   using(values('BR Alpha', 'ardalpha')) 
+   as vals(channel_name_a, channel_name_b) on c.channel_name_a = vals.channel_name_a
+when not matched then insert values vals.channel_name_a, vals.channel_name_b;;

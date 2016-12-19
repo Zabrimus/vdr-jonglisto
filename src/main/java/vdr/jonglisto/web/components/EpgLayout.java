@@ -94,14 +94,14 @@ public class EpgLayout extends BaseComponent {
                 epgCriteria.setChannelGroup(channel.get().getGroup());
                 epgCriteria.setChannel(channel.get());
 
-                channels = dataService.getChannelsInGroup(getChannelUuid(), channel.get().getGroup()).get();
+                channels = dataService.getChannelsInGroup(getChannelUuid(), channel.get().getGroup(), true).get();
             } else {
                 if (groups.size() > 0) {
-                    channels = dataService.getChannelsInGroup(getChannelUuid(), groups.get(0))
+                    channels = dataService.getChannelsInGroup(getChannelUuid(), groups.get(0), true)
                             .orElse(Collections.emptyList());
                     epgCriteria.setChannelGroup(groups.get(0));
                 } else {
-                    channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
+                    channels = dataService.getChannels(getChannelUuid(), true).orElse(Collections.emptyList());
                     epgCriteria.setChannelGroup(null);
                 }
 
@@ -131,9 +131,9 @@ public class EpgLayout extends BaseComponent {
         epgCriteria.setGenre(null);
 
         if (selectedGroup != null) {
-            channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup).orElse(Collections.emptyList());
+            channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup, true).orElse(Collections.emptyList());
         } else {
-            channels = dataService.getChannels(getChannelUuid()).orElse(Collections.emptyList());
+            channels = dataService.getChannels(getChannelUuid(), true).orElse(Collections.emptyList());
         }
 
         epgCriteria.setChannel(channels.get(0));

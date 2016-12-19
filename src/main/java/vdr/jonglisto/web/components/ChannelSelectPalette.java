@@ -31,6 +31,10 @@ public class ChannelSelectPalette extends BaseComponent {
     @Parameter
     private List<Channel> selectedChannels;
 
+    @Property
+    @Parameter
+    private boolean includeRadio;
+
     @Persist
     @Property
     private ChannelEncoder encoder;
@@ -54,9 +58,14 @@ public class ChannelSelectPalette extends BaseComponent {
     @Persist
     private String group;
 
+    @Persist
+    private boolean includeRadioSaved;
+    
     public void beginRender() {
+        includeRadioSaved = includeRadio;
+        
         if (channels == null) {
-            channels = vdrDataService.getChannelsMap(currentVdrView.getChannelVdr().get())
+            channels = vdrDataService.getChannelsMap(currentVdrView.getChannelVdr().get(), includeRadioSaved)
                     .orElse(Collections.emptyList());
             encoder = new ChannelEncoder(channels);
 
@@ -65,14 +74,14 @@ public class ChannelSelectPalette extends BaseComponent {
 
         groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
 
+        System.err.println("Selected Channels: " + selectedChannels);
+        
         if (selectedChannels == null) {
             selectedChannels = new ArrayList<>();
         }
     }
-
-    public void onPalSelectAlpha(@RequestParameter(value = "param", allowBlank = true) String param,
-            @RequestParameter(value = "add", allowBlank = true) String add) {
-
+        
+    public void onPalSelectAlpha(@RequestParameter(value = "param", allowBlank = true) String param, @RequestParameter(value = "add", allowBlank = true) String add) {
         sortAlpha = !sortAlpha;
         setSelectValues(group, add);
     }
@@ -82,10 +91,19 @@ public class ChannelSelectPalette extends BaseComponent {
 
         setSelectValues(param, add);
     }
+    
+    public void onPalSelectAlpha() {
+        sortAlpha = !sortAlpha;
+        setSelectValues(group, null);
+    }
 
+    public void onPalSelectGroup() {
+        setSelectValues(group, null);
+    }
+
+    
     public void onValueChangedFromGroup(String selectedGroup) {
-        channels = vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), selectedGroup)
-                .orElse(Collections.emptyList());
+        channels = vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), selectedGroup, includeRadioSaved).orElse(Collections.emptyList());
         encoder = new ChannelEncoder(channels);
         model = selectModelFactory.create(channels, "name");
 
@@ -99,11 +117,11 @@ public class ChannelSelectPalette extends BaseComponent {
 
         if (group != null) {
             // only channels in group
-            channels = vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), group)
+            channels = vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), group, includeRadioSaved)
                     .orElse(Collections.emptyList());
         } else {
             // VDR, all channels, because group is null
-            channels = vdrDataService.getChannels(currentVdrView.getChannelVdr().get()).orElse(Collections.emptyList());
+            channels = vdrDataService.getChannels(currentVdrView.getChannelVdr().get(), includeRadioSaved).orElse(Collections.emptyList());
         }
 
         // sort list

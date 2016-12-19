@@ -21,7 +21,6 @@ define([ "jquery", "t5/core/zone" ],
                 function updateZone() {
                     var listenerURIWithValue = listenerURI;
 
-                    // if ($element.val()) {
                     var addvalue;
 
                     if (addElement) {
@@ -32,10 +31,9 @@ define([ "jquery", "t5/core/zone" ],
                     listenerURIWithValue = appendQueryStringParameter(
                             listenerURIWithValue, 'param', $element.val(),
                             addvalue);
-                    // }
 
-                    zoneManager.deferredZoneUpdate(zoneElementId,
-                            listenerURIWithValue);
+                    zoneManager.deferredZoneUpdate(zoneElementId, listenerURIWithValue);
+                    // zoneManager.deferredZoneUpdate(zoneElementId, listenerURI);
                 }
             }
 

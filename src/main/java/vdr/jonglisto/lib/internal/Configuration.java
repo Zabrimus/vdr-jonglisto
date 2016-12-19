@@ -101,7 +101,7 @@ public class Configuration {
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
 
     private int prodVersion = 1;
-    private String version = "0.0.3-snapshot";
+    private String version = "0.0.3";
 
     private Logger log = LoggerFactory.getLogger(Configuration.class);
 

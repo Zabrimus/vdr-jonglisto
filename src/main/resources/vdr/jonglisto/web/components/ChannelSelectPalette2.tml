@@ -1,0 +1,51 @@
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+    <t:content>
+        <div class="form-group col-sm-36">
+            <t:zone t:id="channelPaletteZone" id="channelPaletteZone">
+                <div class="row">
+                    <div class="col-sm-15">
+                        <select name="from" id="optgroup" class="form-control" size="8" multiple="multiple">
+                            <t:loop source="groups" value="group">
+                                <optgroup label="${group}">
+                                    <t:loop source="channelsInGroup" value="currentChannel">
+                                        <option value="${currentChannel.id}">${currentChannel.name}</option>
+                                    </t:loop>
+                                </optgroup>
+                            </t:loop>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <button type="button" id="optgroup_rightAll" class="btn btn-block">
+                            <i class="glyphicon glyphicon-forward"></i>
+                        </button>
+                        <button type="button" id="optgroup_rightSelected" class="btn btn-block">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                        <button type="button" id="optgroup_leftSelected" class="btn btn-block">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                        </button>
+                        <button type="button" id="optgroup_leftAll" class="btn btn-block">
+                            <i class="glyphicon glyphicon-backward"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-sm-15">
+                        <select name="to" id="optgroup_to" class="form-control" size="8" multiple="multiple">
+                            <t:loop source="groups" value="group">
+                                <t:if test="hasChannelsInGroup()">
+                                    <optgroup label="${group}">
+                                        <t:loop source="selectedChannelsInGroup" value="currentChannel">
+                                            <option value="${currentChannel.id}">${currentChannel.name}</option>
+                                        </t:loop>
+                                    </optgroup>
+                                </t:if>
+                            </t:loop>
+                        </select>
+                    </div>
+                </div>
+            </t:zone>
+        </div>
+    </t:content>
+</html>
+	
