@@ -1,54 +1,53 @@
 //
-// Pager pagination
-// --------------------------------------------------
+//
+Pager pagination // --------------------------------------------------
+    .pager {
+    padding-left: 0;
+    margin: @line-height-computed 0;
+    list-style: none;
+    text-align: center; &: extend (.clearfix all); li { display : inline;
+    > a , > span { display : inline-block;
+    padding: 5px 14px;
+    background-color:
+    @page
+    r-bg
+    ;
+    border:
+    1px
+    solid
+    @page
+    r-border
+    ;
+    border-radius:
+    @page
+    r-border-radius
+    ;
+}
 
+>
+a:hover, > a:focus {
+    text-decoration: none;
+    background-color:
+    @page
+    r-hover-bg
+    ;
+}
 
-.pager {
-  padding-left: 0;
-  margin: @line-height-computed 0;
-  list-style: none;
-  text-align: center;
-  &:extend(.clearfix all);
-  li {
-    display: inline;
-    > a,
-    > span {
-      display: inline-block;
-      padding: 5px 14px;
-      background-color: @pager-bg;
-      border: 1px solid @pager-border;
-      border-radius: @pager-border-radius;
-    }
+}
+.next { > a , > span { float:right;
+    
+}
 
-    > a:hover,
-    > a:focus {
-      text-decoration: none;
-      background-color: @pager-hover-bg;
-    }
-  }
+}
+.previous { > a , > span { float:left;
+    
+}
 
-  .next {
-    > a,
-    > span {
-      float: right;
-    }
-  }
-
-  .previous {
-    > a,
-    > span {
-      float: left;
-    }
-  }
-
-  .disabled {
-    > a,
-    > a:hover,
-    > a:focus,
-    > span {
-      color: @pager-disabled-color;
-      background-color: @pager-bg;
-      cursor: @cursor-disabled;
-    }
-  }
+}
+.disabled { > a , > a:hover, > a :focus, > span {
+      color : @page r-disabled-color ; background-color: @page r-bg ;
+    cursor: @cursor-disabled;
+    
+}
+}
 }
