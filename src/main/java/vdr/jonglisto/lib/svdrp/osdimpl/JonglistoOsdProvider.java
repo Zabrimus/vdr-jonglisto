@@ -22,18 +22,18 @@ import vdr.jonglisto.lib.svdrp.OsdProviderCache;
 public class JonglistoOsdProvider implements OsdProvider {
 
     private static Logger log = LoggerFactory.getLogger(JonglistoOsdProvider.class);
-    
+
     private enum Type {
         DEFAULT, REMOTEOSD, EPG2VDR, EPG2VDR_RESULT
     }
-    
+
     private TextOsd osd;
     private Socket client;
-    
+
     private static Configuration configuration = Configuration.getInstance();
     private static Epg2VdrNashornService epg2vdrScript = new Epg2VdrNashornServiceImpl();
     private static EpgDataService epgDataService = new EpgDataServiceImpl();
-    
+
     private Type type;
 
     public JonglistoOsdProvider(Socket client) {
@@ -86,7 +86,7 @@ public class JonglistoOsdProvider implements OsdProvider {
             case "RemoteOSD":
                 createRemoteOsd();
                 break;
-                
+
             case "ShowRemote":
                 // create and register new Provider
                 OsdProvider osdProvider = new RemoteOsdProvider(client, getSelectedSubAction());
@@ -103,7 +103,7 @@ public class JonglistoOsdProvider implements OsdProvider {
             }
 
             break;
-            
+
         case "RED":
             if ((type == Type.REMOTEOSD) || (type == Type.EPG2VDR)) {
                 createDefaultOsd();
@@ -113,10 +113,10 @@ public class JonglistoOsdProvider implements OsdProvider {
 
         case "GREEN":
             break;
-            
+
         case "YELLOW":
             break;
-            
+
         case "BLUE":
             break;
         }
@@ -132,8 +132,8 @@ public class JonglistoOsdProvider implements OsdProvider {
 
     private void createDefaultOsd() {
         type = Type.DEFAULT;
-        
-        osd  = new TextOsd();
+
+        osd = new TextOsd();
         osd.setTitle("Jonglisto");
         osd.getItems().add(new OsdItem("Remote OSD", false, "RemoteOSD", null));
         osd.getItems().add(new OsdItem("Epg2Vdr", false, "ShowEpg2Vdr", null));
@@ -142,60 +142,61 @@ public class JonglistoOsdProvider implements OsdProvider {
 
     private void createRemoteOsd() {
         type = Type.REMOTEOSD;
-        
+
         osd = new TextOsd();
         osd.setTitle("Jonglisto");
         osd.setRed("Zurück");
 
         configuration.getConfiguredVdr().entrySet().stream().forEach(s -> {
-            osd.getItems().add(new OsdItem("Osd von " + s.getValue().getDisplayName(), false, "ShowRemote", s.getValue().getUuid()));
+            osd.getItems().add(new OsdItem("Osd von " + s.getValue().getDisplayName(), false, "ShowRemote",
+                    s.getValue().getUuid()));
         });
 
         osd.getItems().get(0).setSelected(true);
     }
-    
+
     private void createEpg2VdrOsd() {
         type = Type.EPG2VDR;
-        
+
         osd = new TextOsd();
         osd.setTitle("Epg2Vdr");
-        osd.setRed("Zurück");        
-        
+        osd.setRed("Zurück");
+
         try {
             List<Map<String, Object>> osdList = epg2vdrScript.callGetOsdList();
-            
+
             osdList.stream().forEach(s -> {
-                osd.getItems().add(new OsdItem((String)s.get("display") , false, "Epg2Vdr", (String)s.get("sql")));
+                osd.getItems().add(new OsdItem((String) s.get("display"), false, "Epg2Vdr", (String) s.get("sql")));
             });
-        
+
             osd.getItems().get(0).setSelected(true);
         } catch (NoSuchMethodException | ScriptException e) {
             // do not generate any entry
             log.error("Script arror", e);
         }
     }
-    
+
     private void createEpg2VdrResultOsd(String sql) {
         type = Type.EPG2VDR_RESULT;
-        
+
         osd = new TextOsd();
         osd.setTitle("Epg2Vdr Egebnisse");
-        osd.setRed("Zurück");        
+        osd.setRed("Zurück");
 
         List<Map<String, Object>> result = epgDataService.selectGeneric(sql);
-        
+
         result.stream().forEach(s -> {
             StringBuilder value = new StringBuilder();
-            
+
             for (int i = 1; i <= s.size(); ++i) {
                 value.append(s.get(String.valueOf(i))).append("\t");
             }
-            
+
             value.append("");
-            
+
             osd.getItems().add(new OsdItem(value.toString(), false, "noaction", null));
         });
-        
+
         osd.getItems().get(0).setSelected(true);
     }
 }

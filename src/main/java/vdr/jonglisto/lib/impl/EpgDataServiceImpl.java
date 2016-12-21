@@ -227,13 +227,14 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
 
         try (Connection con = sql2o.open()) {
             // filter useids
-            String ids = useIds.stream().map(s -> ((Long)s.get("cnt_useid")).toString()).collect(Collectors.joining(","));
-            
+            String ids = useIds.stream().map(s -> ((Long) s.get("cnt_useid")).toString())
+                    .collect(Collectors.joining(","));
+
             if (StringUtils.isEmpty(ids)) {
                 // no result found
                 return Collections.emptyList();
             }
-            
+
             List<Map<String, Object>> epg = con.createQuery(selectFromView + " WHERE cnt_useid in (" + ids + ")")
                     .addParameter("unixtime", System.currentTimeMillis() / 1000L) //
                     .executeAndFetchTable() //
@@ -246,7 +247,7 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
             return result;
         }
     }
-    
+
     public Map<String, Object> getEpgDataForRecording(String recFilename) {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
 
@@ -411,7 +412,7 @@ public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
                     .executeAndFetch(String.class);
         }
     }
-    
+
     public List<Map<String, Object>> selectGeneric(String sql) {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
 

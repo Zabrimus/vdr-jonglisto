@@ -131,7 +131,8 @@ public class EpgLayout extends BaseComponent {
         epgCriteria.setGenre(null);
 
         if (selectedGroup != null) {
-            channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup, true).orElse(Collections.emptyList());
+            channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup, true)
+                    .orElse(Collections.emptyList());
         } else {
             channels = dataService.getChannels(getChannelUuid(), true).orElse(Collections.emptyList());
         }

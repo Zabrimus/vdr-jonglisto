@@ -103,7 +103,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public String getSvdrpScript() {
         return configuration.getSvdrpScript();
     }
-    
+
     public String getEpg2VdrScript() {
         return configuration.getEpg2VdrScript();
     }

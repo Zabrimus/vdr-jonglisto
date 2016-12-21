@@ -1,6 +1,6 @@
 package vdr.jonglisto.lib.util;
 
-
 public class Constants {
-    public static String version = "0.0.3";
+
+    public static String version = "0.0.4-snapshot";
 }

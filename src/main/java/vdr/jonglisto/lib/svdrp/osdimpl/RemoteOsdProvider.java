@@ -21,22 +21,22 @@ public class RemoteOsdProvider implements OsdProvider {
 
     public RemoteOsdProvider(Socket client, String vdrUuid) {
         this.vdrUuid = vdrUuid;
-        this.client = client;               
+        this.client = client;
     }
-    
+
     public TextOsd getOsd() {
         osd = vdrService.getOsd(vdrUuid);
-        
+
         if (osd == null) {
             // 3 retries
             int i = 3;
-            
-            // the OSD is currently not open, but we need an open OSD. 
+
+            // the OSD is currently not open, but we need an open OSD.
             // => Hit Menu-Key and get new OSD after sleep time
             processKey("Menu");
-            
+
             long sleepTime = configService.getRemoteOsdSleepTime();
-            
+
             sleep(sleepTime);
             while (i > 0) {
                 osd = vdrService.getOsd(vdrUuid);
@@ -45,22 +45,22 @@ public class RemoteOsdProvider implements OsdProvider {
                 } else {
                     break;
                 }
-                
+
                 sleepTime = sleepTime + configService.getRemoteOsdIncSleepTime();
                 --i;
             }
-        }              
+        }
 
         OsdProviderCache.changeOsdProvider(client, this);
-        
+
         return osd;
     }
 
     public void processKey(String key) {
         vdrService.processKey(vdrUuid, key);
-        
+
         long waitTime = 0;
-        
+
         if ("Ok".equalsIgnoreCase(key)) {
             // wait longer, because the OSD needs some time
             waitTime = configService.getRemoteOsdSleepTime() + 2 * configService.getRemoteOsdIncSleepTime();
@@ -74,7 +74,7 @@ public class RemoteOsdProvider implements OsdProvider {
             OsdProviderCache.changeOsdProvider(client, null);
         }
     }
-    
+
     private void sleep(long time) {
         try {
             Thread.sleep(time);

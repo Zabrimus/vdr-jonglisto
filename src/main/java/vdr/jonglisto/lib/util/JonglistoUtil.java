@@ -69,10 +69,10 @@ public class JonglistoUtil {
 
         byte[] shortOut = new byte[len];
         System.arraycopy(output, 0, shortOut, 0, len);
-        
+
         return shortOut;
     }
-    
+
     public static String zipBase64(String inputStr) {
         byte[] input = null;
         try {
@@ -113,27 +113,27 @@ public class JonglistoUtil {
     }
 
     public static String channelNameNormalize(String input) {
-    	return StringUtils.stripAccents(input)  //
-    	        .replaceAll("\\&", "and")  //
-    	        .replaceAll("\\+", "plus") //
-    	        .replaceAll("\\*", "star") //
-    	        .replaceAll("HD 1", "1") //
-    	        .replaceAll("HD 2", "2") //
-    	        .replaceAll("HD 3", "3") //
-    	        .replaceAll("HD 4", "4") //
-    	        .replaceAll("HD 5", "5") //
-    	        .replaceAll("HD 6", "6") //
-    	        .replaceAll("HD 7", "7") //
-    	        .replaceAll("HD 8", "8") //
-    	        .replaceAll("HD 9", "9") //
-    	        .replaceAll("II", "2") //
-    	        .replaceAll("III", "3") //
-    	        .replaceAll("7", "sieben") // 
-    	        .replaceAll("\\s+\\(*HD\\)*$", "") //
-			    .replaceAll("\\s+\\(S\\)$", "") //
-				.replaceAll("\\s+\\(*HD\\)*$", "") //
-    	        .replaceAll("[^A-Za-z0-9]", "") //
-    	        .trim() //
-    	        .toLowerCase();
+        return StringUtils.stripAccents(input) //
+                .replaceAll("\\&", "and") //
+                .replaceAll("\\+", "plus") //
+                .replaceAll("\\*", "star") //
+                .replaceAll("HD 1", "1") //
+                .replaceAll("HD 2", "2") //
+                .replaceAll("HD 3", "3") //
+                .replaceAll("HD 4", "4") //
+                .replaceAll("HD 5", "5") //
+                .replaceAll("HD 6", "6") //
+                .replaceAll("HD 7", "7") //
+                .replaceAll("HD 8", "8") //
+                .replaceAll("HD 9", "9") //
+                .replaceAll("II", "2") //
+                .replaceAll("III", "3") //
+                .replaceAll("7", "sieben") //
+                .replaceAll("\\s+\\(*HD\\)*$", "") //
+                .replaceAll("\\s+\\(S\\)$", "") //
+                .replaceAll("\\s+\\(*HD\\)*$", "") //
+                .replaceAll("[^A-Za-z0-9]", "") //
+                .trim() //
+                .toLowerCase();
     }
 }

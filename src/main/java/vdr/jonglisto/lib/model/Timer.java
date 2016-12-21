@@ -15,9 +15,10 @@ import vdr.jonglisto.lib.util.JonglistoUtil;
 public class Timer {
 
     private final static String WD = "MTWTFSS";
-    private static Pattern vdrTimerPattern = Pattern.compile("^(\\d+):(\\S+?):(\\S+?):(\\d+?):(\\d+?):(\\d+?):(\\d+?):(.*?)(:(.*))?$");
+    private static Pattern vdrTimerPattern = Pattern
+            .compile("^(\\d+):(\\S+?):(\\S+?):(\\d+?):(\\d+?):(\\d+?):(\\d+?):(.*?)(:(.*))?$");
     private static Pattern weekdayPattern = Pattern.compile("((M|-)(T|-)(W|-)(T|-)(F|-)(S|-)(S|-))(@(.*?))?");
-    
+
     @JsonProperty("id")
     private String id;
 
@@ -67,7 +68,7 @@ public class Timer {
 
     @JsonProperty("index")
     private int index;
-    
+
     private String title;
     private String shortText;
 
@@ -100,7 +101,7 @@ public class Timer {
         this.setAux(source.getAux());
         this.setIndex(source.getIndex());
     }
-    
+
     public String getId() {
         return id;
     }
@@ -334,7 +335,7 @@ public class Timer {
         }
 
         String result = "timer_id=" + newTimer.getId();
-        
+
         if (flags != newTimer.getFlags()) {
             result += "&flags=" + newTimer.getFlags();
         }
@@ -407,48 +408,50 @@ public class Timer {
             int fl = Integer.parseInt(m.group(1));
             setIsActive((fl & 1) != 0);
             setVps((fl & 4) != 0);
-            
+
             setChannel(m.group(2));
             setPriority(Integer.parseInt(m.group(6)));
             setLifetime(Integer.parseInt(m.group(7)));
             setAux(m.group(10));
             setFilename(m.group(8));
-            
+
             int tStart = Integer.parseInt(m.group(4));
             int tEnd = Integer.parseInt(m.group(5));
             String tDate = m.group(3);
-            
+
             // check if weekdays are part of tDate
             Matcher dm = weekdayPattern.matcher(tDate);
-            
+
             if (dm.matches()) {
                 // weekdays are present
                 setWeekdays(dm.group(1));
-                
+
                 // set new date
                 tDate = dm.group(10);
             } else {
                 setWeekdays("-------");
             }
-            
+
             if (tDate == null) {
                 // today
-                setStartTimestamp(DateTimeUtil.toLocalDateTime(DateTimeUtil.toRestfulDate(LocalDateTime.now()), tStart));
+                setStartTimestamp(
+                        DateTimeUtil.toLocalDateTime(DateTimeUtil.toRestfulDate(LocalDateTime.now()), tStart));
                 setStopTimestamp(DateTimeUtil.toLocalDateTime(DateTimeUtil.toRestfulDate(LocalDateTime.now()), tEnd));
             } else if (StringUtils.isNumeric(tDate)) {
                 // day of month (future date)
-                setStartTimestamp(LocalDateTime.now().withDayOfMonth(Integer.parseInt(tDate)).withHour(tStart/100).withMinute(tStart%100));
-                
+                setStartTimestamp(LocalDateTime.now().withDayOfMonth(Integer.parseInt(tDate)).withHour(tStart / 100)
+                        .withMinute(tStart % 100));
+
                 if (getStart().isBefore(LocalDateTime.now())) {
                     // adjust start date by one month
                     setStartTimestamp(getStart().plusMonths(1));
                 }
-                
-                setStopTimestamp(getStart().withHour(tEnd/100).withMinute(tEnd%100));
+
+                setStopTimestamp(getStart().withHour(tEnd / 100).withMinute(tEnd % 100));
             } else {
                 // assume we have a real date value
                 setStartTimestamp(DateTimeUtil.toLocalDateTime(tDate, tStart));
-                setStopTimestamp(DateTimeUtil.toLocalDateTime(tDate, tEnd));                
+                setStopTimestamp(DateTimeUtil.toLocalDateTime(tDate, tEnd));
             }
 
             // if stop < start, then add 1 day to stop
@@ -459,23 +462,23 @@ public class Timer {
             throw new RuntimeException("Not a valid VDR timer string: " + vdrTimer);
         }
     }
-    
+
     public String convertToVdrTimer() {
         String result = new StringBuilder().append(getFlags()).append(":") //
-                            .append(getChannel()).append(":") //
-                            .append(!weekdays.equals("-------") ? weekdays + "@" : "") //
-                            .append(DateTimeUtil.toRestfulDate(getStart())).append(":") //
-                            .append(DateTimeUtil.toRestfulTime(getStart())).append(":") //
-                            .append(DateTimeUtil.toRestfulTime(getStop())).append(":") //
-                            .append(getPriority()).append(":") //
-                            .append(getLifetime()).append(":") //
-                            .append(getFilename()).append(":") //
-                            .append(getAux()) //
-                            .toString();
-        
+                .append(getChannel()).append(":") //
+                .append(!weekdays.equals("-------") ? weekdays + "@" : "") //
+                .append(DateTimeUtil.toRestfulDate(getStart())).append(":") //
+                .append(DateTimeUtil.toRestfulTime(getStart())).append(":") //
+                .append(DateTimeUtil.toRestfulTime(getStop())).append(":") //
+                .append(getPriority()).append(":") //
+                .append(getLifetime()).append(":") //
+                .append(getFilename()).append(":") //
+                .append(getAux()) //
+                .toString();
+
         return result;
     }
-    
+
     /**
      * helper functions
      */
@@ -523,7 +526,7 @@ public class Timer {
     public void setShortText(String shortText) {
         this.shortText = shortText;
     }
-    
+
     public int getIndex() {
         return index;
     }
@@ -542,5 +545,5 @@ public class Timer {
                 + ", wednesday=" + wednesday + ", thursday=" + thursday + ", friday=" + friday + ", saturday="
                 + saturday + ", sunday=" + sunday + "]";
     }
-   
+
 }

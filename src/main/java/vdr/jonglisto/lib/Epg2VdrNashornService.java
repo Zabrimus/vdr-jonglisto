@@ -7,6 +7,6 @@ import javax.script.ScriptException;
 
 public interface Epg2VdrNashornService {
 
-    public List<Map<String, Object>>  callGetOsdList() throws NoSuchMethodException, ScriptException;
-    
+    public List<Map<String, Object>> callGetOsdList() throws NoSuchMethodException, ScriptException;
+
 }

@@ -16,7 +16,7 @@ public class SvdrpServer implements Runnable {
     private int port;
     private int countExecutor;
     private boolean running;
-    
+
     public SvdrpServer(int port, int countExecutor) {
         this.port = port;
         this.countExecutor = countExecutor;
@@ -42,7 +42,7 @@ public class SvdrpServer implements Runnable {
             }
         }
     }
-    
+
     public void initStop() {
         running = false;
     }

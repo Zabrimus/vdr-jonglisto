@@ -1,15 +1,15 @@
 <html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
-	<t:content>
-		<figure class="${cssClass}">
-			<img src="${getEpgImageLink()}" alt="" data-toggle="tooltip" class="${cssClass} tooltipTop" />
+    <t:content>
+        <figure class="${cssClass}">
+            <img src="${getEpgImageLink()}" alt="" data-toggle="tooltip" class="${cssClass} tooltipTop" />
 
-			<t:if test="imageKey?.actorName">
-				<figcaption>
-					<strong>${imageKey.actorRole}</strong>
-					<br />
-					${imageKey.actorName}
-				</figcaption>
-			</t:if>
-		</figure>
-	</t:content>
+            <t:if test="imageKey?.actorName">
+                <figcaption>
+                    <strong>${imageKey.actorRole}</strong>
+                    <br />
+                    ${imageKey.actorName}
+                </figcaption>
+            </t:if>
+        </figure>
+    </t:content>
 </html>	

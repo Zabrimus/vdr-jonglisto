@@ -23,7 +23,8 @@ public class DateTimeUtil {
     }
 
     public static String toDate(Long unixTime) {
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTime), ZoneId.systemDefault()).toLocalDate().format(dateFormatter);
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTime), ZoneId.systemDefault()).toLocalDate()
+                .format(dateFormatter);
     }
 
     public static String toRestfulDate(LocalDateTime date) {
@@ -81,9 +82,9 @@ public class DateTimeUtil {
 
         return String.format("%02d:%02d", hours, minutes);
     }
-    
+
     public static LocalDateTime toLocalDateTime(String date, int time) {
-        String toParse = String.format("%sT%02d:%02d:00", date, time/100, time%100);
+        String toParse = String.format("%sT%02d:%02d:00", date, time / 100, time % 100);
         return LocalDateTime.parse(toParse);
     }
 }

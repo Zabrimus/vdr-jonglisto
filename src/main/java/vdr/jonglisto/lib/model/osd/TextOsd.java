@@ -32,7 +32,7 @@ public class TextOsd {
     private List<OsdItem> items;
 
     private String textBlock;
-    
+
     public TextOsd() {
         items = new ArrayList<>();
     }
@@ -96,7 +96,7 @@ public class TextOsd {
     public String getTextBlock() {
         return textBlock;
     }
-    
+
     public void setTextBlock(String textBlock) {
         this.textBlock = textBlock;
     }
@@ -122,7 +122,7 @@ public class TextOsd {
         if (oldIdx == items.size()) {
             oldIdx = 0;
         }
-        
+
         // add offset and check range
         int newIdx = oldIdx + offset;
         if (newIdx < 0) {
@@ -139,6 +139,7 @@ public class TextOsd {
     @Override
     public String toString() {
         return "TextOsd [type=" + type + ", title=" + title + ", message=" + message + ", red=" + red + ", green="
-                + green + ", yellow=" + yellow + ", blue=" + blue + ", items=" + items + ", textBlock=" + textBlock + "]";
+                + green + ", yellow=" + yellow + ", blue=" + blue + ", items=" + items + ", textBlock=" + textBlock
+                + "]";
     }
 }

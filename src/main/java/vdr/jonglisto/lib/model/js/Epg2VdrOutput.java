@@ -6,14 +6,14 @@ import java.util.Map;
 public class Epg2VdrOutput {
 
     public List<Map<String, String>> result;
-    
-    public Epg2VdrOutput() {        
+
+    public Epg2VdrOutput() {
     }
 
     public List<Map<String, String>> getResult() {
         return result;
     }
-    
+
     public void setResult(List<Map<String, String>> result) {
         this.result = result;
     }

@@ -22,85 +22,86 @@ import vdr.jonglisto.lib.model.Channel;
 
 @Import(library = { "webjars:multiselect-two-sides:$version/js/multiselect.js" })
 public class ChannelSelectPalette2 extends BaseComponent {
-	@Inject
-	SelectModelFactory selectModelFactory;
 
-	@InjectComponent
-	private Zone channelPaletteZone;
+    @Inject
+    SelectModelFactory selectModelFactory;
 
-	@Property
-	@Parameter
-	private List<Channel> selectedChannels;
+    @InjectComponent
+    private Zone channelPaletteZone;
 
-	@Property
-	@Parameter
-	private boolean includeRadio;
+    @Property
+    @Parameter
+    private List<Channel> selectedChannels;
 
-	@Persist
-	@Property
-	private Map<String, List<Channel>> channels;
+    @Property
+    @Parameter
+    private boolean includeRadio;
 
-	@Persist
-	@Property
-	private List<String> groups;
+    @Persist
+    @Property
+    private Map<String, List<Channel>> channels;
 
-	@Property
-	@Persist
-	private boolean sortAlpha;
+    @Persist
+    @Property
+    private List<String> groups;
 
-	@Property
-	@Persist
-	private String group;
+    @Property
+    @Persist
+    private boolean sortAlpha;
 
-	@Property
-	private String lastGroup;
+    @Property
+    @Persist
+    private String group;
 
-	@Persist
-	private boolean includeRadioSaved;
+    @Property
+    private String lastGroup;
 
-	@Property
-	private Channel currentChannel;
+    @Persist
+    private boolean includeRadioSaved;
 
-	public void beginRender() {
-		includeRadioSaved = includeRadio;
+    @Property
+    private Channel currentChannel;
 
-		groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
+    public void beginRender() {
+        includeRadioSaved = includeRadio;
 
-		if (channels == null) {
-			channels = new HashMap<>();
+        groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
 
-			groups.stream().forEach(s -> {
-				channels.put(s,
-						vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), s, includeRadioSaved)
-								.orElse(Collections.emptyList()));
-			});
-		}
+        if (channels == null) {
+            channels = new HashMap<>();
 
-		if (selectedChannels == null) {
-			selectedChannels = new ArrayList<>();
-		}
-	}
+            groups.stream().forEach(s -> {
+                channels.put(s,
+                        vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), s, includeRadioSaved)
+                                .orElse(Collections.emptyList()));
+            });
+        }
 
-	public void afterRender() {
-		javaScriptSupport.require("multiselect");
-	}
+        if (selectedChannels == null) {
+            selectedChannels = new ArrayList<>();
+        }
+    }
 
-	public List<Channel> getChannelsInGroup() {
-		return channels.get(group);
-	}
+    public void afterRender() {
+        javaScriptSupport.require("multiselect");
+    }
 
-	public List<Channel> getSelectedChannelsInGroup() {
-		return selectedChannels.stream().filter(s -> s.getGroup().equals(group)).collect(Collectors.toList());
-	}
+    public List<Channel> getChannelsInGroup() {
+        return channels.get(group);
+    }
 
-	public boolean hasChannelsInGroup() {
-		return selectedChannels.stream().filter(s -> s.getGroup().equals(group)).findFirst().isPresent();
-	}
-	
-	public void processSelectedChannels(Request request) {
-		String[] channelIds = request.getParameters("to");
-		selectedChannels = Arrays.stream(channelIds) //
-				.map(s -> vdrDataService.getChannel(currentVdrView.getChannelVdr().get(), s).get()) //
-				.collect(Collectors.toList());
-	}
+    public List<Channel> getSelectedChannelsInGroup() {
+        return selectedChannels.stream().filter(s -> s.getGroup().equals(group)).collect(Collectors.toList());
+    }
+
+    public boolean hasChannelsInGroup() {
+        return selectedChannels.stream().filter(s -> s.getGroup().equals(group)).findFirst().isPresent();
+    }
+
+    public void processSelectedChannels(Request request) {
+        String[] channelIds = request.getParameters("to");
+        selectedChannels = Arrays.stream(channelIds) //
+                .map(s -> vdrDataService.getChannel(currentVdrView.getChannelVdr().get(), s).get()) //
+                .collect(Collectors.toList());
+    }
 }

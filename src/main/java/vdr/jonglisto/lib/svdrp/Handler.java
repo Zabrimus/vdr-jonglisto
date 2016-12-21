@@ -21,7 +21,7 @@ public class Handler implements Runnable {
     // Group 1: Command
     // Group 4: Arguments
     private static Pattern cmdPattern = Pattern.compile("^(.*?)(( )+(.*?))?$");
-    
+
     private final Socket client;
 
     public Handler(Socket client) {
@@ -44,11 +44,12 @@ public class Handler implements Runnable {
                     log.debug("Received command from " + Thread.currentThread().getName() + " : " + input);
                 }
 
-                // List<String> args = Arrays.stream(input.split(" ")).collect(Collectors.toList());
+                // List<String> args = Arrays.stream(input.split("
+                // ")).collect(Collectors.toList());
                 String[] args = splitCmd(input);
                 String commandName = args[0].toUpperCase();
                 String subCommandName = null;
-                
+
                 // special cases
                 if ("QUIT".equals(commandName)) {
                     writer.write("221 jonglisto closing connection\n");
@@ -62,7 +63,7 @@ public class Handler implements Runnable {
 
                 String packageName = "vdr.jonglisto.lib.svdrp.commands.";
                 boolean callHelp = false;
-                
+
                 if ("PLUG".equals(commandName)) {
                     packageName = packageName + "plug.";
                     try {
@@ -71,16 +72,16 @@ public class Handler implements Runnable {
                     } catch (Exception e) {
                         commandName = "plugoverview";
                     }
-                    
+
                     if (args[0] == null) {
                         callHelp = true;
                     } else if ((args[1] != null) && "HELP".equals(args[0].toUpperCase())) {
-                        subCommandName = args[1].toUpperCase();                        
+                        subCommandName = args[1].toUpperCase();
                         callHelp = true;
                     }
                 } else if ("HELP".equals(commandName)) {
                     if (args[1] != null) {
-                        commandName = args[1].toUpperCase();                        
+                        commandName = args[1].toUpperCase();
                     }
                     callHelp = true;
                 }
@@ -125,17 +126,16 @@ public class Handler implements Runnable {
             log.error("Error", e);
         }
     }
-    
- 
+
     private String[] splitCmd(String cmd) {
         String[] result = new String[2];
         Matcher matcher = cmdPattern.matcher(cmd);
-        
+
         if (matcher.matches()) {
             result[0] = matcher.group(1);
             result[1] = matcher.group(4);
         }
-        
+
         return result;
     }
 }

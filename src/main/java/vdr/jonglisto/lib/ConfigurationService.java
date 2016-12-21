@@ -18,7 +18,7 @@ public interface ConfigurationService {
     public void shutdown();
 
     public VDR getVdr(String uuid);
-    
+
     public VDR getVdrByAlias(String alias);
 
     public List<VDR> getSortedVdrList();
@@ -48,8 +48,8 @@ public interface ConfigurationService {
     public long getRemoteOsdSleepTime();
 
     public long getRemoteOsdIncSleepTime();
-    
+
     public String getSvdrpScript();
-    
+
     public String getEpg2VdrScript();
 }

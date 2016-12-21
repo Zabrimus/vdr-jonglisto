@@ -12,7 +12,7 @@ import vdr.jonglisto.lib.svdrp.commands.CommandBase;
 public class EPGSEARCH extends CommandBase {
 
     private static Logger log = LoggerFactory.getLogger(EPGSEARCH.class);
-    
+
     @Override
     public void doTheWork(Socket client, BufferedWriter writer, String command, String subCommand) throws IOException {
         switch (subCommand.toUpperCase()) {
@@ -25,12 +25,10 @@ public class EPGSEARCH extends CommandBase {
                 log.debug("send error", e);
             }
             break;
-            
+
         default:
             doNothing(writer, command, subCommand);
             break;
         }
     }
 }
-
-

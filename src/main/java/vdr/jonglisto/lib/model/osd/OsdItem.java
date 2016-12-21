@@ -6,13 +6,13 @@ public class OsdItem {
 
     @JsonProperty("content")
     private String content;
-    
+
     @JsonProperty("is_selected")
     private Boolean isSelected;
 
     private String actionName;
     private String subActionName;
-    
+
     public OsdItem() {
     }
 
@@ -46,11 +46,11 @@ public class OsdItem {
     public void setActionName(String actionName) {
         this.actionName = actionName;
     }
-    
+
     public String getSubActionName() {
         return subActionName;
     }
-    
+
     public void setSubActionName(String subActionName) {
         this.subActionName = subActionName;
     }

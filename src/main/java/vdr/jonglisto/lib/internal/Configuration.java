@@ -101,7 +101,7 @@ public class Configuration {
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
 
     private int prodVersion = 1;
-    private String version = "0.0.3";
+    private String version = "0.0.4-snapshot";
 
     private Logger log = LoggerFactory.getLogger(Configuration.class);
 
@@ -122,13 +122,13 @@ public class Configuration {
 
     private Integer svdrpPort;
     private SvdrpServer svdrpServer;
-    
+
     private long remoteOsdSleepTime = 200L;
     private long remoteOsdIncSleepTime = 200L;
-    
+
     private String svdrpScript;
     private String epg2vdrScript;
-    
+
     private Configuration(String pathname) {
         initConfiguration(pathname);
     }
@@ -136,7 +136,7 @@ public class Configuration {
     public static Configuration getInstance() {
         return instance;
     }
-    
+
     public String getVersion() {
         return version;
     }
@@ -186,7 +186,7 @@ public class Configuration {
     public String getChannelImagePath() {
         return channelImagePath;
     }
-    
+
     public long getRemoteOsdSleepTime() {
         return remoteOsdSleepTime;
     }
@@ -194,7 +194,7 @@ public class Configuration {
     public long getRemoteOsdIncSleepTime() {
         return remoteOsdIncSleepTime;
     }
-    
+
     public String getSvdrpScript() {
         return svdrpScript;
     }
@@ -322,7 +322,7 @@ public class Configuration {
         if (dbServer != null) {
             dbServer.stop();
             dbServer.shutdown();
-        }        
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -338,29 +338,32 @@ public class Configuration {
             useSyncMap = Boolean.valueOf((String) config.get("useRecordingSyncMap"));
 
             // INFO:
-            // Es gibt immer noch seltsame Probleme, nachdem umfangreiche Änderungen 
+            // Es gibt immer noch seltsame Probleme, nachdem umfangreiche
+            // Änderungen
             // an den Aufnahmen vorgenommen wurden.
-            // Die interne Datenbank wurde nicht korrekt aktualisiert. Bis zur genaueren
-            // Analyse und einem Fix, ist es auf jeden Fall besser, erstmal auf die
+            // Die interne Datenbank wurde nicht korrekt aktualisiert. Bis zur
+            // genaueren
+            // Analyse und einem Fix, ist es auf jeden Fall besser, erstmal auf
+            // die
             // RecordingSyncMap zu verzichten. Nur zur Sicherheit.
             useSyncMap = false;
-            
+
             developerMode = Boolean.valueOf((String) config.get("developer_mode"));
 
             svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
-            
-            Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");            
-            svdrpScript = (String)scripts.get("svdrp");
-            epg2vdrScript = (String)scripts.get("epg2vdr");
-            
+
+            Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");
+            svdrpScript = (String) scripts.get("svdrp");
+            epg2vdrScript = (String) scripts.get("epg2vdr");
+
             if (config.get("remoteOsdSleepTime") != null) {
-                remoteOsdSleepTime = Long.parseLong((String)config.get("remoteOsdSleepTime"));
+                remoteOsdSleepTime = Long.parseLong((String) config.get("remoteOsdSleepTime"));
             }
-            
+
             if (config.get("remoteOsdIncSleepTime") != null) {
-                remoteOsdIncSleepTime = Long.parseLong((String)config.get("remoteOsdIncSleepTime"));
+                remoteOsdIncSleepTime = Long.parseLong((String) config.get("remoteOsdIncSleepTime"));
             }
-            
+
             Map<String, Object> dbConfig;
             // create DataSource for epg2vdr
             dbConfig = (Map<String, Object>) config.get("epg2vdr");
@@ -401,7 +404,7 @@ public class Configuration {
             try (Connection con = sql2oEpg2vdr.open()) {
                 configuredVdr = con.createQuery("select uuid, name displayName, ip, svdrp svdrpPort, mac from vdrs") //
                         .executeAndFetch(VDR.class) //
-                        .stream() //                        
+                        .stream() //
                         .map(s -> addinfo(s, vdrConfig, aliases)) //
                         .filter(s -> s.getRestfulApiPort() > 0) //
                         .collect(Collectors.toMap(VDR::getUuid, c -> c));
@@ -463,9 +466,9 @@ public class Configuration {
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });
-            
+
             // start SVDRP server
-            startSvdrpServer();            
+            startSvdrpServer();
         } catch (IOException e) {
             System.err.println("Error while reading " + pathname + ": " + e.getMessage());
             System.exit(1);
@@ -484,9 +487,10 @@ public class Configuration {
             vdr.setMac(StringUtils.defaultIfBlank((String) c.get("mac"), vdr.getMac()));
             vdr.setSvdrpPort(vdr.getSvdrpPort() == 0 ? (Integer) c.get("svdrpPort") : vdr.getSvdrpPort());
             vdr.setRestfulApiPort(c.get("restfulApiPort") != null ? (Integer) c.get("restfulApiPort") : 8002);
-            
+
             // find the alias name
-            vdr.setAlias(aliases.entrySet().stream().filter(s -> s.getValue().equals(vdr.getUuid())).findFirst().get().getKey());            
+            vdr.setAlias(aliases.entrySet().stream().filter(s -> s.getValue().equals(vdr.getUuid())).findFirst().get()
+                    .getKey());
 
             @SuppressWarnings("unchecked")
             Map<String, Object> vc = (Map<String, Object>) c.get("config");
@@ -529,7 +533,7 @@ public class Configuration {
 
         // always call createDatabase
         createDatabase(prodVersion);
-        
+
         if (currentVersion < prodVersion) {
             upgradeDatabase(currentVersion, prodVersion);
         }
@@ -632,17 +636,17 @@ public class Configuration {
         dbServer.setSilent(true);
         dbServer.start();
     }
-    
+
     private void startSvdrpServer() {
         if ((svdrpPort == null) || (svdrpPort == 0)) {
             log.error("SVDRP Port is not configured. Server will not be started.");
             return;
         }
-        
+
         svdrpServer = new SvdrpServer(svdrpPort, 10);
         Thread thread = new Thread(svdrpServer);
         thread.start();
-        
+
         log.info("SVDRP Server started at port " + svdrpPort);
     }
 }

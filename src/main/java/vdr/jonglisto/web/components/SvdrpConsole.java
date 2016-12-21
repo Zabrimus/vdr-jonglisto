@@ -83,7 +83,7 @@ public class SvdrpConsole extends BaseComponent {
         System.err.println("SvdrpCommand: " + svdrpCommand + ", VDR = " + selectedVdr);
 
         List<String> result = executeCommand();
-        
+
         if (request.isXHR()) {
             ajaxResponseRenderer.addCallback(appendToLog(result));
         }
@@ -91,8 +91,10 @@ public class SvdrpConsole extends BaseComponent {
 
     public JavaScriptCallback appendToLog(List<String> text) {
         return new JavaScriptCallback() {
+
             public void run(JavaScriptSupport javascriptSupport) {
-                javaScriptSupport.require("appendconsole").with(escape(svdrpCommand), "svdrpconsole", "svdrpinput", JSONArray.from(text));
+                javaScriptSupport.require("appendconsole").with(escape(svdrpCommand), "svdrpconsole", "svdrpinput",
+                        JSONArray.from(text));
             }
         };
     }
@@ -100,16 +102,16 @@ public class SvdrpConsole extends BaseComponent {
     public List<String> executeCommand() {
         Connection con = null;
         List<String> result = new ArrayList<>();
-        
+
         try {
             con = new Connection(selectedVdr.getIp(), selectedVdr.getSvdrpPort(), 1500);
             Response resp = con.send(new GenericCommand(svdrpCommand));
-            Arrays.stream(resp.getMessage().split("\n")).forEach(s -> result.add(escape(s)));            
+            Arrays.stream(resp.getMessage().split("\n")).forEach(s -> result.add(escape(s)));
             return result;
         } catch (ConnectException ce) {
             result.add("Unable to connect to " + selectedVdr.getIp() + ":" + selectedVdr.getSvdrpPort());
         } catch (IOException e) {
-            result.add("Unknown error: " + e.getMessage());            
+            result.add("Unknown error: " + e.getMessage());
         } finally {
             if (con != null) {
                 try {
@@ -119,10 +121,10 @@ public class SvdrpConsole extends BaseComponent {
                 }
             }
         }
-        
+
         return result;
     }
-    
+
     private String escape(String s) {
         return StringEscapeUtils.escapeHtml4(s).replaceAll(" ", "&nbsp;").replaceAll("\\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
     }

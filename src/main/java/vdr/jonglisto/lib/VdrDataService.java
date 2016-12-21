@@ -82,12 +82,12 @@ public interface VdrDataService {
     public void moveRecordings(String vdrUuid, List<String> recordingsToChange, String destination);
 
     public void moveRecording(String vdrUuid, String sourceFilename, String destination);
-    
+
     /*
      * OSD and keyboard
      */
     public TextOsd getOsd(String vdrUuid);
-    
+
     public void processKey(String vdrUuid, String key);
 
     public void processString(String vdrUuid, String string);

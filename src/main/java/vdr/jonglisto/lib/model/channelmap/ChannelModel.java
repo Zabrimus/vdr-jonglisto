@@ -49,20 +49,20 @@ public class ChannelModel {
     }
 
     /*
-    public String getNormalizedName() {    	
-        return normalizedName;
+     * public String getNormalizedName() {
+     * return normalizedName;
+     * }
+     */
+
+    public String getNormalizedName(Map<String, String> channelNameMapping) {
+        String norm = channelNameMapping.get(name);
+        if (norm != null) {
+            return norm;
+        } else {
+            return normalizedName;
+        }
     }
-    */
-    
-	public String getNormalizedName(Map<String, String> channelNameMapping) {
-		String norm = channelNameMapping.get(name);
-		if (norm != null) {
-			return norm;
-		} else {
-			return normalizedName;
-		}
-	}
-    
+
     @Override
     public String toString() {
         return "ChannelModel [number=" + number + ", channelId=" + channelId + ", name=" + name + ", normalizedName="

@@ -96,7 +96,7 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
         if (!includeRadio && ch.isPresent()) {
             return Optional.of(ch.get().stream().filter(s -> !s.getRadio()).collect(Collectors.toList()));
         }
-        
+
         return ch;
     }
 
@@ -106,13 +106,14 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
     public Optional<List<Channel>> getChannelsInGroup(String vdrUuid, String group, boolean includeRadio) {
         if (group != null) {
-            Optional<List<Channel>> ch = getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group), "channels", "name", Channel.class);
-            
+            Optional<List<Channel>> ch = getJsonList(vdrUuid, "channels.json?group=" + JonglistoUtil.encode(group),
+                    "channels", "name", Channel.class);
+
             if (!includeRadio && ch.isPresent()) {
                 return Optional.of(ch.get().stream().filter(s -> !s.getRadio()).collect(Collectors.toList()));
             }
-            
-            return ch; 
+
+            return ch;
         } else {
             return getChannels(vdrUuid, includeRadio);
         }
@@ -487,12 +488,12 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     }
 
     public void processString(String vdrUuid, String string) {
-        String kbd = StringUtils.capitalize(string.toLowerCase());        
+        String kbd = StringUtils.capitalize(string.toLowerCase());
         post(vdrUuid, "remote/kbd", "{'kbd':'" + kbd.replaceAll("'", "\"") + "'}");
     }
 
     // TODO: OSD keyboard sequence
-    
+
     /*
      * private helper functions
      */

@@ -20,7 +20,7 @@ public class SVDRPOSD extends CommandBase {
         OsdProvider osd = OsdProviderCache.getOsdProvider(client);
 
         Matcher matcher = cmdPattern.matcher(subCommand);
-        
+
         String cmd;
         if (matcher.matches()) {
             cmd = matcher.group(1);
@@ -28,7 +28,7 @@ public class SVDRPOSD extends CommandBase {
             send(writer, 554, "command error");
             return;
         }
-        
+
         switch (cmd.toUpperCase()) {
         case "LSTO":
             send(writer, 920, createOsd(osd));
@@ -125,10 +125,10 @@ public class SVDRPOSD extends CommandBase {
 
     private void addItems(List<String> osdList, List<OsdItem> items) {
         addColumnLayout(osdList, items);
-        
+
         // check, if this is a text block or a selectable list
         if ((items.size() == 1) && (items.get(0).getContent().contains("\n"))) {
-            osdList.add("X:" + items.get(0).getContent().replaceAll("\n", "|"));            
+            osdList.add("X:" + items.get(0).getContent().replaceAll("\n", "|"));
         } else {
             items.stream().forEach(s -> osdList
                     .add(new StringBuilder().append(s.isSelected() ? "S:" : "I:").append(s.getContent()).toString()));
@@ -154,7 +154,7 @@ public class SVDRPOSD extends CommandBase {
                 }
             });
         });
-        
+
         Arrays.stream(tabs).filter(s -> s != 0).forEach(t -> osdList.add("C:" + t));
     }
 }

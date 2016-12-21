@@ -9,7 +9,7 @@ import javax.script.ScriptException;
 import vdr.jonglisto.lib.Epg2VdrNashornService;
 
 public class Epg2VdrNashornServiceImpl extends NashornServiceImpl implements Epg2VdrNashornService {
-   
+
     public Epg2VdrNashornServiceImpl() {
         try {
             initScript(configuration.getEpg2VdrScript());
@@ -17,7 +17,7 @@ public class Epg2VdrNashornServiceImpl extends NashornServiceImpl implements Epg
             throw new RuntimeException("unable to init SvdrpNashornService", e);
         }
     }
-    
+
     @Override
     public List<Map<String, Object>> callGetOsdList() throws NoSuchMethodException, ScriptException {
         return callNashornFunctionArray("getOsd", null);

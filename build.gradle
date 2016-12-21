@@ -11,7 +11,7 @@ targetCompatibility = "1.8"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 group = "vdr.jonglisto"
-version = "0.0.3"
+version = "0.0.4-snapshot"
 
 buildscript {
   repositories {
@@ -81,10 +81,13 @@ dependencies {
     
     compile    'org.tynamo:tapestry-conversations:0.2.0'
 
-	compile  'de.eddyson:tapestry-webjars:1.0.0'
+	compile  'de.eddyson:tapestry-webjars:1.0.0'	
 	compile  'de.eddyson:tapestry-extensions:0.0.22'
 	compile  'org.webjars:jquery:3.1.1'
-	compile  'org.webjars:jquery-ui:1.12.1'
+	
+	// compile  'org.webjars:jquery-ui:1.12.1'
+	compile files('external-jar/jquery-ui-1.12.1.jar')
+	
 	compile  'org.webjars.bower:multiselect-two-sides:2.2.9'
 
 	compile  'org.apache.httpcomponents:httpclient:4.5.2'

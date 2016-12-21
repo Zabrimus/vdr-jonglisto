@@ -1,0 +1,66 @@
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter"
+    xmlns:etc="tapestry-library:EddysonTapestryExtensions">
+
+    <t:content>
+        Kanal-Konfiguration/-Sortierung
+        <br />
+
+        <t:zone t:id="channelConfigZone" id="channelConfigZone">
+            <t:eventlink t:event="createChannelsConf" class="btn btn-default" zone="^">${message:create_channels_conf}</t:eventlink>&nbsp;
+            <t:eventlink t:event="createChannelGroup" class="btn btn-default" zone="^">${message:create_channel_group}</t:eventlink>&nbsp;
+            <t:eventlink t:event="deleteObsolete" class="btn btn-default" zone="^">${message:deleteObsolete}</t:eventlink>&nbsp;
+            <t:eventlink t:event="fixObsolete" class="btn btn-default" zone="^">${message:fixObsolete}</t:eventlink>&nbsp;
+
+            <div class="form-group">
+                <t:form class="form-horizontal" t:id="filterform" t:zone="^">
+                    <div class="col-sm-32">                    
+                        <div class="col-sm-6">
+                            <t:label for="filterradio" />
+                            <t:select t:id="filterradio" label="message:filterradio" validate="required" zone="^"/>
+                        </div>
+                        
+                        <div class="col-sm-8">
+                            <t:label for="filterencrypted" />
+                            <t:select t:id="filterencrypted" label="message:filterencrypted" validate="required" zone="^"/>
+                        </div>                        
+                    </div>
+                </t:form>
+            </div>
+
+            <div class="portlet-column">
+                <div class="portlet">
+                    <div class="portlet-header">Kanalgruppen</div>
+                    <div class="portlet-content">
+                        <ul class="sortable">
+                            <t:loop source="channelGroups" value="group">
+                                <li class="ui-state-default">
+                                    ${group} 
+                                    <t:eventlink t:event="renameGroup" class="caright" zone="^">R</t:eventlink>
+                                    <t:eventlink t:event="deleteGroup" class="caright" zone="^">D</t:eventlink>                                    
+                                 </li>
+                            </t:loop>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <t:loop source="channelGroups" value="group">
+                <div class="portlet-column">
+                    <div class="portlet">
+                        <div class="portlet-header">
+                            ${group} 
+                            <t:eventlink t:event="sortGroup" class="caright" zone="^">S</t:eventlink>
+                        </div>
+                        <div class="portlet-content">
+                            <ul class="sortable connectedSortable">
+                                <t:loop source="channels" value="channel">
+                                    <li class="ui-state-default">${channel.name}</li>
+                                </t:loop>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </t:loop>
+        </t:zone>
+    </t:content>
+</html>

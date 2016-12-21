@@ -10,7 +10,7 @@ public class VDR {
     private int restfulApiPort;
 
     private String alias;
-    
+
     private String timerAux = "";
     private int timerMinusMin = 5;
     private int timerPlusMin = 5;
@@ -117,7 +117,7 @@ public class VDR {
     public String getAlias() {
         return alias;
     }
-    
+
     public void setAlias(String alias) {
         this.alias = alias;
     }

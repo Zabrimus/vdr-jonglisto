@@ -50,7 +50,7 @@
                     <t:eventlink t:event="resetMapping" class="btn btn-default" zone="^">${message:reset_mapping}</t:eventlink>&nbsp;
                     <t:eventlink t:event="saveMapping" class="btn btn-default" zone="^">${message:save_mapping}</t:eventlink>&nbsp;&nbsp;&nbsp;
                     <t:eventlink t:event="download" class="btn btn-default">${message:download_mapping}</t:eventlink>&nbsp;
-                    
+
                     <t:if test="showTvmIds">
                         <t:eventlink t:event="hideTvmIds" class="btn btn-default" zone="^">${message:hide_tvmids}</t:eventlink>&nbsp;
                     </t:if>
@@ -66,7 +66,7 @@
                     <t:if test="showTvspIds" negate="true">
                         <t:eventlink t:event="showTvspIds" class="btn btn-default" zone="^">${message:show_tvspids}</t:eventlink>&nbsp;
                     </t:if>
-                    
+
                     <t:if test="showEpgdataIds">
                         <t:eventlink t:event="hideEpgdataIds" class="btn btn-default" zone="^">${message:hide_epgdataids}</t:eventlink>&nbsp;
                     </t:if>
@@ -78,10 +78,10 @@
                     <t:if test="showEpgdataIds" negate="true">
                         <t:eventlink t:event="deleteNameMapping" class="btn btn-default" zone="^">${message:delete_name_mapping}</t:eventlink>&nbsp;
                     </t:if>
-                    
+
                     <p></p>
                 </div>
-                
+
                 <div class="col-sm-32">
                     <table class="table table-sm table-striped table-bordered">
                         <tr>
@@ -116,9 +116,9 @@
                                         <div class="dropme1" data-id-drop1="delete">
                                             <t:loop source="getAllEpgIds(1)" value="idModel" index="idDataIndex">
                                                 <span class="dragme1 btn btn-default" data-id-drag1="${idModel.normalizedName}" data-id-name1="${idModel.normalizedName}">${idModel.name}</span>
-                                                
+
                                                 <t:if test="doInsertLineBreak()">
-                                                    <br/>
+                                                    <br />
                                                 </t:if>
                                             </t:loop>
                                         </div>
@@ -136,12 +136,12 @@
                                 <t:if test="insertId2Column">
                                     <td rowspan="${countRows}">
                                         <div class="dropme2" data-id-drop2="delete">
-                                            <t:loop source="getAllEpgIds(2)" value="idModel" index="idDataIndex">                                            
+                                            <t:loop source="getAllEpgIds(2)" value="idModel" index="idDataIndex">
                                                 <span class="dragme2 btn btn-default" data-id-drag2="${idModel.normalizedName}" data-id-name2="${idModel.normalizedName}">${idModel.name}</span>
-                                                
+
                                                 <t:if test="doInsertLineBreak()">
-                                                    <br/>
-                                                </t:if>                                                
+                                                    <br />
+                                                </t:if>
                                             </t:loop>
                                         </div>
                                     </td>
@@ -154,20 +154,20 @@
                                         </t:loop>
                                     </div>
                                 </td>
-                                
+
                                 <t:if test="insertId3Column">
                                     <td rowspan="${countRows}">
                                         <div class="dropme3" data-id-drop3="delete">
                                             <t:loop source="getAllEpgIds(3)" value="idModel" index="idDataIndex">
                                                 <span class="dragme3 btn btn-default" data-id-drag3="${idModel.normalizedName}" data-id-name3="${idModel.normalizedName}">${idModel.name}</span>
-                                                
+
                                                 <t:if test="doInsertLineBreak()">
-                                                    <br/>
-                                                </t:if>                                                
+                                                    <br />
+                                                </t:if>
                                             </t:loop>
                                         </div>
                                     </td>
-                                </t:if>                                
+                                </t:if>
                             </tr>
                         </t:loop>
                     </table>

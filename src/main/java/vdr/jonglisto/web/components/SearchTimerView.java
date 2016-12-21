@@ -36,7 +36,7 @@ public class SearchTimerView extends BaseComponent {
 
     @Inject
     private Request request;
-    
+
     @Inject
     SelectModelFactory selectModelFactory;
 
@@ -114,18 +114,18 @@ public class SearchTimerView extends BaseComponent {
     @Persist
     @Property
     private VDR selectedVdr;
-    
+
     @Persist
     @Property
     List<Map<String, Object>> searchResult;
-    
+
     void setupRender() {
         String reset = request.getParameter("reset");
-        
+
         if ((function == null) || ((reset != null) && "true".equals(reset))) {
-            function = Function.LIST;    
+            function = Function.LIST;
         }
-        
+
         searchTimers = searchTimerService.getSearchTimers();
 
         categoryModel = selectModelFactory.create(globalValues.getCategories());
@@ -159,7 +159,7 @@ public class SearchTimerView extends BaseComponent {
         function = Function.EPG;
 
         searchResult = searchTimerService.performSearch(searchTimerService.getSearchTimer(id));
-        
+
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(searchTimerListZone);
         }
@@ -167,15 +167,15 @@ public class SearchTimerView extends BaseComponent {
 
     public void onBack() {
         function = Function.LIST;
-        
+
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(searchTimerListZone);
         }
     }
-    
-    public void onEditSearchTimer(Long id) {        
+
+    public void onEditSearchTimer(Long id) {
         function = Function.EDIT;
-        
+
         searchTimer = searchTimerService.getSearchTimer(id);
         searchTimerId = id;
 
@@ -285,7 +285,7 @@ public class SearchTimerView extends BaseComponent {
             ajaxResponseRenderer.addRender(searchTimerListZone);
         }
     }
-    
+
     public String getTimerAction() {
         switch (searchTimer.getType()) {
         case "R":
@@ -324,7 +324,7 @@ public class SearchTimerView extends BaseComponent {
 
         case EPG:
             return epgBlock;
-            
+
         default:
             return viewBlock;
         }

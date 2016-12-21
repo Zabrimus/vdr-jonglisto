@@ -1,3 +1,6 @@
+0.0.4-snapshot:
+
+
 0.0.3:
 - implemented svdrp server
 - implemented svdrposd/remoteosd protocol (jonglisto has now an own OSD)

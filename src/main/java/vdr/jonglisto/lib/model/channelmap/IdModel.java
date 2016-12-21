@@ -50,14 +50,14 @@ public class IdModel {
         return normalizedName;
     }
 
-	public String getNormalizedName(Map<String, String> channelNameMapping) {
-		String norm = channelNameMapping.get(name);
-		if (norm != null) {
-			return norm;
-		} else {
-			return normalizedName;
-		}
-	}
+    public String getNormalizedName(Map<String, String> channelNameMapping) {
+        String norm = channelNameMapping.get(name);
+        if (norm != null) {
+            return norm;
+        } else {
+            return normalizedName;
+        }
+    }
 
     public int getProviderId() {
         return providerId;
