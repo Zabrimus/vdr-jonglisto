@@ -1,30 +1,12 @@
-//
-Labels
+// Labels
 
-.label-variant (@color) {
-    background-color: @color;
-    &[
-    href
-    ]
-    {
-    &
-    :
-    hover
-    ,
-    &:
-    focus
-    {
-    
-      
-    background-color
-    :
-     
-    darken(
-    @
-    color
-    ,
-    10%
-    );
-}
-}
+.label-variant(@color) {
+  background-color: @color;
+
+  &[href] {
+    &:hover,
+    &:focus {
+      background-color: darken(@color, 10%);
+    }
+  }
 }
