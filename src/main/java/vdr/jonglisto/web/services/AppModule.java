@@ -82,7 +82,7 @@ public class AppModule {
 	@Contribute(JavaScriptStack.class)
 	@Core
 	public static void overrideJQueryWithNewerVersion(final OrderedConfiguration<StackExtension> configuration) {
-		configuration.override("jquery-library", StackExtension.library("webjars:jquery:$version/jquery.js"));
+		configuration.override("jquery-library", StackExtension.library("webjars:jquery:$version/dist/jquery.js"));
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
