@@ -7,7 +7,7 @@
 
         <t:zone t:id="channelConfigZone" id="channelConfigZone">
             <t:eventlink t:event="saveChannelsConf" class="btn btn-default" zone="^">${message:save_channels_conf}</t:eventlink>&nbsp;
-            <t:eventlink t:event="loadChannelsConf" class="btn btn-default" zone="^">${message:load_channels_conf}</t:eventlink>&nbsp;            
+            <t:eventlink t:event="loadChannelsConf" class="btn btn-default" zone="^">${message:load_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelsConf" class="btn btn-default" zone="^">${message:create_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelGroup" class="btn btn-default" zone="^">${message:create_channel_group}</t:eventlink>&nbsp;
             <t:eventlink t:event="deleteObsolete" class="btn btn-default" zone="^">${message:deleteObsolete}</t:eventlink>&nbsp;
@@ -15,16 +15,16 @@
 
             <div class="form-group">
                 <t:form class="form-horizontal" t:id="filterform" t:zone="^">
-                    <div class="col-sm-32">                    
+                    <div class="col-sm-32">
                         <div class="col-sm-6">
                             <t:label for="filterradio" />
-                            <t:select t:id="filterradio" label="message:filterradio" validate="required" zone="^"/>
+                            <t:select t:id="filterradio" label="message:filterradio" validate="required" zone="^" />
                         </div>
-                        
+
                         <div class="col-sm-8">
                             <t:label for="filterencrypted" />
-                            <t:select t:id="filterencrypted" label="message:filterencrypted" validate="required" zone="^"/>
-                        </div>                        
+                            <t:select t:id="filterencrypted" label="message:filterencrypted" validate="required" zone="^" />
+                        </div>
                     </div>
                 </t:form>
             </div>
@@ -36,10 +36,14 @@
                         <ul class="sortable">
                             <t:loop source="channelGroups" value="group">
                                 <li class="ui-state-default">
-                                    ${group} 
-                                    <t:eventlink t:event="renameGroup" class="caright" zone="^"><img src="${asset:edit.svg}" alt="Umbenennen" class="iconwh" /></t:eventlink>
-                                    <t:eventlink t:event="deleteGroup" class="caright" zone="^"><img src="${asset:delete.svg}" alt="Löschen" class="iconwh" /></t:eventlink>                                    
-                                 </li>
+                                    ${group}
+                                    <t:eventlink t:event="renameGroup" class="caright" context="group" zone="^">
+                                        <img src="${asset:edit.svg}" alt="Umbenennen" class="iconwh" />
+                                    </t:eventlink>
+                                    <t:eventlink t:event="deleteGroup" class="caright" context="group" zone="^">
+                                        <img src="${asset:delete.svg}" alt="Löschen" class="iconwh" />
+                                    </t:eventlink>
+                                </li>
                             </t:loop>
                         </ul>
                     </div>
@@ -50,13 +54,12 @@
                 <div class="portlet-column">
                     <div class="portlet">
                         <div class="portlet-header">
-                            ${group} 
-                            <t:eventlink t:event="sortGroup" class="caright" zone="^"><img src="${asset:sort.svg}" alt="Sortieren" class="iconwh" /></t:eventlink>
+                            ${group}
+                            <t:eventlink t:event="sortGroup" class="caright" context="group" zone="^">
+                                <img src="${asset:sort.svg}" alt="Sortieren" class="iconwh" />
+                            </t:eventlink>
                         </div>
                         <div class="portlet-content">
-                            <!-- 
-                            <ul class="sortable connectedSortable" data-group-name="${group}">
-                            -->
                             <ul class="connectedSortable" data-group-name="${group}">
                                 <t:loop source="channels" value="channel">
                                     <li class="ui-state-default" data-channel-drag="${channel.id}" data-group-drag="${group}">${channel.name}</li>
@@ -66,6 +69,81 @@
                     </div>
                 </div>
             </t:loop>
+        </t:zone>
+
+        <t:zone t:id="groupRenameZone" id="groupRenameZone">
+            <div class="modal fade" tabindex="-1" role="dialog" id="groupRename" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                            </button>
+                            <t:form class="form-horizontal" t:id="renameGroupForm" t:zone="^">
+                                <div>
+                                    <h3>${message:rename_group_title} </h3>
+
+                                    <t:errors />
+
+                                    <div class="form-group">
+                                        <t:label for="oldgroupname" class="col-sm-9" />
+                                        <div class="col-sm-12">
+                                            <t:TextField t:id="oldgroupname" value="group" label="message:old_group_name" size="20" disabled="true" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <t:label for="renamegroupname" class="col-sm-9" />
+                                        <div class="col-sm-12">
+                                            <t:TextField t:id="renamegroupname" value="newGroupName" validate="required" label="message:new_group_name" size="20" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-sm-27 col-sm-offset-9">
+                                            <t:submit value="${message:rename_group_title}" zone="^" />&nbsp;
+                                            <t:eventlink event="cancel" class="btn btn-default" zone="^">${message:cancel}</t:eventlink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t:zone>
+        
+        <t:zone t:id="newGroupZone" id="newGroupZone">
+            <div class="modal fade" tabindex="-1" role="dialog" id="newGroup" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                            </button>
+                            <t:form class="form-horizontal" t:id="newGroupForm" t:zone="^">
+                                <div>
+                                    <h3>${message:new_group_title} </h3>
+                                    
+                                    <t:errors />
+                                    
+                                    <div class="form-group">
+                                        <t:label for="newgroupname" class="col-sm-9" />
+                                        <div class="col-sm-12">
+                                            <t:TextField t:id="newgroupname" value="newGroupName" validate="required" label="message:new_group_name" size="20" />
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-sm-27 col-sm-offset-9">
+                                            <t:submit value="${message:new_group_title}" zone="^" />&nbsp;
+                                            <t:eventlink event="cancel" class="btn btn-default" zone="^">${message:cancel}</t:eventlink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </t:zone>
     </t:content>
 </html>
