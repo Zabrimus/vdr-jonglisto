@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.tapestry5.Link;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -73,16 +74,36 @@ public class ChannelConfig extends BaseComponent {
         }
         
         filterRadio = FilterRadioTv.RADIOTV;
-        filterEncrypted = filterEncrypted.ALL;
+        filterEncrypted = FilterEncrypted.ALL;
     }
 
     public void afterRender() {
-        javaScriptSupport.require("portlet");
-        javaScriptSupport.require("sortablelist").with("sortable");
+        Link link = componentResources.createEventLink("draggedChannel");
+        String baseURI = link.toAbsoluteURI();
+        javaScriptSupport.require("portlet").with(baseURI);
     }
 
     public List<Channel> getChannels() {
         return channelsInGroup.get(group);
+    }
+
+    public void onDraggedChannel() {
+        String id = request.getParameter("id");
+        String to = request.getParameter("to");
+        String from = request.getParameter("from");
+        String fromidx = request.getParameter("fromidx");
+        String toidx = request.getParameter("toidx");
+        String group = request.getParameter("group");
+        
+        System.err.println("id: " + id + ", to: " + to + ", from: " + from + ", fromidx: " + fromidx + ", toidx: " + toidx + ", group: " + group);
+    }
+
+    public void onSaveChannelsConf() {
+        log.info("Currently not implemented: ChannelConfig.onSaveChannelsConf");
+    }
+    
+    public void onLoadChannelsConf() {
+        log.info("Currently not implemented: ChannelConfig.onLoadChannelsConf");
     }
 
     public void onCreateChannelsConf() {

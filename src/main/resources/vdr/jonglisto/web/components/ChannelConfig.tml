@@ -6,6 +6,8 @@
         <br />
 
         <t:zone t:id="channelConfigZone" id="channelConfigZone">
+            <t:eventlink t:event="saveChannelsConf" class="btn btn-default" zone="^">${message:save_channels_conf}</t:eventlink>&nbsp;
+            <t:eventlink t:event="loadChannelsConf" class="btn btn-default" zone="^">${message:load_channels_conf}</t:eventlink>&nbsp;            
             <t:eventlink t:event="createChannelsConf" class="btn btn-default" zone="^">${message:create_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelGroup" class="btn btn-default" zone="^">${message:create_channel_group}</t:eventlink>&nbsp;
             <t:eventlink t:event="deleteObsolete" class="btn btn-default" zone="^">${message:deleteObsolete}</t:eventlink>&nbsp;
@@ -35,8 +37,8 @@
                             <t:loop source="channelGroups" value="group">
                                 <li class="ui-state-default">
                                     ${group} 
-                                    <t:eventlink t:event="renameGroup" class="caright" zone="^">R</t:eventlink>
-                                    <t:eventlink t:event="deleteGroup" class="caright" zone="^">D</t:eventlink>                                    
+                                    <t:eventlink t:event="renameGroup" class="caright" zone="^"><img src="${asset:edit.svg}" alt="Umbenennen" class="iconwh" /></t:eventlink>
+                                    <t:eventlink t:event="deleteGroup" class="caright" zone="^"><img src="${asset:delete.svg}" alt="Löschen" class="iconwh" /></t:eventlink>                                    
                                  </li>
                             </t:loop>
                         </ul>
@@ -49,12 +51,15 @@
                     <div class="portlet">
                         <div class="portlet-header">
                             ${group} 
-                            <t:eventlink t:event="sortGroup" class="caright" zone="^">S</t:eventlink>
+                            <t:eventlink t:event="sortGroup" class="caright" zone="^"><img src="${asset:sort.svg}" alt="Sortieren" class="iconwh" /></t:eventlink>
                         </div>
                         <div class="portlet-content">
-                            <ul class="sortable connectedSortable">
+                            <!-- 
+                            <ul class="sortable connectedSortable" data-group-name="${group}">
+                            -->
+                            <ul class="connectedSortable" data-group-name="${group}">
                                 <t:loop source="channels" value="channel">
-                                    <li class="ui-state-default">${channel.name}</li>
+                                    <li class="ui-state-default" data-channel-drag="${channel.id}" data-group-drag="${group}">${channel.name}</li>
                                 </t:loop>
                             </ul>
                         </div>
