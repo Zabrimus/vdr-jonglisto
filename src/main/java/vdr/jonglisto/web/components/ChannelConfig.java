@@ -1,13 +1,16 @@
 package vdr.jonglisto.web.components;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
@@ -15,12 +18,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
 
-import vdr.jonglisto.lib.model.Channel;
+import vdr.jonglisto.lib.model.ExtendedChannel;
 import vdr.jonglisto.lib.util.FilterEncrypted;
 import vdr.jonglisto.lib.util.FilterRadioTv;
 
@@ -59,7 +63,7 @@ public class ChannelConfig extends BaseComponent {
 
     @Persist
     @Property
-    private Channel channel;
+    private ExtendedChannel channel;
 
     @Persist
     @Property
@@ -70,8 +74,11 @@ public class ChannelConfig extends BaseComponent {
     private FilterEncrypted filterEncrypted;
 
     @Property
+    private List<ExtendedChannel> filteredChannels;
+    
+    @Property
     @Persist
-    private Map<String, List<Channel>> channelsInGroup;
+    private Map<String, List<ExtendedChannel>> channelsInGroup;
 
     @Property
     @Persist
@@ -79,23 +86,21 @@ public class ChannelConfig extends BaseComponent {
 
     @Property
     private String newGroupName;
-    
+
     void setupRender() {
-        channelsInGroup = new HashMap<>();
         channelGroups = new ArrayList<>();
-        parkingGroup = "-- " + messages.get("parking_group") + " --";
 
         Optional<List<String>> gr = vdrDataService.getGroups(currentVdrView.getChannelVdr().get());
         if (gr.isPresent()) {
             channelGroups.addAll(gr.get());
-            gr.get().stream().forEach(g -> channelsInGroup.put(g,
-                    vdrDataService.getChannelsInGroup(currentVdrView.getChannelVdr().get(), g, true).get()));
         } else {
             // create a default group
             channelGroups.add("-- Default --");
-            channelsInGroup.put("-- Default --",
-                    vdrDataService.getChannels(currentVdrView.getChannelVdr().get(), true).get());
         }
+
+        parkingGroup = "-- " + messages.get("parking_group") + " --";
+        
+        channelsInGroup = vdrDataService.getExtendedChannelsInGroup(currentVdrView.getChannelVdr().get());
 
         channelGroups.add(parkingGroup);
         channelsInGroup.put(parkingGroup, new ArrayList<>());
@@ -110,8 +115,12 @@ public class ChannelConfig extends BaseComponent {
         javaScriptSupport.require("portlet").with(baseURI);
     }
 
-    public List<Channel> getChannels() {
-        return channelsInGroup.get(group);
+    public int getGroupCount() {
+        return filteredChannels.size();
+    }
+    
+    public List<ExtendedChannel> getChannels() {
+        return filteredChannels;
     }
 
     public void onDraggedChannel() {
@@ -122,8 +131,18 @@ public class ChannelConfig extends BaseComponent {
         String toidx = request.getParameter("toidx");
         String group = request.getParameter("group");
 
-        System.err.println("id: " + id + ", to: " + to + ", from: " + from + ", fromidx: " + fromidx + ", toidx: "
-                + toidx + ", group: " + group);
+        System.err.println("id: " + id + ", to: " + to + ", from: " + from + ", fromidx: " + fromidx + ", toidx: " + toidx + ", group: " + group);
+        
+        if (Boolean.parseBoolean(group)) {
+            // exchange groups
+            String g = channelGroups.get(Integer.parseInt(to));
+            channelGroups.set(Integer.parseInt(to), channelGroups.get(Integer.parseInt(from)));
+            channelGroups.set(Integer.parseInt(from), g);
+        } else {
+            // 'from' group 'to' group, Zielindex toidx, Vonidx: fromidx
+            ExtendedChannel c = channelsInGroup.get(from).remove(Integer.parseInt(fromidx));
+            channelsInGroup.get(to).add(Integer.parseInt(toidx), c);
+        }
     }
 
     public void onSaveChannelsConf() {
@@ -134,8 +153,41 @@ public class ChannelConfig extends BaseComponent {
         log.info("Currently not implemented: ChannelConfig.onLoadChannelsConf");
     }
 
-    public void onCreateChannelsConf() {
-        log.info("Currently not implemented: ChannelConfig.onCreateChannelsConf");
+    public StreamResponse onCreateChannelsConf() {
+        return new StreamResponse() {
+
+            InputStream inputStream;
+
+            @Override
+            public void prepareResponse(Response response) {
+                try {
+                    response.setHeader("Content-Disposition", "attachment; filename=channelmap.conf");
+
+                    // generate channels.conf
+                    StringBuilder builder = new StringBuilder();
+                    channelGroups.stream().forEach(g -> {
+                        builder.append(":").append(g).append("\n");
+                        channelsInGroup.get(g).stream().forEach(c -> builder.append(c.getChannelLine()).append("\n"));
+                    });
+                    
+                    inputStream = new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
+
+                    response.setHeader("Content-Length", "" + inputStream.available());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public String getContentType() {
+                return "text/plain";
+            }
+
+            @Override
+            public InputStream getStream() throws IOException {
+                return inputStream;
+            }
+        };
     }
 
     public void onDeleteObsolete() {
@@ -149,6 +201,7 @@ public class ChannelConfig extends BaseComponent {
     public void onCreateChannelGroup() {
         if (request.isXHR()) {
             ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+
                 public void run(JavaScriptSupport javascriptSupport) {
                     javaScriptSupport.require("dialogmodal").invoke("activate").with("newGroup");
                 }
@@ -158,11 +211,11 @@ public class ChannelConfig extends BaseComponent {
     }
 
     public void onChangeFromFilterRadio() {
-        log.info("Currently not implemented: ChannelConfig.onChangeFromFilterRadio");
+        updateZone();
     }
 
     public void onChangeFromFilterEncrypted() {
-        log.info("Currently not implemented: ChannelConfig.onChangeFromFilterEncrypted");
+        updateZone();
     }
 
     public void onRenameGroup(String selectedGroup) {
@@ -170,10 +223,11 @@ public class ChannelConfig extends BaseComponent {
             // internal group, do nothing
             return;
         }
-        
+
         if (request.isXHR()) {
             group = selectedGroup;
             ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+
                 public void run(JavaScriptSupport javascriptSupport) {
                     javaScriptSupport.require("dialogmodal").invoke("activate").with("groupRename");
                 }
@@ -188,7 +242,7 @@ public class ChannelConfig extends BaseComponent {
             return;
         }
 
-        List<Channel> removed = channelsInGroup.get(selectedGroup);
+        List<ExtendedChannel> removed = channelsInGroup.get(selectedGroup);
         channelsInGroup.remove(selectedGroup);
         channelsInGroup.get("-- " + messages.get("parking_group") + " --").addAll(removed);
 
@@ -210,46 +264,84 @@ public class ChannelConfig extends BaseComponent {
     public void onSuccessFromNewGroupForm() {
         channelGroups.add(newGroupName);
         channelsInGroup.put(newGroupName, new ArrayList<>());
-        
+
         if (request.isXHR()) {
             ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+
                 public void run(JavaScriptSupport javascriptSupport) {
                     javaScriptSupport.require("dialogmodal").invoke("hide").with("newGroup");
                 }
             });
         }
-        
+
         updateZone();
     }
-    
+
     public void onSuccessFromRenameGroupForm() {
         int idx = channelGroups.indexOf(group);
         channelGroups.set(idx, newGroupName);
-        
-        List<Channel> ch = channelsInGroup.get(group);
+
+        List<ExtendedChannel> ch = channelsInGroup.get(group);
         channelsInGroup.remove(group);
         channelsInGroup.put(newGroupName, ch);
-        
+
         if (request.isXHR()) {
             ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+
                 public void run(JavaScriptSupport javascriptSupport) {
                     javaScriptSupport.require("dialogmodal").invoke("hide").with("groupRename");
                 }
             });
         }
-        
+
         updateZone();
-    }       
-    
+    }
+
     public void onCancel() {
         if (request.isXHR()) {
             ajaxResponseRenderer.addCallback(new JavaScriptCallback() {
+
                 public void run(JavaScriptSupport javascriptSupport) {
                     javaScriptSupport.require("dialogmodal").invoke("hide").with("newGroup");
                     javaScriptSupport.require("dialogmodal").invoke("hide").with("groupRename");
                 }
             });
         }
+    }
+
+    public void onFilterChannels() {
+        filteredChannels = channelsInGroup.get(group)//
+                .stream() //
+                .filter(s -> {
+                    // filter Radio/Tv
+                    switch (filterRadio) {
+                    case TV:
+                        return !s.getRadio();
+
+                    case RADIOTV:
+                        return true;
+
+                    case RADIO:
+                        return s.getRadio();
+                    }
+
+                    return true;
+                }) //
+                .filter(s -> {
+                    // filter encrypted/decrypted
+                    switch (filterEncrypted) {
+                    case ALL:
+                        return true;
+
+                    case FREE:
+                        return !s.getEncrypted();
+
+                    case ENCRYPTED:
+                        return s.getEncrypted();
+                    }
+
+                    return false;
+                }).collect(Collectors.toList());
     }
     
     private void updateZone() {

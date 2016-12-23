@@ -8,7 +8,7 @@
         <t:zone t:id="channelConfigZone" id="channelConfigZone">
             <t:eventlink t:event="saveChannelsConf" class="btn btn-default" zone="^">${message:save_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="loadChannelsConf" class="btn btn-default" zone="^">${message:load_channels_conf}</t:eventlink>&nbsp;
-            <t:eventlink t:event="createChannelsConf" class="btn btn-default" zone="^">${message:create_channels_conf}</t:eventlink>&nbsp;
+            <t:eventlink t:event="createChannelsConf" class="btn btn-default">${message:create_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelGroup" class="btn btn-default" zone="^">${message:create_channel_group}</t:eventlink>&nbsp;
             <t:eventlink t:event="deleteObsolete" class="btn btn-default" zone="^">${message:deleteObsolete}</t:eventlink>&nbsp;
             <t:eventlink t:event="fixObsolete" class="btn btn-default" zone="^">${message:fixObsolete}</t:eventlink>&nbsp;
@@ -51,10 +51,13 @@
             </div>
 
             <t:loop source="channelGroups" value="group">
+                <!-- Trigger the the precalculation of filtered channels -->
+                <t:trigger event="filterChannels" />
+            
                 <div class="portlet-column">
                     <div class="portlet">
                         <div class="portlet-header">
-                            ${group}
+                            ${group} (${groupCount})
                             <t:eventlink t:event="sortGroup" class="caright" context="group" zone="^">
                                 <img src="${asset:sort.svg}" alt="Sortieren" class="iconwh" />
                             </t:eventlink>

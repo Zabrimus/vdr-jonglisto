@@ -1,15 +1,20 @@
 package vdr.jonglisto.lib.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hampelratte.svdrp.Response;
+import org.hampelratte.svdrp.commands.LSTC;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,6 +36,7 @@ import vdr.jonglisto.lib.exception.Http404Exception;
 import vdr.jonglisto.lib.exception.NetworkException;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.Device;
+import vdr.jonglisto.lib.model.ExtendedChannel;
 import vdr.jonglisto.lib.model.Plugin;
 import vdr.jonglisto.lib.model.RecPathSummary;
 import vdr.jonglisto.lib.model.Recording;
@@ -83,6 +89,58 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     /*
      * Channels
      */
+    public Optional<List<ExtendedChannel>> getExtendedChannels(String vdrUuid) {
+        VDR vdr = configuration.getVdr(vdrUuid);
+
+        String resultStr = null;
+
+        org.hampelratte.svdrp.Connection svdrpVdr;
+        try {
+            svdrpVdr = new org.hampelratte.svdrp.Connection(vdr.getIp(), vdr.getSvdrpPort(), 5000);
+            Response response = svdrpVdr.send(new LSTC());
+
+            if (response.getCode() == 250) {
+                resultStr = response.getMessage();
+            } else {
+                return Optional.empty();
+            }
+
+            svdrpVdr.close();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+
+        List<ExtendedChannel> result = new ArrayList<>();
+        Arrays.stream(resultStr.split("\n")).forEach(s -> result.add(new ExtendedChannel(s)));
+        return Optional.of(result);
+    }
+
+    public Map<String, List<ExtendedChannel>> getExtendedChannelsInGroup(String vdrUuid) {
+        Map<String, List<ExtendedChannel>> result = new HashMap<>();
+
+        Optional<List<String>> groups = getGroups(vdrUuid);
+        Optional<List<ExtendedChannel>> channels = getExtendedChannels(vdrUuid);
+
+        if (!groups.isPresent() && channels.isPresent()) {
+            result.put("-- Default --", channels.get());
+            return result;
+        } else if (!channels.isPresent()) {
+            return result;
+        }
+
+        Map<String, ExtendedChannel> emap = channels.get().stream()
+                .collect(Collectors.toMap(ExtendedChannel::getId, Function.identity()));
+
+        groups.get().stream().forEach(s -> {
+            result.put(s, getChannelsInGroup(vdrUuid, s, true) //
+                            .get() //
+                            .stream() //
+                            .map(c -> emap.get(c.getId())) //
+                            .collect(Collectors.toList()));
+        });
+
+        return result;
+    }
 
     public Optional<Channel> getChannel(String vdrUuid, String channelId) {
         List<Channel> list = getJsonList(vdrUuid, "channels/" + JonglistoUtil.encode(channelId) + ".json", "channels",

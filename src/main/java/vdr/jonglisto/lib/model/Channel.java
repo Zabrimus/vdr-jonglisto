@@ -18,7 +18,7 @@ public class Channel {
 
     @JsonProperty("is_radio")
     private Boolean radio;
-
+    
     public static Channel emptyChannel = new Channel("", "");
 
     public Channel() {

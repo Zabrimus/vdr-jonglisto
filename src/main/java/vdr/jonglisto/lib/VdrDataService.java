@@ -1,10 +1,12 @@
 package vdr.jonglisto.lib;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.Device;
+import vdr.jonglisto.lib.model.ExtendedChannel;
 import vdr.jonglisto.lib.model.Plugin;
 import vdr.jonglisto.lib.model.RecPathSummary;
 import vdr.jonglisto.lib.model.RecordingInfo;
@@ -24,7 +26,11 @@ public interface VdrDataService {
      * Channels
      */
     public Optional<Channel> getChannel(String vdrUuid, String channelId);
-
+    
+    public Optional<List<ExtendedChannel>> getExtendedChannels(String vdrUuid);
+    
+    public Map<String, List<ExtendedChannel>> getExtendedChannelsInGroup(String vdrUuid);
+    
     public Optional<List<Channel>> getChannels(String vdrUuid, boolean includeRadio);
 
     public Optional<List<String>> getGroups(String vdrUuid);

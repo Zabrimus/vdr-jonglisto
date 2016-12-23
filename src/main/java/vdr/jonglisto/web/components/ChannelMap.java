@@ -3,7 +3,6 @@ package vdr.jonglisto.web.components;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +32,6 @@ import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.channelmap.ChannelModel;
 import vdr.jonglisto.lib.model.channelmap.IdModel;
 import vdr.jonglisto.lib.model.channelmap.Provider;
-import vdr.jonglisto.lib.util.JonglistoUtil;
 
 @Import(library = { "webjars:jquery-ui:$version/jquery-ui.js" })
 public class ChannelMap extends BaseComponent {
@@ -151,8 +149,6 @@ public class ChannelMap extends BaseComponent {
         String from = request.getParameter("from");
         String to = request.getParameter("to");
         String name = request.getParameter("name");
-
-        System.err.println("From: " + from + ", to: " + to + ", name: " + name);
 
         // get element and move it
         if (from.equals(to)) {
