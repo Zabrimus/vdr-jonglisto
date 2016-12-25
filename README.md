@@ -42,6 +42,11 @@ It is possible to send a SVDRP command to all configured VDR instances and see t
 The configuration of channelmap.conf for the epg2vdr daemon can be done via Jonglisto. It supports currently different epg provider (all german). The mapping could be done via drag and drop. The configuration itself is saved into the internal database. If the configuration is done well, the included auto-mapping tool will create a reasonable channelmap.conf.
 Included is a configuration which is reasonable for my cable provider. 
 
+### channel sorting
+It is possible to create channel groups and sort channels via drag and drop. The final channels.conf can then be downloaded.
+The current configuration (based on channel names and groups) can be saved into the internal database. If the internal configuration is then loaded after some while or after a new channel scan, the channel list will be then sorted via the saved configuration. If some channel ids are changed, loading the configuration should resort the channel list.
+ 
+
 ### Build instructions 
 
 There exist multiple possibilities to build and start the application. 
