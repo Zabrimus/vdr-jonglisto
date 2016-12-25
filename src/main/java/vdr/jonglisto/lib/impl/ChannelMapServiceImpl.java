@@ -278,7 +278,10 @@ public class ChannelMapServiceImpl extends ServiceBase implements ChannelMapServ
                     .executeAndFetch(String.class);
 
             includeList.stream().forEach(s -> {
-                result.add(channels.stream().filter(c -> c.getName().equals(s)).findFirst().get());
+                Optional<Channel> ch = channels.stream().filter(c -> c.getName().equals(s)).findFirst();
+                if (ch.isPresent()) {
+                    result.add(ch.get());
+                }
             });
         }
 
