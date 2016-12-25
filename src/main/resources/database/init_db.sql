@@ -66,6 +66,17 @@ create table if not exists
     channel_map (channel_name Varchar(200),
     			 mapping Varchar(2000)
                  );;
+                 
+create table if not exists
+    channel_conf_group (id Integer,
+    			 		groupname Varchar(200)
+                 	   );;
+                 
+create table if not exists
+    channel_conf_channel (id Integer,
+    			 		 name Varchar(200),
+    			 		 group_id Integer
+                 	     );;
             
 -- Sequences --------------------------------------------------------------------------------- 
 					  

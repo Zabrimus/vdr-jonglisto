@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -91,17 +92,18 @@ public class ChannelConfig extends BaseComponent {
         channelGroups = new ArrayList<>();
 
         Optional<List<String>> gr = vdrDataService.getGroups(currentVdrView.getChannelVdr().get());
-        if (gr.isPresent()) {
+        if (gr.isPresent() && gr.get().size() > 0) {
             channelGroups.addAll(gr.get());
         } else {
             // create a default group
             channelGroups.add("-- Default --");
         }
+        
 
         parkingGroup = "-- " + messages.get("parking_group") + " --";
         
         channelsInGroup = vdrDataService.getExtendedChannelsInGroup(currentVdrView.getChannelVdr().get());
-
+        
         channelGroups.add(parkingGroup);
         channelsInGroup.put(parkingGroup, new ArrayList<>());
 
@@ -146,11 +148,14 @@ public class ChannelConfig extends BaseComponent {
     }
 
     public void onSaveChannelsConf() {
-        log.info("Currently not implemented: ChannelConfig.onSaveChannelsConf");
+        vdrDataService.saveExtendedChannelConf(channelGroups, channelsInGroup);
     }
 
     public void onLoadChannelsConf() {
-        log.info("Currently not implemented: ChannelConfig.onLoadChannelsConf");
+        channelGroups = vdrDataService.readSavedChannelGroups();
+        channelsInGroup = vdrDataService.readSavedExtendedChannelConf(currentVdrView.getChannelVdr().get(), parkingGroup);
+        
+        updateZone();
     }
 
     public StreamResponse onCreateChannelsConf() {
@@ -161,14 +166,18 @@ public class ChannelConfig extends BaseComponent {
             @Override
             public void prepareResponse(Response response) {
                 try {
-                    response.setHeader("Content-Disposition", "attachment; filename=channelmap.conf");
+                    response.setHeader("Content-Disposition", "attachment; filename=channels.conf");
 
                     // generate channels.conf
                     StringBuilder builder = new StringBuilder();
-                    channelGroups.stream().forEach(g -> {
-                        builder.append(":").append(g).append("\n");
-                        channelsInGroup.get(g).stream().forEach(c -> builder.append(c.getChannelLine()).append("\n"));
-                    });
+                    channelGroups.stream() //
+                        .filter(f -> !parkingGroup.equals(f)) //
+                        .forEach(g -> {
+                            builder.append(":").append(g).append("\n");
+                            if ((channelsInGroup.get(g) != null) && (channelsInGroup.get(g).size() > 1)) {
+                                channelsInGroup.get(g).stream().forEach(c -> builder.append(c.getChannelLine()).append("\n"));
+                            }
+                        });
                     
                     inputStream = new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
 
@@ -188,14 +197,6 @@ public class ChannelConfig extends BaseComponent {
                 return inputStream;
             }
         };
-    }
-
-    public void onDeleteObsolete() {
-        log.info("Currently not implemented: ChannelConfig.onDeleteObsolete");
-    }
-
-    public void onFixObsolete() {
-        log.info("Currently not implemented: ChannelConfig.onFixObsolete");
     }
 
     public void onCreateChannelGroup() {
@@ -244,7 +245,9 @@ public class ChannelConfig extends BaseComponent {
 
         List<ExtendedChannel> removed = channelsInGroup.get(selectedGroup);
         channelsInGroup.remove(selectedGroup);
-        channelsInGroup.get("-- " + messages.get("parking_group") + " --").addAll(removed);
+        if ((removed != null) && (removed.size() > 0)) {
+            channelsInGroup.get("-- " + messages.get("parking_group") + " --").addAll(removed);
+        }
 
         channelGroups.remove(selectedGroup);
 
@@ -310,6 +313,11 @@ public class ChannelConfig extends BaseComponent {
     }
 
     public void onFilterChannels() {
+        if ((channelsInGroup.get(group) == null) || (channelsInGroup.get(group).size() == 0)) {
+            filteredChannels = Collections.emptyList();
+            return;
+        }
+        
         filteredChannels = channelsInGroup.get(group)//
                 .stream() //
                 .filter(s -> {
@@ -344,6 +352,10 @@ public class ChannelConfig extends BaseComponent {
                 }).collect(Collectors.toList());
     }
     
+    public void onSwitchChannel(String channelId) {
+        commandService.switchChannel(getHeadUuid(), channelId);
+    }
+
     private void updateZone() {
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(channelConfigZone).addCallback(new JavaScriptCallback() {

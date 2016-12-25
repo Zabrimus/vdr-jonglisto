@@ -40,6 +40,12 @@ public interface VdrDataService {
     public Optional<List<Channel>> getChannelsMap(String vdrUuid, boolean includeRadio);
 
     public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group, boolean includeRadio);
+    
+    public void saveExtendedChannelConf(List<String> groupsToSave, Map<String, List<ExtendedChannel>> channelsToSave);
+    
+    public Map<String, List<ExtendedChannel>> readSavedExtendedChannelConf(String vdrUuid, String parkingGroup);
+    
+    public List<String> readSavedChannelGroups();
 
     /*
      * Timer

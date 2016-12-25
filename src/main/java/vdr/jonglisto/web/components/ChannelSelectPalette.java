@@ -74,8 +74,6 @@ public class ChannelSelectPalette extends BaseComponent {
 
         groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
 
-        System.err.println("Selected Channels: " + selectedChannels);
-
         if (selectedChannels == null) {
             selectedChannels = new ArrayList<>();
         }

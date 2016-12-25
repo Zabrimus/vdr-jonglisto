@@ -67,7 +67,7 @@ public class ExtendedChannel {
             if ((rid != null) && !"0".equals(rid)) {
                 id = id + "-" + rid;
             }
-
+            
             // INFO: Ist vpid = 1 wirklich ein Kriterium für verschlüsselte
             // Radio-Kanäle?
             if ("0".equals(vpid)) {
@@ -181,6 +181,6 @@ public class ExtendedChannel {
 
     @Override
     public String toString() {
-        return "ExtendedChannel [channelLine=" + channelLine + "]";
+        return "ExtendedChannel [id=" + id + ", channelLine=" + channelLine + "]";
     }
 }

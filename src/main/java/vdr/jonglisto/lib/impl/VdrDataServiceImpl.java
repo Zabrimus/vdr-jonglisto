@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,8 +113,18 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
             return Optional.empty();
         }
 
+        Set<String> alreadyFoundNames = new HashSet<String>();
+        
         List<ExtendedChannel> result = new ArrayList<>();
-        Arrays.stream(resultStr.split("\n")).forEach(s -> result.add(new ExtendedChannel(s)));
+        Arrays.stream(resultStr.split("\n")).forEach(s -> {
+            ExtendedChannel ch = new ExtendedChannel(s);
+                        
+            if(!alreadyFoundNames.contains(ch.getName())) {
+                result.add(ch);
+                alreadyFoundNames.add(ch.getName());
+            }
+        });
+        
         return Optional.of(result);
     }
 
@@ -121,8 +134,8 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
         Optional<List<String>> groups = getGroups(vdrUuid);
         Optional<List<ExtendedChannel>> channels = getExtendedChannels(vdrUuid);
 
-        if (!groups.isPresent() && channels.isPresent()) {
-            result.put("-- Default --", channels.get());
+        if ((!groups.isPresent() || (groups.get().size() == 0)) && channels.isPresent()) {
+            result.put("-- Default --", channels.get());            
             return result;
         } else if (!channels.isPresent()) {
             return result;
@@ -132,9 +145,11 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
                 .collect(Collectors.toMap(ExtendedChannel::getId, Function.identity()));
 
         groups.get().stream().forEach(s -> {
-            result.put(s, getChannelsInGroup(vdrUuid, s, true) //
+            result.put(s,
+                    getChannelsInGroup(vdrUuid, s, true) //
                             .get() //
                             .stream() //
+                            .filter(k -> emap.get(k.getId()) != null) //
                             .map(c -> emap.get(c.getId())) //
                             .collect(Collectors.toList()));
         });
@@ -185,6 +200,100 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
     public Optional<List<Channel>> getChannelsInGroupMap(String vdrUuid, String group, boolean includeRadio) {
         // get List of channels in VDR
         return filterChannels(getChannelsInGroup(vdrUuid, group, includeRadio));
+    }
+
+    public void saveExtendedChannelConf(List<String> groupsToSave, Map<String, List<ExtendedChannel>> channelsToSave) {
+        Sql2o sql2o = configuration.getSql2oHsqldb();
+
+        try (Connection con = sql2o.beginTransaction()) {
+            // delete all existing data
+            con.createQuery("delete from channel_conf_group").executeUpdate();
+            con.createQuery("delete from channel_conf_channel").executeUpdate();
+
+            // save all groups and channels
+            AtomicInteger idx = new AtomicInteger();
+            AtomicInteger gidx = new AtomicInteger();
+            groupsToSave.stream().forEach(s -> {
+                con.createQuery("insert into channel_conf_group (id, groupname) values (:id, :name)") //
+                        .addParameter("id", idx.get()) //
+                        .addParameter("name", s) //
+                        .executeUpdate();
+
+                if ((channelsToSave.get(s) != null) && (channelsToSave.get(s).size() > 0)) {                
+                    channelsToSave.get(s).stream().forEach(c -> {
+                        if ((c != null) && !c.getName().endsWith(" OBSOLETE")) {
+                            con.createQuery(
+                                    "insert into channel_conf_channel (id, name, group_id) values (:id, :name, :group_id)") //
+                                    .addParameter("id", gidx.getAndIncrement()) //
+                                    .addParameter("name", c.getName()) //
+                                    .addParameter("group_id", idx.get()) //
+                                    .executeUpdate();
+                        }
+                    });
+                }
+
+                idx.incrementAndGet();
+            });
+
+            con.commit();
+        }
+    }
+
+    public Map<String, List<ExtendedChannel>> readSavedExtendedChannelConf(String vdrUuid, String parkingGroup) {
+        Sql2o sql2o = configuration.getSql2oHsqldb();
+
+        Map<String, List<ExtendedChannel>> result = new HashMap<>();
+        
+        // read and remap current channels
+        Map<String, ExtendedChannel> ch = getExtendedChannels(vdrUuid).get() //
+                .stream() //
+                .collect(Collectors.toMap(ExtendedChannel::getName, Function.identity()));
+
+        // read saved configuration
+        List<Map<String, Object>> conf;
+        try (Connection con = sql2o.open()) {
+             conf = con.createQuery("SELECT c.NAME, g.GROUPNAME FROM CHANNEL_CONF_CHANNEL c, CHANNEL_CONF_GROUP g WHERE c.GROUP_ID = g.ID ORDER BY c.ID")
+                    .executeAndFetchTable().asList();
+        }
+
+        result.put(parkingGroup, new ArrayList<>());
+        
+        // construct result
+        conf.stream().forEach(c -> {
+            if (!result.containsKey(c.get("groupname"))) {
+                result.put((String)c.get("groupname"), new ArrayList<>());
+            }
+            
+            String currentChannel = (String) c.get("name");
+            
+            if (ch.containsKey(currentChannel)) {
+                // channel exists 
+                result.get(c.get("groupname")).add(ch.get(currentChannel));               
+            } else {
+                // put the channel into the parking group
+                if (ch.get(currentChannel) != null) {
+                    result.get(parkingGroup).add(ch.get(currentChannel));
+                } else {
+                    System.err.println("CurrentChannel " + currentChannel + " -> " + ch.get(currentChannel));
+                }
+            }
+            
+            ch.remove(currentChannel);
+        });
+
+        // put all other channels into the parking group
+        result.get(parkingGroup).addAll(ch.values());
+        
+        return result;
+    }
+
+    public List<String> readSavedChannelGroups() {
+        Sql2o sql2o = configuration.getSql2oHsqldb();
+        
+        try (Connection con = sql2o.open()) {
+            return con.createQuery("select groupname from channel_conf_group order by id")
+                    .executeAndFetch(String.class);
+        }
     }
 
     /*

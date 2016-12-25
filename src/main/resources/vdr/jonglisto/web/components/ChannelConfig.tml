@@ -10,8 +10,6 @@
             <t:eventlink t:event="loadChannelsConf" class="btn btn-default" zone="^">${message:load_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelsConf" class="btn btn-default">${message:create_channels_conf}</t:eventlink>&nbsp;
             <t:eventlink t:event="createChannelGroup" class="btn btn-default" zone="^">${message:create_channel_group}</t:eventlink>&nbsp;
-            <t:eventlink t:event="deleteObsolete" class="btn btn-default" zone="^">${message:deleteObsolete}</t:eventlink>&nbsp;
-            <t:eventlink t:event="fixObsolete" class="btn btn-default" zone="^">${message:fixObsolete}</t:eventlink>&nbsp;
 
             <div class="form-group">
                 <t:form class="form-horizontal" t:id="filterform" t:zone="^">
@@ -38,10 +36,10 @@
                                 <li class="ui-state-default">
                                     ${group}
                                     <t:eventlink t:event="renameGroup" class="caright" context="group" zone="^">
-                                        <img src="${asset:edit.svg}" alt="Umbenennen" class="iconwh" />
+                                        <img src="${asset:edit.svg}" alt="Umbenennen" class="iconwhsmall" />
                                     </t:eventlink>
                                     <t:eventlink t:event="deleteGroup" class="caright" context="group" zone="^">
-                                        <img src="${asset:delete.svg}" alt="Löschen" class="iconwh" />
+                                        <img src="${asset:delete.svg}" alt="Löschen" class="iconwhsmall" />
                                     </t:eventlink>
                                 </li>
                             </t:loop>
@@ -65,7 +63,13 @@
                         <div class="portlet-content">
                             <ul class="connectedSortable" data-group-name="${group}">
                                 <t:loop source="channels" value="channel">
-                                    <li class="ui-state-default" data-channel-drag="${channel.id}" data-group-drag="${group}">${channel.name}</li>
+                                    <li class="ui-state-default" data-channel-drag="${channel.id}" data-group-drag="${group}">
+                                        ${channel.name}
+                                    
+                                        <t:eventlink t:event="switchChannel" class="caright" context="channel.id" zone="^">
+                                            <img src="${asset:umschalten.svg}" alt="Channel Switch" class="iconwhsmall" />
+                                        </t:eventlink>                                    
+                                    </li>
                                 </t:loop>
                             </ul>
                         </div>
