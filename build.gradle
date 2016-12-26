@@ -11,7 +11,7 @@ targetCompatibility = "1.8"
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 group = "vdr.jonglisto"
-version = "0.0.4-snapshot"
+version = "0.0.4"
 
 buildscript {
   repositories {

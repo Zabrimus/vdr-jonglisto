@@ -1,5 +1,6 @@
-0.0.4-snapshot:
+0.0.4:
 - channel sorting implemented
+- bugfixes
 
 0.0.3:
 - implemented svdrp server
