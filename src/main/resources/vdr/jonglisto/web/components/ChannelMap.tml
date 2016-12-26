@@ -50,6 +50,7 @@
                     <t:eventlink t:event="resetMapping" class="btn btn-default" zone="^">${message:reset_mapping}</t:eventlink>&nbsp;
                     <t:eventlink t:event="saveMapping" class="btn btn-default" zone="^">${message:save_mapping}</t:eventlink>&nbsp;&nbsp;&nbsp;
                     <t:eventlink t:event="download" class="btn btn-default">${message:download_mapping}</t:eventlink>&nbsp;
+                    <t:eventlink t:event="updateDatabase" class="btn btn-default">${message:update_database}</t:eventlink>&nbsp;
 
                     <t:if test="showTvmIds">
                         <t:eventlink t:event="hideTvmIds" class="btn btn-default" zone="^">${message:hide_tvmids}</t:eventlink>&nbsp;

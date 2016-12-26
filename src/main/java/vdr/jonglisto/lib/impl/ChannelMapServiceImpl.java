@@ -597,6 +597,30 @@ public class ChannelMapServiceImpl extends ServiceBase implements ChannelMapServ
         return header + result.keySet().stream().sorted().map(s -> result.get(s)).collect(Collectors.joining());
     }
 
+    public void updateDatabaseSort(String vdrUuid) {
+        Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+        try (Connection con = sql2o.beginTransaction()) {
+            Map<String, List<Object>> mapping = readMapping(vdrUuid);
+    
+            mapping.values().stream().forEach(m -> {
+                List<ChannelModel> channels = m.stream() //
+                        .filter(c -> c instanceof ChannelModel).map(c -> (ChannelModel) c)
+                        .collect(Collectors.toList());
+    
+                channels.stream() //
+                    .forEach(c -> {
+                        con.createQuery("update channelmap set ord=:ord where channelid=:id") //
+                            .addParameter("ord", c.getNumber()) //
+                            .addParameter("id", c.getChannelId()) //
+                            .executeUpdate();
+                    });
+            });
+            
+            con.commit();
+        }
+    }
+    
     private List<String> doGet(String getFrom, boolean isZipped) {
         URL url = null;
         BufferedReader reader = null;

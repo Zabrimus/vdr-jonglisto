@@ -329,6 +329,10 @@ public class ChannelMap extends BaseComponent {
         };
     }
 
+    public void onUpdateDatabase() {
+        channelMapService.updateDatabaseSort(currentVdrView.getChannelVdr().get());
+    }
+    
     public List<Object> getSortedMapData() {
         return mapData.keySet().stream() //
                 .sorted() //

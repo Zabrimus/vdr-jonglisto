@@ -45,4 +45,6 @@ public interface ChannelMapService {
     public void saveProvider(Provider mainProv, Provider secProv);
 
     public Provider[] readProvider();
+
+    public void updateDatabaseSort(String vdrUuid);
 }
