@@ -5,11 +5,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -207,10 +213,59 @@ public class Configuration {
     public void sendWol(String uuid) {
         VDR v = getVdr(uuid);
 
-        if (v != null) {
-            log.info("Wake on Lan is not yet implemented: {}", v.getDisplayName());
-        } else {
-            log.error("MAC for VDR with uuid {} is not available.", uuid);
+        if ((v == null) || (v.getMac() == null)) {
+            log.error("MAC for VDR with uuid [} is not available", uuid);
+        }
+
+        // check MAC and extract parts
+        byte[] macBytes = new byte[6];
+        String[] hex = v.getMac().split("(\\:|\\-)");
+        if (hex.length != 6) {
+            log.error("Invalid MAC address: {}", v.getMac());
+            return;
+        }
+
+        try {
+            for (int i = 0; i < 6; i++) {
+                macBytes[i] = (byte) Integer.parseInt(hex[i], 16);
+            }
+        } catch (NumberFormatException e) {
+            log.error("Invalid MAC address: {}", v.getMac());
+            return;
+        }
+
+        // create the magic packet
+        byte[] bytes = new byte[6 + 16 * macBytes.length];
+        for (int i = 0; i < 6; i++) {
+            bytes[i] = (byte) 0xff;
+        }
+        for (int i = 6; i < bytes.length; i += macBytes.length) {
+            System.arraycopy(macBytes, 0, bytes, i, macBytes.length);
+        }
+
+        // try to find the broadcast addresses and send magic packet
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = interfaces.nextElement();
+                if (networkInterface.isLoopback())
+                    continue;
+
+                for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
+                    InetAddress broadcast = interfaceAddress.getBroadcast();
+                    if (broadcast == null)
+                        continue;
+
+                    // send magic packet to broadcast address
+                    DatagramPacket packet = new DatagramPacket(bytes, bytes.length, broadcast, 9);
+                    DatagramSocket socket = new DatagramSocket();
+                    socket.send(packet);
+                    socket.close();
+                }
+            }
+        } catch (IOException e) {
+            // i'm unsure what to do
+            log.error("Unable to send WOL packet to broadcase address", e);
         }
     }
 
