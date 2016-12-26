@@ -79,9 +79,7 @@
                                             </tr>
                                         </t:loop>
                                     </table>
-
                                 </div>
-
                             </div>
                         </td>
                     </tr>
@@ -89,5 +87,4 @@
             </table>
         </div>
     </t:loop>
-
 </html>

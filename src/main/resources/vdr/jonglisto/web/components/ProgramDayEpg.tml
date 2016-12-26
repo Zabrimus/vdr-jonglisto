@@ -12,13 +12,13 @@
                 </tr>
 
                 <tr>
-                    <th class="timeCell">Time</th>
-                    <th class="titleCell">Title</th>
-                    <th class="seasonCell">Season</th>
-                    <th class="partCell">Part</th>
-                    <th class="genreCell">Genre</th>
-                    <th class="categoryCell">Kategorie</th>
-                    <th class="actionCell">Action</th>
+                    <th class="timeCell">${message:time}</th>
+                    <th class="titleCell">${message:title}</th>
+                    <th class="seasonCell">${message:season}</th>
+                    <th class="partCell">${message:part}</th>
+                    <th class="genreCell">${message:genre}</th>
+                    <th class="categoryCell">${message:category}</th>
+                    <th class="actionCell">${message:action}</th>
                 </tr>
 
                 <t:loop source="channelEpg" value="epg">
@@ -73,11 +73,11 @@
 
                         <td>
                             <t:pagelink page="timer" parameters="{'newTimerUseId':useId, 'channelName':channelName}">
-                                <img src="${asset:record.svg}" alt="Record Timer" data-toggle="tooltip" title="Timer anlegen" class="iconwhlarge tooltipTop" />
+                                <img src="${asset:record.svg}" alt="Record Timer" data-toggle="tooltip" title="${message:create_timer}" class="iconwhlarge tooltipTop" />
                             </t:pagelink>
 
                             <t:eventlink t:event="switchChannel" context="channelId">
-                                <img src="${asset:umschalten.svg}" alt="Channel Switch" data-toggle="tooltip" title="TV umschalten" class="iconwhlarge tooltipTop" />
+                                <img src="${asset:umschalten.svg}" alt="Channel Switch" data-toggle="tooltip" title="${message:switch_channel}" class="iconwhlarge tooltipTop" />
                             </t:eventlink>
                         </td>
                     </tr>

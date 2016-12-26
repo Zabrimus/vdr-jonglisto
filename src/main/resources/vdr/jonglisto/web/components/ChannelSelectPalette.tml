@@ -13,12 +13,6 @@
 
                 &nbsp;
                 <t:label for="select_alpha" />
-
-                <!-- <t:select t:id="group" model="groups" value="group" blankOption="ALWAYS" blankLabel="Alle..." t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" 
-                    ZoneUpdater.event="palSelectGroup" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')" /> <br /> <div id="chpal"> <t:Palette 
-                    t:id="XXpalette" t:model="model" t:selected="selectedChannels" t:encoder="encoder" /> </div> <t:Checkbox t:id="select_alpha" type="checkbox" label="message:select_alpha" 
-                    value="sortAlpha" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="change" ZoneUpdater.event="palSelectAlpha" ZoneUpdater.zone="channelPaletteZone" ZoneUpdater.addValue="$('#chpal').find(':hidden')" 
-                    /> &nbsp; <t:label for="select_alpha" /> -->
             </t:zone>
         </div>
     </t:content>

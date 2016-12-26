@@ -24,9 +24,9 @@
                         <div class="navbar-header">
                             <t:eventlink event="toggleViewType" class="navbar-brand">
                                 <t:if test="showVdrList()">
-                                    Konfigurierte VDR:
+                                    ${message:configured_vdr}:                                    
                                     <p:else>
-                                        Konfigurierte Sichten:
+                                        ${message:configured_views}:
                                     </p:else>
                                 </t:if>
                             </t:eventlink>

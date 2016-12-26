@@ -33,11 +33,11 @@
 
                         <p:actionCell>
                             <t:eventlink t:event="editTimer" t:context="timer.id" zone="^">
-                                <img src="${asset:edit.svg}" alt="Timer bearbeiten" class="iconwh" title="Timer bearbeiten" />
+                                <img src="${asset:edit.svg}" alt="${message:edit_timer}" class="iconwh" title="${message:edit_timer}" />
                             </t:eventlink>
 							&nbsp;
                             <t:eventlink t:event="deleteTimer" t:context="timer.id">
-                                <img src="${asset:delete.svg}" alt="Timer löschen" class="iconwh" title="Timer löschen" />
+                                <img src="${asset:delete.svg}" alt="${message:delete_timer}" class="iconwh" title="${message:delete_timer}" />
                             </t:eventlink>
                         </p:actionCell>
 
@@ -57,26 +57,26 @@
                         <div class="col-sm-36">
 
                             <div class="col-sm-6">
-                                Ausgewählte Timer
+                                ${message:selected_timer}                                
                             </div>
 
                             <div class="col-sm-6">
                                 <img src="${asset:delete.svg}" alt="Timer löschen" class="iconwhlarge" />
-                                <t:linksubmit t:event="deleteTimers">löschen</t:linksubmit>
+                                <t:linksubmit t:event="deleteTimers">${message:delete}</t:linksubmit>
                             </div>
 
                             <div class="col-sm-6">
                                 <img src="${asset:record.svg}" alt="aktiv" class="iconwhlarge" />
-                                <t:linksubmit t:event="activateTimers">aktivieren</t:linksubmit>
+                                <t:linksubmit t:event="activateTimers">${message:activate}</t:linksubmit>
                             </div>
 
                             <div class="col-sm-6">
                                 <img src="${asset:stop.svg}" alt="inaktiv" class="iconwhlarge" />
-                                <t:linksubmit t:event="deactivateTimers">deaktivieren</t:linksubmit>
+                                <t:linksubmit t:event="deactivateTimers">${message:deactivate}</t:linksubmit>
                             </div>
 
                             <div class="col-sm-6">
-                                <t:linksubmit t:event="moveTimers">verschieben nach </t:linksubmit>
+                                <t:linksubmit t:event="moveTimers">${message:move_to} </t:linksubmit>
                             </div>
 
                             <div class="col-sm-6">

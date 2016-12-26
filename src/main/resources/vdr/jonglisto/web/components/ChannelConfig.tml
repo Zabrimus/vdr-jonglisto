@@ -2,7 +2,7 @@
     xmlns:etc="tapestry-library:EddysonTapestryExtensions">
 
     <t:content>
-        Kanal-Konfiguration/-Sortierung
+        ${message:channel_config_sort}
         <br />
 
         <t:zone t:id="channelConfigZone" id="channelConfigZone">
@@ -29,17 +29,17 @@
 
             <div class="portlet-column">
                 <div class="portlet">
-                    <div class="portlet-header">Kanalgruppen</div>
+                    <div class="portlet-header">${message:channel_groups}</div>
                     <div class="portlet-content">
                         <ul class="sortable">
                             <t:loop source="channelGroups" value="group">
                                 <li class="ui-state-default">
                                     ${group}
                                     <t:eventlink t:event="renameGroup" class="caright" context="group" zone="^">
-                                        <img src="${asset:edit.svg}" alt="Umbenennen" class="iconwhsmall" />
+                                        <img src="${asset:edit.svg}" alt="${message:rename}" class="iconwhsmall" />
                                     </t:eventlink>
                                     <t:eventlink t:event="deleteGroup" class="caright" context="group" zone="^">
-                                        <img src="${asset:delete.svg}" alt="Löschen" class="iconwhsmall" />
+                                        <img src="${asset:delete.svg}" alt="${message:delete}" class="iconwhsmall" />
                                     </t:eventlink>
                                 </li>
                             </t:loop>
@@ -57,7 +57,7 @@
                         <div class="portlet-header">
                             ${group} (${groupCount})
                             <t:eventlink t:event="sortGroup" class="caright" context="group" zone="^">
-                                <img src="${asset:sort.svg}" alt="Sortieren" class="iconwh" />
+                                <img src="${asset:sort.svg}" alt="${message:sort}" class="iconwh" />
                             </t:eventlink>
                         </div>
                         <div class="portlet-content">

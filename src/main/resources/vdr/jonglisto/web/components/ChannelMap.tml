@@ -5,7 +5,7 @@
         <t:zone t:id="mappingConfigZone" id="mappingConfigZone">
             <t:form class="form-horizontal" t:id="channelmapform" t:zone="^">
                 <fieldset class="fieldset-border">
-                    <legend class="legend-border">Konfiguration der EPG Provider</legend>
+                    <legend class="legend-border">${message:provider_config}</legend>
                     <div class="col-sm-30">
                         <div class="col-sm-6">
                             <t:label for="mainprov" />
@@ -31,7 +31,7 @@
 
             <t:form class="form-horizontal" t:id="channelform" t:zone="^">
                 <fieldset class="fieldset-border">
-                    <legend class="legend-border">Kanalauswahl</legend>
+                    <legend class="legend-border">${message:channel_selection}</legend>
                     <div class="col-sm-32">
                         <div class="col-sm-16">
                             <t:channelSelectPalette2 selectedChannels="selectedChannels" includeRadio="false" />
@@ -44,7 +44,7 @@
 
         <t:zone t:id="mappingZone" id="mappingZone">
             <fieldset class="fieldset-border">
-                <legend class="legend-border">Kanalmapping</legend>
+                <legend class="legend-border">${message:channel_mapping}</legend>
                 <div class="row">
                     <t:eventlink t:event="autoMapping" class="btn btn-default" zone="^">${message:auto_mapping}</t:eventlink>&nbsp;
                     <t:eventlink t:event="resetMapping" class="btn btn-default" zone="^">${message:reset_mapping}</t:eventlink>&nbsp;
@@ -86,7 +86,7 @@
                 <div class="col-sm-32">
                     <table class="table table-sm table-striped table-bordered">
                         <tr>
-                            <th>Kanäle</th>
+                            <th>${message:channels}</th>
                             <th colspan="${tvmColspan}">TVM</th>
                             <th colspan="${tvspColspan}">TVSP</th>
                             <th colspan="${epgdataColspan}">epgdata</th>

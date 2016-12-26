@@ -45,21 +45,21 @@
 
                 <p:actionCell>
                     <t:eventlink t:event="executeSearchTimer" t:context="searchTimer.id" zone="^">
-                        <img src="${asset:search.svg}" alt="Suchtimer ausführen" class="iconwh" title="Suchtimer ausführen" />
+                        <img src="${asset:search.svg}" alt="${message:execute_searchtimer}" class="iconwh" title="${message:execute_searchtimer}" />
                     </t:eventlink>
 					&nbsp;
                     <t:eventlink t:event="editSearchTimer" t:context="searchTimer.id" zone="^">
-                        <img src="${asset:edit.svg}" alt="Suchtimer bearbeiten" class="iconwh" title="Suchtimer bearbeiten" />
+                        <img src="${asset:edit.svg}" alt="${message:edit_searchtimer}" class="iconwh" title="${message:edit_searchtimer}" />
                     </t:eventlink>
 					&nbsp;
                     <t:eventlink t:event="deleteSearchTimer" t:context="searchTimer.id">
-                        <img src="${asset:delete.svg}" alt="Suchtimer löschen" class="iconwh" title="Suchttimer löschen" />
+                        <img src="${asset:delete.svg}" alt="${message:delete_searchtimer}" class="iconwh" title="${message:delete_searchtimer}" />
                     </t:eventlink>
                 </p:actionCell>
             </t:grid>
 
             <t:eventlink t:event="newSearchTimer" zone="^">
-                <img src="${asset:new.svg}" alt="Neuen Suchtimer erstellen" class="iconwh" title="neuen Suchtimer erstellen" />
+                <img src="${asset:new.svg}" alt="${message:create_searchtimer}" class="iconwh" title="${message:create_searchtimer}" />
                 Neuen Suchtimer erstellen
             </t:eventlink>
         </t:block>
@@ -74,7 +74,7 @@
                     <t:errors />
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border">Allgemeine Konfiguration</legend>
+                        <legend class="legend-border">${message:common_configuration}</legend>
 
                         <div class="form-group row">
                             <t:label for="timer_name" class="col-sm-5 col-form-label" />
@@ -86,7 +86,10 @@
                         <div class="form-group row">
                             <t:label for="timer_type" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
+                                <!-- 
                                 <t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=aufnehmen,V=umschalten,S=suchen" />
+                                -->
+                                <t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=select_record,V=select_switch_channel,S=select_search" />
                             </div>
                         </div>
 
@@ -118,8 +121,12 @@
                         <div class="form-group row">
                             <t:label for="timer_namingmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
+                                <!-- 
                                 <t:select t:id="timer_namingmode" value="searchTimer.namingMode" label="message:timer_namingmode" blankOption="NEVER"
                                     model="literal:0=VDR,1=Auto,2=Constable,3=Serie,4=Kategorisiert,5=Benutzerdefiniert" />
+                                -->
+                                <t:select t:id="timer_namingmode" value="searchTimer.namingMode" label="message:timer_namingmode" blankOption="NEVER"
+                                    model="literal:0=select_vdr,1=select_auto,2=select_constable,3=select_series,4=select_category,5=select_userdefined" />                                
                             </div>
                         </div>
 
@@ -144,7 +151,7 @@
                     </fieldset>
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border">Suchkriterien</legend>
+                        <legend class="legend-border">${message:search_criteria}</legend>
 
                         <div class="form-group row">
                             <t:label for="timer_searchitem" class="col-sm-5 col-form-label" />
@@ -208,12 +215,12 @@
                             <t:label for="timer_searchmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
                                 <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode"
-                                    model="literal:1=Exakt,2=regulärer Ausdruck,3=Muster,4=enthalten in" />
+                                    model="literal:1=select_exactly,2=select_regex,3=select_pattern,4=select_contains" />
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-sm-5">Wiederholungen vermeiden:</label>
+                            <label class="col-sm-5">${message:avoid_repeat}:</label>
                             <div class="col-sm-18">
                                 <div class="form-check">
                                     <label class="form-check-label">
@@ -237,7 +244,7 @@
 
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">Erweiterte Suchkriterien</legend>
+                        <legend class="legend-border clickToHide">${message:extended_search_criteria}</legend>
 
                         <span class="hideme">
                             <div class="form-group row">
@@ -271,14 +278,14 @@
                                 <div class="col-sm-4">
                                     <t:TextField t:id="timer_starttime" value="searchTimer.starttime" size="5" validate="regexp" />
                                 </div>
-                                <label class="col-sm-1">und</label>
+                                <label class="col-sm-1">${message:and}</label>
                                 <div class="col-sm-4">
                                     <t:TextField t:id="timer_endtime" value="searchTimer.endtime" size="5" validate="regexp" />
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-5">Tage:</label>
+                                <label class="col-sm-5">${message:days}:</label>
                                 <div class="col-sm-10">
                                     <div class="form-check">
                                         <label class="form-check-label">
@@ -313,13 +320,13 @@
                                 </div>
                             </div>
 
-                            <p>Bevorzugtes Sendeformat HD,SD,3D</p>
+                            <p>TODO: Bevorzugtes Sendeformat HD,SD,3D</p>
 
                         </span>
                     </fieldset>
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">Kanalauswahl</legend>
+                        <legend class="legend-border clickToHide">${message:select_channel}</legend>
                         <span class="hideme">
                             <div class="form-group row">
                                 <div class="col-sm-16">
@@ -330,7 +337,7 @@
                     </fieldset>
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">Auswahl Kategorie</legend>
+                        <legend class="legend-border clickToHide">${message:select_category}</legend>
                         <span class="hideme">
                             <div class="form-group row">
                                 <div class="col-sm-16">
@@ -341,7 +348,7 @@
                     </fieldset>
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">Auswahl Genre</legend>
+                        <legend class="legend-border clickToHide">${message:select_genre}</legend>
                         <span class="hideme">
                             <div class="form-group row">
                                 <div class="col-sm-16">
@@ -365,7 +372,7 @@
 
         <t:block t:id="epgBlock">
             <fieldset class="fieldset-border">
-                <legend class="legend-border">Suchergebnisse</legend>
+                <legend class="legend-border">${message:search_results}</legend>
 
                 <t:SearchTimerResult useIds="searchResult" />
 
