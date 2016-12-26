@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -17,7 +19,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.lang3.StringUtils;
-import org.hampelratte.svdrp.commands.QUIT;
 import org.hsqldb.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -259,8 +260,39 @@ public class Configuration {
         try {
             log.debug("TestSvdrp: " + ip + ":" + svdrpPort);
 
-            org.hampelratte.svdrp.Connection svdrpVdr = new org.hampelratte.svdrp.Connection(ip, svdrpPort, 5000);
-            svdrpVdr.send(new QUIT());
+            Socket clientSocket = null;
+
+            try {
+                clientSocket = new Socket(ip, svdrpPort);
+                clientSocket.setSoTimeout(5000);
+
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                String inputLine = in.readLine();
+                String[] splitted = inputLine.split(" ");
+
+                if ((splitted != null) && (splitted.length > 1) && "220".equals(splitted[0])) {
+                    ch.result = true;
+                    lastCheck.put(key, ch);
+                } else {
+                    ch.result = false;
+                    lastCheck.put(key, ch);
+                }
+
+                out.append("QUIT\n");
+                out.flush();
+
+                return ch.result;
+            } finally {
+                if (clientSocket != null) {
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e) {
+                        // fail silently
+                    }
+                }
+            }
         } catch (IOException e) {
             ch.result = false;
             lastCheck.put(key, ch);
@@ -268,14 +300,9 @@ public class Configuration {
             // log.error("SVDRP Connection failed", e);
             return false;
         }
-
-        ch.result = true;
-        lastCheck.put(key, ch);
-
-        return true;
     }
 
-    public boolean testResfulApi(String ip, int restfulApiPort) {
+    public boolean testRestfulApi(String ip, int restfulApiPort) {
         String key = "S:" + ip + ":" + restfulApiPort;
 
         LastCheck ch = lastCheck.get(key);

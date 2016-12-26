@@ -1,5 +1,7 @@
 <html t:type="layout" title="VDR Jonglisto Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
 
+    <t:trigger event="triggerAllChecks" />
+
     <t:loop source="configuredVdrs" value="vdr">
         <div class="vdrinfo">
             <table class="status">
@@ -52,9 +54,37 @@
                         </td>
                     </tr>
 
-                    <!-- <tr> <td colspan="3"> Plugins: <table> <t:loop source="plugins" value="plugin"> <tr> <td>${plugin.name}</td> <td>${plugin.version}</td> 
-                        </tr> </t:loop> </table> </td> </tr> <tr> <td colspan="3"> Devices: <table> <t:loop source="devices" value="device"> <tr> <td>${device.name}</td> <td>${device.channelName}</td> 
-                        </tr> </t:loop> </table> </td> </tr> -->
+                    <tr>
+                        <td colspan="3">
+                            <div class="accordion">
+                                <h3>Plugins</h3>
+                                <div>
+                                    <table>
+                                        <t:loop source="plugins" value="plugin">
+                                            <tr>
+                                                <td>${plugin.name}</td>
+                                                <td>${plugin.version}</td>
+                                            </tr>
+                                        </t:loop>
+                                    </table>
+                                </div>
+
+                                <p>Devices</p>
+                                <div>
+                                    <table>
+                                        <t:loop source="devices" value="device">
+                                            <tr>
+                                                <td>${device.name}</td>
+                                                <td>${device.channelName}</td>
+                                            </tr>
+                                        </t:loop>
+                                    </table>
+
+                                </div>
+
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

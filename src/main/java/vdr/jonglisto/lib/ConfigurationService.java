@@ -33,6 +33,8 @@ public interface ConfigurationService {
 
     public boolean testRestfulApi(String ip, int restfulApiPort);
 
+    public void testAllConnections();
+    
     public Sql2o getSql2oEpg2vdr();
 
     public Sql2o getSql2oHsqldb();

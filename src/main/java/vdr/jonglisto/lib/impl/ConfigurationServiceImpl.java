@@ -1,8 +1,12 @@
 package vdr.jonglisto.lib.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.sql2o.Sql2o;
 
@@ -47,9 +51,54 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Override
     public boolean testRestfulApi(String ip, int restfulApiPort) {
-        return configuration.testResfulApi(ip, restfulApiPort);
+        return configuration.testRestfulApi(ip, restfulApiPort);
     }
 
+    @Override
+    public void testAllConnections() {
+        ExecutorService executor = Executors.newWorkStealingPool();
+
+        List<Callable<Boolean>> callables = new ArrayList<>();
+        configuration.getSortedVdrList().stream().forEach(v -> {
+            
+            callables.add(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return configuration.pingHost(v.getIp());
+                }
+            });
+                        
+            callables.add(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return configuration.testRestfulApi(v.getIp(), v.getRestfulApiPort());
+                }
+            });
+            
+            callables.add(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    return configuration.testSvdrp(v.getIp(), v.getSvdrpPort());
+                }
+            });
+        });
+        
+        try {
+            executor.invokeAll(callables)            
+                .stream()
+                .map(future -> {
+                    try {
+                        return future.get();
+                    }
+                    catch (Exception e) {
+                        throw new IllegalStateException(e);
+                    }
+                });
+        } catch (InterruptedException e) {
+            // do nothing. This is only a faster method to check all VDR.
+        }
+    }
+    
     @Override
     public VDR getVdr(String uuid) {
         return configuration.getVdr(uuid);

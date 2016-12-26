@@ -2,9 +2,12 @@ package vdr.jonglisto.web.pages;
 
 import java.util.List;
 
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.slf4j.Logger;
 
 import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.VdrDataService;
@@ -17,8 +20,15 @@ import vdr.jonglisto.lib.model.VDRView.Type;
 /**
  * Start page of application VDR Jonglisto app.
  */
+@Import(library = { "webjars:jquery-ui:$version/jquery-ui.js" }, stylesheet = {"webjars:jquery-ui:$version/jquery-ui.css" })
 public class Index {
 
+    @Inject
+    private Logger log;
+    
+    @Inject
+    protected JavaScriptSupport javaScriptSupport;
+    
     @Inject
     private ConfigurationService configuration;
 
@@ -43,7 +53,11 @@ public class Index {
             // session is empty. re-init...
             currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == Type.View)
                     .findFirst().get();
-        }
+        }                       
+    }
+    
+    public void afterRender() {
+        javaScriptSupport.require("accordion");
     }
 
     public List<VDR> getConfiguredVdrs() {
@@ -52,6 +66,10 @@ public class Index {
 
     public void onWol(String uuid) {
         configuration.sendWol(uuid);
+    }
+
+    public void onTriggerAllChecks() {
+        configuration.testAllConnections();
     }
 
     public boolean pingHost() {
