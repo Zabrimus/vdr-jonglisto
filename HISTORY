@@ -2,6 +2,7 @@
 - implemented wake-on-lan 
 - shows plugin and devices for each VDR on index page
 - possibility to update ordering of epg2vdr channelmap according to channel sorting
+- localization (a first show in english)
 
 0.0.4:
 - channel sorting implemented
