@@ -86,10 +86,7 @@
                         <div class="form-group row">
                             <t:label for="timer_type" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
-                                <!-- 
-                                <t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=aufnehmen,V=umschalten,S=suchen" />
-                                -->
-                                <t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="literal:R=select_record,V=select_switch_channel,S=select_search" />
+                                <t:select t:id="timer_type" value="searchTimer.type" label="message:timer_type" model="message:timer_type_select" />
                             </div>
                         </div>
 
@@ -121,12 +118,8 @@
                         <div class="form-group row">
                             <t:label for="timer_namingmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
-                                <!-- 
                                 <t:select t:id="timer_namingmode" value="searchTimer.namingMode" label="message:timer_namingmode" blankOption="NEVER"
-                                    model="literal:0=VDR,1=Auto,2=Constable,3=Serie,4=Kategorisiert,5=Benutzerdefiniert" />
-                                -->
-                                <t:select t:id="timer_namingmode" value="searchTimer.namingMode" label="message:timer_namingmode" blankOption="NEVER"
-                                    model="literal:0=select_vdr,1=select_auto,2=select_constable,3=select_series,4=select_category,5=select_userdefined" />                                
+                                    model="message:timer_namingmode_select" />                                
                             </div>
                         </div>
 
@@ -215,7 +208,7 @@
                             <t:label for="timer_searchmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
                                 <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode"
-                                    model="literal:1=select_exactly,2=select_regex,3=select_pattern,4=select_contains" />
+                                    model="message:timer_searchmode_select" />
                             </div>
                         </div>
 

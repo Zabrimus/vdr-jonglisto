@@ -289,16 +289,16 @@ public class SearchTimerView extends BaseComponent {
     public String getTimerAction() {
         switch (searchTimer.getType()) {
         case "R":
-            return messages.get("select_record");
+            return messages.get("timer_type_record");
         case "V":
-            return messages.get("select_switch_channel");
+            return messages.get("timer_type_switch");
         case "S":
-            return messages.get("select_search");
+            return messages.get("timer_type_search");
         default:
-            return messages.get("select_unknown");            
+            return messages.get("timer_type_unknown");            
         }
     }
-
+    
     public void setTimerAction(String s) {
         System.err.println("SetTimerAction: " + s);
     }
