@@ -154,14 +154,14 @@ public class AppModule {
         configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
         configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
         configuration.add(SymbolConstants.ENABLE_PAGELOADING_MASK, true);
-        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "de");
+        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "de,en");
         configuration.add(SymbolConstants.CLUSTERED_SESSIONS, false);
         configuration.add(SymbolConstants.COMBINE_SCRIPTS, true);
         configuration.add(SymbolConstants.COMPACT_JSON, true);
         configuration.add(SymbolConstants.COMPRESS_WHITESPACE, true);
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
-        configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
-
+        configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);        
+        
         // configuration.add("tapestry.closure-compiler-level",
         // "WHITESPACE_ONLY");
         configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--

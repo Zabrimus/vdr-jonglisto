@@ -1,6 +1,7 @@
 package vdr.jonglisto.web.components;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.BindingConstants;
@@ -14,6 +15,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.services.LocalizationSetter;
+import org.apache.tapestry5.services.PersistentLocale;
 import org.tynamo.conversations.services.ConversationManager;
 
 import vdr.jonglisto.lib.model.VDRView;
@@ -32,8 +35,18 @@ public class Layout extends BaseComponent {
     private ConversationManager conversationManager;
 
     @Inject
+    private PersistentLocale persistentLocaleService;
+    
+    @Inject
     protected ComponentResources componentResources;
 
+    @Inject
+    @Property
+    private Locale currentLocale;
+    
+    @Inject
+    private LocalizationSetter localizationSetter;
+    
     @Persist("session")
     private String conversationId;
 
@@ -56,9 +69,18 @@ public class Layout extends BaseComponent {
     @Property
     private Type type;
 
+    @Property
+    private String language;
+    
     public void setupRender() {
         if (!conversationManager.isActiveConversation(conversationId)) {
             conversationId = conversationManager.createConversation(componentResources.getPageName(), 60, true);
+        }
+        
+        if (currentLocale.getLanguage().equals(new Locale("de").getLanguage())) {
+            language="de";
+        } else  if (currentLocale.getLanguage().equals(new Locale("en").getLanguage())) {
+            language="en";
         }
     }
 
@@ -98,5 +120,21 @@ public class Layout extends BaseComponent {
 
     public boolean showVdrList() {
         return type == Type.VDR;
+    }
+    
+    public Object onValueChangedFromLanguage(String selectedLanguage) {
+        localizationSetter.setLocaleFromLocaleName(selectedLanguage);
+        /*
+        switch (selectedLanguage) {
+        case "de":
+            persistentLocaleService.set(Locale.GERMAN);
+            break;
+            
+        case "en":
+            persistentLocaleService.set(Locale.ENGLISH);
+            break;
+        }
+        */
+        return componentResources.getPage();
     }
 }
