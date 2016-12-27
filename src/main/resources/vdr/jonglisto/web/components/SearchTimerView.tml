@@ -354,7 +354,7 @@
                     <div class="form-group row">
                         <div class="col-sm-16">
                             <t:submit value="${message:timer_save}" />&nbsp;
-                            <t:eventlink event="cancel" class="btn btn-default">${message:timer_cancel}</t:eventlink>
+                            <t:eventlink event="cancel" class="btn btn-default">${message:cancel}</t:eventlink>
                         </div>
                     </div>
                 </div>

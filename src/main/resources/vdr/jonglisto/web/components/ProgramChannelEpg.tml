@@ -22,7 +22,7 @@
                         <th class="partCell">${message:part}</th>
                         <th class="genreCell">${message:genre}</th>
                         <th class="categoryCell">${message:category}</th>
-                        <th class="actionCell">${message:action}</th>
+                        <th class="actionCell">${message:action-label}</th>
                     </tr>
 
                 </t:if>
