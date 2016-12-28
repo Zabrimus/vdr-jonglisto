@@ -59,6 +59,7 @@ public class Navbar extends BaseComponent {
         pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
         pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
         pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
+        pages.add(new NavPage(messages.get("page_setup"), "setup"));
     }
 
     public List<NavPage> getPageNames() {

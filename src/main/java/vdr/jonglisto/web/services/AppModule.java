@@ -54,6 +54,8 @@ import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
+import vdr.jonglisto.web.model.setup.JonglistoVdr;
+import vdr.jonglisto.web.model.setup.JonglistoView;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -142,6 +144,29 @@ public class AppModule {
         };
 
         configuration.add(new CoercionTuple<String, Channel>(String.class, Channel.class, coercion3));
+        
+        Coercion<String, JonglistoVdr> coercion4 = new Coercion<String, JonglistoVdr>() {
+
+            public JonglistoVdr coerce(String input) {
+                JonglistoVdr v = new JonglistoVdr();
+                v.setUuid(input);
+                return v;
+            }
+        };
+
+        configuration.add(new CoercionTuple<String, JonglistoVdr>(String.class, JonglistoVdr.class, coercion4));
+        
+        Coercion<String, JonglistoView> coercion5 = new Coercion<String, JonglistoView>() {
+
+            public JonglistoView coerce(String input) {
+                JonglistoView v = new JonglistoView();
+                v.setName(input);
+                return v;
+            }
+        };
+
+        configuration.add(new CoercionTuple<String, JonglistoView>(String.class, JonglistoView.class, coercion5));
+
     }
 
     @Contribute(SymbolProvider.class)

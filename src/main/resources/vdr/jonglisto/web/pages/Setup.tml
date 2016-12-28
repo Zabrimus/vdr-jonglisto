@@ -1,0 +1,201 @@
+<html t:type="layout" title="VDR Jonglisto Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter"
+    xmlns:etc="tapestry-library:EddysonTapestryExtensions">
+
+    <h4>${message:configuration}</h4>
+
+    <t:zone t:id="setupZone" id="setupZone">
+        <t:form class="form-horizontal" t:id="setupform" zone="^">
+            <t:alerts />
+            <t:Errors />
+
+            <fieldset class="fieldset-border">
+                <legend class="legend-border">${message:database_configuration}</legend>
+
+                <div class="form-group row">
+                    <t:label for="epgdhost" class="col-sm-5 col-form-label" />
+                    <div class="col-sm-10">
+                        <t:TextField t:id="epgdhost" value="setup.epgdhost" label="message:epgdhost" size="25" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <t:label for="epgdport" class="col-sm-5 col-form-label" />
+                    <div class="col-sm-10">
+                        <t:TextField t:id="epgdport" value="setup.epgdport" label="message:epgdport" size="25" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <t:label for="epgduser" class="col-sm-5 col-form-label" />
+                    <div class="col-sm-10">
+                        <t:TextField t:id="epgduser" value="setup.epgduser" label="message:epgduser" size="25" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <t:label for="epgdpw" class="col-sm-5 col-form-label" />
+                    <div class="col-sm-10">
+                        <t:TextField t:id="epgdpw" value="setup.epgdpassword" label="message:epgdpw" size="25" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <t:label for="epgdname" class="col-sm-5 col-form-label" />
+                    <div class="col-sm-10">
+                        <t:TextField t:id="epgdname" value="setup.epgdDatabase" label="message:epgddatabase" size="25" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-16">
+                        <t:submit value="${message:testDatabase}" t:id="testDatabase" zone="^" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <t:if test="sql2o">
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">${message:configvdr}</legend>
+                    <table class="table table-sm table-striped table-bordered">
+                        <tr>
+                            <th>${message:vdr_alias}</th>
+                            <th>${message:vdr_ip}</th>
+                            <th>${message:vdr_uuid}</th>
+                            <th>${message:vdr_svdrpport}</th>
+                            <th>${message:vdr_restfulapi}</th>
+                            <th></th>
+                        </tr>
+
+                        <t:loop source="setup.availableVdr" value="vdr">
+                            <tr>
+                                <td>
+                                    <t:TextField t:id="name" value="vdr.name" size="20" />
+                                </td>
+
+                                <td>
+                                    <t:TextField t:id="ip" value="vdr.ip" size="20" />
+                                </td>
+
+                                <td>
+                                    <span style="white-space: nowrap;">${vdr.uuid}</span>
+                                </td>
+
+                                <td>
+                                    <t:TextField t:id="svdrp" value="vdr.svdrp" size="5" />
+                                </td>
+
+                                <td>
+                                    <t:TextField t:id="restful" value="vdr.restful" size="5" />
+                                </td>
+
+                                <td>
+                                    <t:eventlink t:event="deleteVdr" class="caright" context="vdr.uuid" zone="^">${message:delete}</t:eventlink>
+                                </td>
+                            </tr>
+                        </t:loop>
+                    </table>
+
+                    <t:submit value="${message:newVdr}" t:id="newVdr" zone="^" />
+                </fieldset>
+
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">${message:configviews}</legend>
+
+                    <table class="table table-sm table-striped table-bordered">
+                        <tr>
+                            <th>${message:view_name}</th>
+                            <th>${message:view_tv}</th>
+                            <th>${message:view_channels}</th>
+                            <th>${message:view_timers}</th>
+                            <th>${message:view_recordings}</th>
+                            <th></th>
+                        </tr>
+
+                        <t:loop source="setup.availableViews" value="view" index="viewIndex">
+                            <tr>
+                                <td>
+                                    <t:TextField t:id="viewName" value="view.name" size="20" />
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewHead" blankLabel="Select..." model="vdrNameModel" selected="view.head"
+                                            multiple="false" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewChannels" blankLabel="Select..." model="vdrNameModel" selected="view.channels"
+                                            multiple="true" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewTimers" blankLabel="Select..." model="vdrNameModel" selected="view.timer"
+                                            multiple="false" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewRecordings" blankLabel="Select..." model="vdrNameModel" selected="view.recordings"
+                                            multiple="true" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <t:eventlink t:event="deleteView" class="caright" context="viewIndex" zone="^">${message:delete}</t:eventlink>
+                                </td>
+                            </tr>
+                        </t:loop>
+                    </table>
+
+                    <t:submit value="${message:newView}" t:id="newView" zone="^" />
+
+                </fieldset>
+
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">${message:configvdr}</legend>
+                    
+                    <!-- TODO:
+                      "useRecordingSyncMap" : "false",  
+                      "developer_mode": "false",         
+                      "svdrpPort": "5000",
+                      "remoteOsdSleepTime": "200",
+                      "remoteOsdIncSleepTime": "200",
+                      
+                      "hsqldb": {
+                           "path": "/var/cache/jonglisto-db",
+                           "remote": "true"
+                      }
+                      
+                      "NashornScripts": {  
+                            "svdrp": "/etc/jonglisto/svdrp.js",
+                            "epg2vdr": "/etc/jonglisto/epg2vdr.js"
+                      } 
+                      
+                      VDR Configs:
+                      
+                      "config" : {
+                            "TIMER_AUX" : "<remotetimers>2</remotetimers>",
+                            "TIMER_MINUS_MINUTES" : 10,
+                            "TIMER_PLUS_MINUTES" : 10,
+                            "TIMER_PRIORITY" : 50,
+                            "TIMER_LIFETIME" : 99,
+                            "RECORDING_NAMING_MODE": 1    
+                      }                      
+                    -->
+                    
+                    <div class="form-group row">
+                        <t:label for="coma" class="col-sm-5 col-form-label" />
+                        <div class="col-sm-10">
+                            <t:TextField t:id="coma" value="setup.epgdhost" label="message:epgdhost" size="25" />
+                        </div>
+                    </div>
+                </fieldset>
+            </t:if>
+        </t:form>
+    </t:zone>
+</html>
