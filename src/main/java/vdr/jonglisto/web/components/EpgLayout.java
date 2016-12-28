@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
@@ -20,6 +21,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 
 import vdr.jonglisto.lib.model.Channel;
+import vdr.jonglisto.lib.model.TimerEpg;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.util.Function;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
@@ -71,7 +73,7 @@ public class EpgLayout extends BaseComponent {
 
     @Property
     private String epgDetailChannelName;
-
+    
     @SetupRender
     public void setupRender() {
         String channelId = request.getParameter("channelId");
@@ -193,14 +195,18 @@ public class EpgLayout extends BaseComponent {
     }
 
     public void setTimeStr(String st) {
-        int idx = st.indexOf(':');
-
-        epgCriteria.setTime( //
-                LocalDateTime.now() //
-                        .withHour(Integer.valueOf(st.substring(0, idx))) //
-                        .withMinute(Integer.valueOf(st.substring(idx + 1))) //
-                        .atZone(ZoneOffset.systemDefault()) //
-                        .toEpochSecond());
+        if (StringUtils.isNotEmpty(st)) {
+            int idx = st.indexOf(':');
+            
+            if (idx != ':') {
+                epgCriteria.setTime( //
+                        LocalDateTime.now() //
+                                .withHour(Integer.valueOf(st.substring(0, idx))) //
+                                .withMinute(Integer.valueOf(st.substring(idx + 1))) //
+                                .atZone(ZoneOffset.systemDefault()) //
+                                .toEpochSecond());
+            }
+        }
     }
 
     public boolean isFunction(Function function) {
@@ -210,7 +216,7 @@ public class EpgLayout extends BaseComponent {
     public void onShowEpg(Long useId, String channelName) {
         epgDetailUseId = useId;
         epgDetailChannelName = channelName;
-
+                
         function = Function.INFO;
         epg.showInfoZone();
     }

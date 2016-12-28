@@ -3,6 +3,8 @@
     <t:zone t:id="epgListZone" id="epgListZone">
         <!-- <t:grid source="epgData" row="epg" model="epgModel" t:mixins="EnableGridZone" inplace="true"> -->
         <t:grid source="epgData" row="epg" model="epgModel">
+            <t:trigger event="findTimerEpg" />
+
             <p:timeCell>
                 <div>
                     <t:pagelink page="programTime" parameters="{'searchTime':startTime}">
@@ -27,6 +29,15 @@
                 <t:eventlink t:event="showEpg" t:context="[useId,channelName]" zone="^">
                     <strong>${map:epg['title']}</strong>
                 </t:eventlink>
+                
+                <div class="caright">
+                    <t:if test="timerEpg">
+                        <span class="btn btn-success btn-xs">
+                            ${timerEpg?.method}:${timerEpg?.name}&nbsp;${timerEpg?.remoteId}
+                        </span>
+                    </t:if>
+                </div>
+
                 <br />
                 ${map:epg['shorttext']}
             </p:titleCell>

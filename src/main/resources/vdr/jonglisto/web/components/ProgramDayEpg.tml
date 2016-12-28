@@ -22,6 +22,8 @@
                 </tr>
 
                 <t:loop source="channelEpg" value="epg">
+                    <t:trigger event="findTimerEpg" />
+
                     <tr>
                         <td>
                             <div>
@@ -47,6 +49,15 @@
                             <t:eventlink t:event="showEpg" t:context="[useId,channelName]" zone="^">
                                 <strong>${map:epg['title']}</strong>
                             </t:eventlink>
+
+                            <div class="caright">
+                                <t:if test="timerEpg">
+                                    <span class="btn btn-success btn-xs">
+                                        ${timerEpg?.method}:${timerEpg?.name}&nbsp;${timerEpg?.remoteId}
+                                    </span>
+                                </t:if>
+                            </div>
+
                             <br />
                             ${map:epg['shorttext']}
                         </td>

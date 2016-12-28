@@ -61,6 +61,11 @@ public class ProgramTimeEpg extends ProgramBaseEpg {
     }
 
     public Long getUseId() {
-        return (Long) epg.get("useid");
+        Long useId = (Long) epg.get("useid");
+        
+        // possibly not the best place
+        super.findTimerEpg(useId);
+        
+        return useId;
     }
 }

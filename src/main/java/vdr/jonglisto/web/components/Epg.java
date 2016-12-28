@@ -17,6 +17,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.model.EPGMedia.MediaType;
 import vdr.jonglisto.lib.model.Timer;
+import vdr.jonglisto.lib.model.TimerEpg;
 
 public class Epg extends BaseComponent {
 
@@ -71,8 +72,11 @@ public class Epg extends BaseComponent {
     @Property
     private boolean visible;
 
-    private Timer timer;
+    @Property
+    private TimerEpg timerEpg;
 
+    private Timer timer;
+    
     // Trigger from Epg.tml to reload the epg data
     public void onLoadEpgData() {
         if (epg == null) {
@@ -84,6 +88,7 @@ public class Epg extends BaseComponent {
             } else {
                 // normal processing
                 epg = epgDataService.getEpgDataForUseId(savedUseId);
+                timerEpg = searchTimerService.getSearchTimerForEventId(savedUseId); 
             }
         }
     }

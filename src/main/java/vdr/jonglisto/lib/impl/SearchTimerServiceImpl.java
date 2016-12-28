@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,9 +17,15 @@ import org.sql2o.Sql2o;
 
 import vdr.jonglisto.lib.SearchTimerService;
 import vdr.jonglisto.lib.model.SearchTimer;
+import vdr.jonglisto.lib.model.TimerEpg;
 
 public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerService {
 
+    private Pattern epgsearchPattern = Pattern.compile(".*?<epgsearch>.*?<searchtimer>(.*?)</searchtimer>.*?");
+    private Pattern epgdPattern = Pattern.compile(".*?<epgd>.*?<autotimerid>(.*?)</autotimerid>.*?");
+    private Pattern epg2timerPattern = Pattern.compile(".*?<epg2timer>(.*?)</epg2timer>.*?");
+    private Pattern remoteTimersPattern = Pattern.compile(".*?<remotetimers>(.*?)</remotetimers>.*?");
+    
     public List<SearchTimer> getSearchTimers() {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
 
@@ -152,6 +160,55 @@ public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerSe
         }
     }
 
+    public TimerEpg getSearchTimerForEventId(Long id) {
+        Sql2o sql2o = configuration.getSql2oEpg2vdr();
+
+        try (Connection con = sql2o.open()) {
+            String aux = con.createQuery("select t.aux from timers t where t.eventid = :id and state <> 'D'") //
+                            .addParameter("id", id) //
+                            .executeScalar(String.class);
+            
+            if (StringUtils.isEmpty(aux)) {
+                return null;
+            }
+            
+            String type = null;
+            String name = null;
+            String remoteId = null;
+            
+            // is this an epgsearch timer?
+            Matcher epgsearchMatcher = epgsearchPattern.matcher(aux);
+            if (epgsearchMatcher.matches()) {
+                type = "epgsearch";
+                name = epgsearchMatcher.group(1);
+            }
+
+            // is this an epg2timer timer?
+            Matcher epg2timerMatcher = epg2timerPattern.matcher(aux);
+            if (epg2timerMatcher.matches()) {
+                type = "epg2timer";
+                name = epgsearchMatcher.group(1);
+            }
+
+            // is this an epgd timer?
+            Matcher epgdMatcher = epgdPattern.matcher(aux);
+            if (epgdMatcher.matches()) {
+                type = "epgd";
+                name = con.createQuery("select name from searchtimers where id = :id") //
+                            .addParameter("id", Long.valueOf(epgdMatcher.group(1))) //
+                            .executeScalar(String.class);
+            }
+
+            // is this a remote timer?
+            Matcher remoteMatcher = remoteTimersPattern.matcher(aux);
+            if (remoteMatcher.matches()) {
+                remoteId = remoteMatcher.group(1);
+            }
+            
+            return new TimerEpg(name, type, remoteId);
+        }
+    }
+    
     public List<Map<String, Object>> performSearch(SearchTimer timer) {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();
 

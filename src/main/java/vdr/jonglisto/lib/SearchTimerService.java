@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import vdr.jonglisto.lib.model.SearchTimer;
+import vdr.jonglisto.lib.model.TimerEpg;
 
 public interface SearchTimerService {
 
@@ -20,4 +21,6 @@ public interface SearchTimerService {
     public void toggleActive(Long id);
 
     public List<Map<String, Object>> performSearch(SearchTimer timer);
+    
+    public TimerEpg getSearchTimerForEventId(Long id);
 }

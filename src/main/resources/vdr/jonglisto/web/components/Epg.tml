@@ -14,8 +14,18 @@
                                     <div class="row col-md-36 epg-header ">
                                         <div class="col-md-30">
                                             <t:ChannelImage channelName="${channelName}" />
-                                            ${map:epg['v_longstartdate']}, ${map:epg['v_starttime']} - ${map:epg['v_endtime']} , ${message:duration}: ${map:epg['v_duration']}
+                                            ${map:epg['v_longstartdate']}, ${map:epg['v_starttime']} - ${map:epg['v_endtime']} , ${message:duration}:
+                                            ${map:epg['v_duration']}
+
+                                            <div class="caright">
+                                                <t:if test="timerEpg">
+                                                    <span class="btn btn-success btn-xs">
+                                                        ${timerEpg?.method}:${timerEpg?.name}&nbsp;${timerEpg?.remoteId}
+                                                    </span>
+                                                </t:if>
+                                            </div>
                                         </div>
+                                        
                                         <div class="col-md-6">
                                             <t:if test="timer">
                                                 <t:eventlink t:event="toggleTimerActive" t:context="timer.id">

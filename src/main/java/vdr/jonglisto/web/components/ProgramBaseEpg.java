@@ -14,6 +14,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
+import vdr.jonglisto.lib.model.TimerEpg;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.util.EpgSorter;
 
@@ -42,6 +43,9 @@ public abstract class ProgramBaseEpg extends BaseComponent {
     @Persist
     protected EpgSorter epgSorter;
 
+    @Property
+    protected TimerEpg timerEpg;
+    
     public String getChannelId() {
         return epg != null ? (String) epg.get("channelid") : "";
     }
@@ -86,6 +90,14 @@ public abstract class ProgramBaseEpg extends BaseComponent {
         return false;
     }
 
+    public void onFindTimerEpg() {        
+        timerEpg = searchTimerService.getSearchTimerForEventId(getUseId());
+    }
+
+    public void findTimerEpg(Long useId) {
+        timerEpg = searchTimerService.getSearchTimerForEventId(useId);
+    }
+    
     public Integer getStartTime() {
         return (Integer) epg.get("starttime");
     }

@@ -57,7 +57,7 @@ public class ProgramChannelEpg extends ProgramBaseEpg {
     }
 
     public String getChannelName() {
-        if (epgData != null) {
+        if ((epgData != null) && (epgData.size() > 0)) {
             return findChannelName(epgData.get(0));
         } else {
             return "";
