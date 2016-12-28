@@ -222,6 +222,9 @@ public class SearchTimerView extends BaseComponent {
         selectedGenres = new ArrayList<>();
         selectedVdr = null;
         searchTimer.setNamingMode(1);
+        searchTimer.setPriority(50);
+        searchTimer.setLifetime(99);
+        searchTimer.setActive(true);
 
         if (request.isXHR()) {
             ajaxResponseRenderer.addRender(searchTimerListZone);

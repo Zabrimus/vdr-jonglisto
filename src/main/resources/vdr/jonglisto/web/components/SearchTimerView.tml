@@ -208,7 +208,7 @@
                             <t:label for="timer_searchmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
                                 <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode"
-                                    model="message:timer_searchmode_select" />
+                                    model="message:timer_searchmode_select" blankOption="NEVER" validate="required" />
                             </div>
                         </div>
 
