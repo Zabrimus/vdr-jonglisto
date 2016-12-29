@@ -2,8 +2,11 @@ package vdr.jonglisto.web.model.setup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class JonglistoView {
+
+    private String uuid;
 
     private String name;
     private List<String> head;
@@ -12,6 +15,8 @@ public class JonglistoView {
     private List<String> recordings;
 
     public JonglistoView() {
+        uuid = UUID.randomUUID().toString();
+
         head = new ArrayList<>();
         channels = new ArrayList<>();
         timer = new ArrayList<>();
@@ -22,8 +27,8 @@ public class JonglistoView {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String n) {
+        this.name = n;
     }
 
     public List<String> getHead() {
@@ -56,5 +61,13 @@ public class JonglistoView {
 
     public void setRecordings(List<String> recordings) {
         this.recordings = recordings;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

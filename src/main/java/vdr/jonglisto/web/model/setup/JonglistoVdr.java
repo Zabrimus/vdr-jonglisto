@@ -1,14 +1,17 @@
 package vdr.jonglisto.web.model.setup;
 
 public class JonglistoVdr {
-
+    
     private String uuid;
     private String name;
     private String ip;
     private String svdrp;
     private String restful;
-
+    
     public JonglistoVdr() {
+        // set default values
+        restful = "8002";
+        svdrp = "6419";
     }
 
     public String getUuid() {

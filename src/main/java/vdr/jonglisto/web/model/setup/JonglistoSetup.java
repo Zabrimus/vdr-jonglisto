@@ -11,19 +11,18 @@ public class JonglistoSetup {
     private String epgdPort;
     private String epgdUser;
     private String epgdPassword;
-    
-    
+
     private List<JonglistoVdr> availableVdr;
     private List<JonglistoView> availableViews;
 
     public JonglistoSetup() {
         // set some default values
         epgdDatabase = "epg2vdr";
-        epgdHost = "homeserver";
-        epgdPort = "3307";
+        epgdHost = "server";
+        epgdPort = "3306";
         epgdUser = "epg2vdr";
         epgdPassword = "epg";
-        
+
         availableViews = new ArrayList<>();
     }
 
@@ -58,15 +57,15 @@ public class JonglistoSetup {
     public void setEpgdPassword(String epgdPassword) {
         this.epgdPassword = epgdPassword;
     }
-    
+
     public String getEpgdDatabase() {
         return epgdDatabase;
     }
-    
+
     public void setEpgdDatabase(String epgdDatabase) {
         this.epgdDatabase = epgdDatabase;
     }
-    
+
     public List<JonglistoVdr> getAvailableVdr() {
         return availableVdr;
     }
@@ -77,13 +76,12 @@ public class JonglistoSetup {
         result.addAll(list);
         this.availableVdr = result;
     }
-    
+
     public List<JonglistoView> getAvailableViews() {
         return availableViews;
     }
-    
+
     public void setAvailableViews(List<JonglistoView> availableViews) {
         this.availableViews = availableViews;
     }
-    
 }

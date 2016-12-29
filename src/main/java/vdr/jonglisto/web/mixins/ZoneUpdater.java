@@ -55,11 +55,18 @@ public class ZoneUpdater {
     private boolean secure;
 
     /**
-     * Set the additional value
+     * Set the additional computed value
      */
     @Parameter(name = "addValue", defaultPrefix = BindingConstants.LITERAL)
     private String addValue;
 
+    /**
+     * Set the additional constant value
+     */
+    @Parameter(name = "addConstant", defaultPrefix = BindingConstants.LITERAL)
+    private String addConstant;
+
+    
     // Useful bits and pieces
 
     @Inject
@@ -79,6 +86,6 @@ public class ZoneUpdater {
     void afterRender() {
         String listenerURI = componentResources.createEventLink(event, context).toAbsoluteURI(secure);
         javaScriptSupport.require("zone-updater").with(attachedTo.getClientId(), clientEvent, listenerURI, zone,
-                addValue != null ? addValue : new JSONLiteral(null));
+                addValue != null ? addValue : new JSONLiteral(null), addConstant != null ? addConstant : new JSONLiteral(null));
     }
 }

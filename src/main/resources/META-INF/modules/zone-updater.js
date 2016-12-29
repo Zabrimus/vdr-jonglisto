@@ -10,8 +10,7 @@
 define([ "jquery", "t5/core/zone" ],
         function($, zoneManager) {
 
-            return function(elementId, clientEvent, listenerURI, zoneElementId,
-                    addElement) {
+            return function(elementId, clientEvent, listenerURI, zoneElementId, addElement, addconstant) {
                 var $element = $("#" + elementId);
 
                 if (clientEvent) {
@@ -28,16 +27,13 @@ define([ "jquery", "t5/core/zone" ],
 
                     }
 
-                    listenerURIWithValue = appendQueryStringParameter(
-                            listenerURIWithValue, 'param', $element.val(),
-                            addvalue);
+                    listenerURIWithValue = appendQueryStringParameter(listenerURIWithValue, 'param', $element.val(), addvalue, addconstant);
 
                     zoneManager.deferredZoneUpdate(zoneElementId, listenerURIWithValue);
-                    // zoneManager.deferredZoneUpdate(zoneElementId, listenerURI);
                 }
             }
 
-            function appendQueryStringParameter(url, name, value, addvalue) {
+            function appendQueryStringParameter(url, name, value, addvalue, addconstant) {
                 if (url.indexOf('?') < 0) {
                     url += '?'
                 } else {
@@ -52,6 +48,10 @@ define([ "jquery", "t5/core/zone" ],
                     url += '&add=' + encodeURIComponent(addvalue);
                 }
 
+                if (addconstant) {
+                    url += '&constant=' + encodeURIComponent(addconstant)
+                }
+                
                 return url;
             }
 
