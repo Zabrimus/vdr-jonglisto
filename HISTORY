@@ -1,9 +1,11 @@
-0.0.5-snapshot (cleanuo):
+0.0.5:
 - implemented wake-on-lan 
 - shows plugin and devices for each VDR on index page
 - possibility to update ordering of epg2vdr channelmap according to channel sorting
 - localization (a first translation in english)
 - mark different search timer in epg views (epgsearch, epgd and epg2timer)
+- implemented a (minimal) setup page
+- bugfixes
 
 0.0.4:
 - channel sorting implemented

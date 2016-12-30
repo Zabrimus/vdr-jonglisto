@@ -21,7 +21,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 
 import vdr.jonglisto.lib.model.Channel;
-import vdr.jonglisto.lib.model.TimerEpg;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.util.Function;
 import vdr.jonglisto.web.encoder.ChannelEncoder;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -94,7 +95,7 @@ public class Setup {
     
     public void onActivate() {
         if (setup == null) {
-            setup = new JonglistoSetup();
+            readExistingSetup();
         }
     }
 
@@ -104,6 +105,8 @@ public class Setup {
     public Object onSelectedFromTestDatabase() {
         try {
             String url = "jdbc:mysql://" + setup.getEpgdHost() + ":" + setup.getEpgdPort() + "/" + setup.getEpgdDatabase();
+            
+            log.info("Database url: " + url);
             
             BasicDataSource epgDb = new BasicDataSource();
             epgDb.setDriverClassName("com.mysql.jdbc.Driver");        
@@ -115,11 +118,11 @@ public class Setup {
             
             // read vdr data
             try (Connection con = sql2o.open()) {
-                setup.setAvailableVdr(con.createQuery("select uuid, name, ip, svdrp from vdrs where name <> 'epgd'").executeAndFetch(JonglistoVdr.class));
+                setup.setAvailableVdr(con.createQuery("select uuid, name as hostname, name as displayname, name as alias, ip, svdrp from vdrs where name <> 'epgd'").executeAndFetch(JonglistoVdr.class));
             }
                         
             this.alertManager.info("Database connection is sucessfully configured.");
-        } catch (Exception e) {            
+        } catch (Exception e) {
             sql2o = null;
             setupform.recordError("Unable to connect to database. Please adjust the values.");
         }
@@ -145,9 +148,45 @@ public class Setup {
         
         return setupZone;
     }
-    
+
+    public Object onSelectedFromCheckVdr() {
+        boolean ok = true;
+        
+        // check if all aliases and display names are unique
+        Optional<Long> countedAliases = setup.getAvailableVdr().stream()    // 
+                .map(s -> s.getAlias()) //
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())) //
+                .values() //
+                .stream() //
+                .filter(s -> s > 1) //
+                .findFirst();
+        
+        if (countedAliases.isPresent()) {
+            setupform.recordError("Aliases are not unique. Expect some problems...");
+            ok = false;
+        }
+        
+        Optional<Long> countedDisplayNames = setup.getAvailableVdr().stream()    // 
+                .map(s -> s.getDisplayName()) //
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting())) //
+                .values() //
+                .stream() //
+                .filter(s -> s > 1) //
+                .findFirst();
+        
+        if (countedDisplayNames.isPresent()) {
+            setupform.recordError("Display names are not unique. Expect some problems...");
+            ok = false;
+        }
+        
+        if (ok) {
+            this.alertManager.info("VDR aliases and display names are now usable.");
+        }
+        
+        return setupZone;
+    }
+
     public void onSelectedFromGenerateConfig() {
-        // FIXME: Prüfe, ob die Aliasnamen eindeutig sind!      
         genConfig = true;
     }
     
@@ -185,7 +224,7 @@ public class Setup {
             JSONObject aliases = new JSONObject();
             setup.getAvailableVdr().stream() //
                 .forEach(s -> {
-                    aliases.put(s.getName(), s.getUuid());
+                    aliases.put(s.getAlias(), s.getUuid());
                 });
             cfg.put("aliases", aliases);
             
@@ -193,8 +232,8 @@ public class Setup {
             setup.getAvailableVdr().stream() //
                 .forEach(s -> {
                     JSONObject vdrcfg = new JSONObject();
-                    vdrcfg.put("uuid", s.getName());
-                    vdrcfg.put("displayName", s.getName());
+                    vdrcfg.put("uuid", s.getAlias());
+                    vdrcfg.put("displayName", s.getDisplayName());
                     
                     JSONObject vdrval = new JSONObject();
                     vdrval.put("TIMER_AUX", "");
@@ -211,8 +250,6 @@ public class Setup {
             // Sichten
             setup.getAvailableViews().stream() //
                 .forEach(s -> {
-                    System.err.println("View.name: " + s.getName());
-                    
                     JSONObject sicht = new JSONObject();
                     sicht.put("displayName", s.getName());
                     sicht.put("head", s.getHead().get(0));
@@ -234,23 +271,23 @@ public class Setup {
     }
 
     public Object getVdrNameModel() {
-        return setup.getAvailableVdr().stream().map(s -> s.getName()).collect(Collectors.toList());
+        return setup.getAvailableVdr().stream().map(s -> s.getAlias()).collect(Collectors.toList());
     }
 
     public Object onDeleteVdr(String uuid) {
         setup.setAvailableVdr(setup.getAvailableVdr().stream().filter(s -> !s.getUuid().equals(uuid)).collect(Collectors.toList()));
         return setupZone;
     }
-    
+
     public Object onDeleteView(int idx) {
         setup.getAvailableViews().remove(idx);
         return setupZone;
     }
     
     void onAliasNameChanged(@RequestParameter(value = "param", allowBlank = true) String name, @RequestParameter(value = "constant", allowBlank = true) String oldName) {
-        Optional<JonglistoVdr> myv = setup.getAvailableVdr().stream().filter(s -> s.getName().equals(oldName)).findFirst();
+        Optional<JonglistoVdr> myv = setup.getAvailableVdr().stream().filter(s -> s.getAlias().equals(oldName)).findFirst();
         if (myv.isPresent()) {
-            myv.get().setName(name);
+            myv.get().setAlias(name);
         }
         
         setup.getAvailableViews().stream().forEach(v -> {
@@ -304,12 +341,14 @@ public class Setup {
         };
     }
 
-    private JonglistoSetup readExistingSetup() {
+    @SuppressWarnings("unchecked")
+    private void readExistingSetup() {
         Pattern pattern = Pattern.compile("jdbc:mysql://(.*?):(.*?)/(.*?)");
         
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-        JonglistoSetup s = new JonglistoSetup();
+        
+        setup = new JonglistoSetup();
         
         try {
             Map<String, Object> config = mapper.readValue(new File("/etc/jonglisto/jonglisto.json"), Map.class);
@@ -319,31 +358,32 @@ public class Setup {
 
             Matcher matcher = pattern.matcher((String) dbConfig.get("url"));
             if (matcher.matches()) {                
-                s.setEpgdPassword((String) dbConfig.get("password"));
-                s.setEpgdUser((String) dbConfig.get("username"));
-                s.setEpgdHost(matcher.group(1));            
-                s.setEpgdPort(matcher.group(2));
-                s.setEpgdDatabase(matcher.group(3));
+                setup.setEpgdPassword((String) dbConfig.get("password"));
+                setup.setEpgdUser((String) dbConfig.get("username"));
+                setup.setEpgdHost(matcher.group(1));            
+                setup.setEpgdPort(matcher.group(2));
+                setup.setEpgdDatabase(matcher.group(3));
                 
                 // Connect to database
                 onSelectedFromTestDatabase();
                 if (sql2o == null) {
+                    log.info("Database setup not valid or database not accesible");
                     // at least the database configuration must be correct...
-                    return s;
+                    return;
                 }
             }            
             
             // Aliases configuration
             Map<String, String> aliases = (Map<String, String>) config.get("aliases");
             aliases.keySet().stream().forEach(a -> {
-                Optional<JonglistoVdr> myv = s.getAvailableVdr().stream().filter(av -> av.getUuid().equals(aliases.get(a))).findFirst();
+                Optional<JonglistoVdr> myv = setup.getAvailableVdr().stream().filter(av -> av.getUuid().equals(aliases.get(a))).findFirst();
                 if (myv.isPresent()) {
-                    myv.get().setName(a);
+                    myv.get().setAlias(a);
                 } else {
                     JonglistoVdr newv = new JonglistoVdr();
-                    newv.setName(a);
+                    newv.setAlias(a);
                     newv.setUuid(aliases.get(a));
-                    s.getAvailableVdr().add(newv);
+                    setup.getAvailableVdr().add(newv);
                 }
             });
 
@@ -351,22 +391,37 @@ public class Setup {
             ArrayList<Map<String, Object>> vdrConfig = (ArrayList<Map<String, Object>>) config.get("VDR");
             vdrConfig.stream().forEach(v -> {
                 // search the vdr
-                Optional<JonglistoVdr> x = s.getAvailableVdr().stream().filter(f -> f.getName().equals(v.get("displayName"))).findFirst();
+                Optional<JonglistoVdr> x = setup.getAvailableVdr().stream().filter(f -> f.getAlias().equals(v.get("uuid"))).findFirst();
                 if (x.isPresent()) {
-                    x.get().setIp(StringUtils.defaultIfBlank((String) v.get("ip"), vdr.getIp()));
-                    x.get().setRestful(StringUtils.defaultIfBlank((String) v.get("restfulApiPort"), vdr.getRestful()));
-                    x.get().setSvdrp(StringUtils.defaultIfBlank((String) v.get("svdrpPort"), vdr.getSvdrp()));
+                    x.get().setIp(StringUtils.defaultIfBlank((String) v.get("ip"), x.get().getIp()));
+                    
+                    if (v.get("restfulApiPort") != null) {
+                        x.get().setRestful(String.valueOf(v.get("restfulApiPort")));
+                    }
+                    
+                    if (v.get("svdrpPort") != null) {
+                        x.get().setSvdrp(String.valueOf(v.get("svdrpPort")));
+                    }
+                        
+                    x.get().setDisplayName((String) v.get("displayName"));
                 }
             });
             
             // View configuration
-            
-            // FIXME: Finish the implementation
+            ArrayList<Map<String, Object>> vdrViews = (ArrayList<Map<String, Object>>) config.get("Sichten");
+            vdrViews.stream().forEach(v -> {
+                JonglistoView view = new JonglistoView();
+                view.setName((String) v.get("displayName"));                
+                view.getChannels().addAll((ArrayList<String>)v.get("channels"));
+                view .getHead().add((String) v.get("head"));
+                view .getTimer().add((String) v.get("timers"));
+                view .getRecordings().addAll((ArrayList<String>)v.get("recordings"));
+                
+                setup.getAvailableViews().add(view);
+            });
         } catch (IOException e) {
             // setup does not exists => use the empty one            
         }        
-        
-        return s;
     }
     
 }

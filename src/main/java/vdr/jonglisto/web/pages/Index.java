@@ -48,12 +48,18 @@ public class Index {
     @Property
     private VDRView currentVdrView;
 
-    public void onActivate() {
+    public Object onActivate() {
+        if (!configuration.isSuccessfullyInitialized()) {
+            return Setup.class;
+        }
+        
         if (currentVdrView == null) {
             // session is empty. re-init...
             currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == Type.View)
                     .findFirst().get();
-        }                       
+        }         
+        
+        return null;
     }
     
     public void afterRender() {

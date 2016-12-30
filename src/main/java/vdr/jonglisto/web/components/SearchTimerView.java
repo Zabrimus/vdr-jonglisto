@@ -303,7 +303,6 @@ public class SearchTimerView extends BaseComponent {
     }
     
     public void setTimerAction(String s) {
-        System.err.println("SetTimerAction: " + s);
     }
 
     public List<String> getChannels() {

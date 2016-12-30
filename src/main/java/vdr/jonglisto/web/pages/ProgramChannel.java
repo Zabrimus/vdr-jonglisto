@@ -6,11 +6,15 @@ import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria.What;
 
 public class ProgramChannel {
+
+    @Inject
+    private ConfigurationService configuration;
 
     @SessionAttribute("epgSearchCriteria")
     @Property
@@ -24,6 +28,10 @@ public class ProgramChannel {
     private ComponentResources componentResources;
 
     Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
+        if (!configuration.isSuccessfullyInitialized()) {
+            return Setup.class;
+        }
+
         if (currentVdrView == null) {
             // deep jump into this page?
             return Index.class;

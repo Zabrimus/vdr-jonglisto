@@ -6,12 +6,18 @@ import java.io.InputStream;
 
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.Persist;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Response;
+
+import vdr.jonglisto.lib.ConfigurationService;
 
 /*
  * Hacky page to bypass problems with ajax requests and StreamResponse as answer
  */
 public class StreamResponsePage {
+
+    @Inject
+    private ConfigurationService configuration;
 
     @Persist("flash")
     private String streamContent;

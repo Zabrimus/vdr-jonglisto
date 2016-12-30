@@ -54,8 +54,6 @@ import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
-import vdr.jonglisto.web.model.setup.JonglistoVdr;
-import vdr.jonglisto.web.model.setup.JonglistoView;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -162,8 +160,8 @@ public class AppModule {
         configuration.add(SymbolConstants.COMPACT_JSON, true);
         configuration.add(SymbolConstants.COMPRESS_WHITESPACE, true);
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
-        configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);        
-        
+        configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
+
         // configuration.add("tapestry.closure-compiler-level",
         // "WHITESPACE_ONLY");
         configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--
@@ -210,7 +208,7 @@ public class AppModule {
             }
         };
     }
-
+    
     @Startup
     public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service,
             ComponentClassResolver componentClassResolver, ComponentSource componentSource) {

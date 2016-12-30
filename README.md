@@ -16,6 +16,14 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 * optional remoteosd/svdrpservice plugin (See <http://vdr.schmirler.de/>) 
 * java 8
 
+### Setup
+If you first start the application without an valid configuration, you will be redirected to a setup page to create your first minimal configuration. The configuration file jonglisto.json can then be *downloaded*. There is no automatically installation. But this downloaded file is a good starting point for further configuration.
+
+### i18n
+It is possible to switch the application language. Currently english and german are supported. But the english version could be a little bit bumby.
+The language files could be found in directory src/main/webapp/WEB-INF. app.properties or app_de.properties.
+Any help in translatating to other languages or correcting some flaws are very appreciated.
+
 ### Channel logos
 The application now uses channel logos from <https://github.com/picons/picons-source>. To build the necessary logo.jar ju,p into directory tools and start ./build-logo-jar.sh.
 This jar have to created only at the very first build or if there exists some new and interesting logos. The logo.jar has a size of only 8MB.
@@ -41,6 +49,7 @@ It is possible to send a SVDRP command to all configured VDR instances and see t
 ### channelmap.conf editor (epg2vdr daemon)
 The configuration of channelmap.conf for the epg2vdr daemon can be done via Jonglisto. It supports currently different epg provider (all german). The mapping could be done via drag and drop. The configuration itself is saved into the internal database. If the configuration is done well, the included auto-mapping tool will create a reasonable channelmap.conf.
 Included is a configuration which is reasonable for my cable provider. 
+It is also possible to sort the channels in the epg2vdr database according to your personal sorting.
 
 ### channel sorting
 It is possible to create channel groups and sort channels via drag and drop. The final channels.conf can then be downloaded.

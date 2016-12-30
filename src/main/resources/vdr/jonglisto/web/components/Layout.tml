@@ -24,9 +24,9 @@
                         <div class="navbar-header">
                             <t:eventlink event="toggleViewType" class="navbar-brand">
                                 <t:if test="showVdrList()">
-                                    ${message:configured_vdr}:                                    
+                                    <span class="glyphicon glyphicon-triangle-right"></span> ${message:configured_vdr}:                                    
                                     <p:else>
-                                        ${message:configured_views}:
+                                        <span class="glyphicon glyphicon-triangle-right"></span> ${message:configured_views}:
                                     </p:else>
                                 </t:if>
                             </t:eventlink>

@@ -80,8 +80,6 @@ public class SvdrpConsole extends BaseComponent {
     }
 
     void onSuccess() {
-        System.err.println("SvdrpCommand: " + svdrpCommand + ", VDR = " + selectedVdr);
-
         List<String> result = executeCommand();
 
         if (request.isXHR()) {

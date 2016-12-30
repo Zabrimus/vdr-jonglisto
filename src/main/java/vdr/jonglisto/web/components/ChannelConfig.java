@@ -133,8 +133,6 @@ public class ChannelConfig extends BaseComponent {
         String toidx = request.getParameter("toidx");
         String group = request.getParameter("group");
 
-        System.err.println("id: " + id + ", to: " + to + ", from: " + from + ", fromidx: " + fromidx + ", toidx: " + toidx + ", group: " + group);
-        
         if (Boolean.parseBoolean(group)) {
             // exchange groups
             String g = channelGroups.get(Integer.parseInt(to));

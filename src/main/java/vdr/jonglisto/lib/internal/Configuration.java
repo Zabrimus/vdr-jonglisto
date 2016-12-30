@@ -106,9 +106,10 @@ public class Configuration {
     }
 
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
-
+    
     private int prodVersion = 1;
     private String version = "0.0.5";
+    private boolean successfullyConfigured = true;
 
     private Logger log = LoggerFactory.getLogger(Configuration.class);
 
@@ -146,6 +147,10 @@ public class Configuration {
 
     public String getVersion() {
         return version;
+    }
+    
+    public boolean isSuccessfullyConfigured() {
+        return successfullyConfigured;
     }
 
     public VDR getVdr(String uuid) {
@@ -553,7 +558,7 @@ public class Configuration {
             startSvdrpServer();
         } catch (IOException e) {
             System.err.println("Error while reading " + pathname + ": " + e.getMessage());
-            System.exit(1);
+            successfullyConfigured = false;
         }
     }
 

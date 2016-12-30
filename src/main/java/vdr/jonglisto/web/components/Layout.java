@@ -1,5 +1,6 @@
 package vdr.jonglisto.web.components;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -89,15 +90,19 @@ public class Layout extends BaseComponent {
     }
 
     public List<VDRView> getViews() {
-        if (type == null) {
-            // set default type and view
-            type = Type.View;
-            currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
-                    .sorted().findFirst().get();
+        if (configuration.isSuccessfullyInitialized()) {
+            if (type == null) {
+                // set default type and view
+                type = Type.View;
+                currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
+                        .sorted().findFirst().get();
+            }
+    
+            return configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).sorted()
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
         }
-
-        return configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).sorted()
-                .collect(Collectors.toList());
     }
 
     public void onSelectView(String displayName) {
@@ -107,14 +112,17 @@ public class Layout extends BaseComponent {
     }
 
     public Object onToggleViewType() {
+        if (!configuration.isSuccessfullyInitialized()) {
+            return null;
+        }
+        
         if (type == Type.VDR) {
             type = Type.View;
         } else {
             type = Type.VDR;
         }
 
-        currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
-                .findFirst().get();
+        currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).findFirst().get();
         return Index.class;
     }
 

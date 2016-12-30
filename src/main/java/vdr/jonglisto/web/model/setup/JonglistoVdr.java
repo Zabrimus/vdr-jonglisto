@@ -1,13 +1,15 @@
 package vdr.jonglisto.web.model.setup;
 
 public class JonglistoVdr {
-    
+
     private String uuid;
-    private String name;
+    private String hostname;
+    private String displayName;
+    private String alias;
     private String ip;
     private String svdrp;
     private String restful;
-    
+
     public JonglistoVdr() {
         // set default values
         restful = "8002";
@@ -20,14 +22,6 @@ public class JonglistoVdr {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getIp() {
@@ -52,5 +46,29 @@ public class JonglistoVdr {
 
     public void setRestful(String restful) {
         this.restful = restful;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 }

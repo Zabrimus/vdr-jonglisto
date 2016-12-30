@@ -59,6 +59,8 @@
                     <table class="table table-sm table-striped table-bordered">
                         <tr>
                             <th>${message:vdr_alias}</th>
+                            <th>${message:vdr_displayname}</th>
+                            <th>${message:vdr_hostname}</th>
                             <th>${message:vdr_ip}</th>
                             <th>${message:vdr_uuid}</th>
                             <th>${message:vdr_svdrpport}</th>
@@ -69,7 +71,15 @@
                         <t:loop source="setup.availableVdr" value="vdr" encoder="vdrEncoder">
                             <tr>
                                 <td>
-                                    <t:TextField t:id="name" value="vdr.name" size="20" t:mixins="zoneUpdater" ZoneUpdater.clientEvent="blur" ZoneUpdater.event="aliasNameChanged" ZoneUpdater.zone="setupZone" ZoneUpdater.addConstant="${vdr.name}"/>
+                                    <t:TextField t:id="alias" value="vdr.alias" size="20" />
+                                </td>
+
+                                <td>
+                                    <t:TextField t:id="displayname" value="vdr.displayname" size="20" />
+                                </td>
+
+                                <td>
+                                    <t:TextField t:id="hostname" value="vdr.hostname" size="20" />
                                 </td>
 
                                 <td>
@@ -95,71 +105,68 @@
                         </t:loop>
                     </table>
 
-                    <t:submit value="${message:newVdr}" t:id="newVdr" zone="^" />
+                    <t:submit value="${message:newVdr}" t:id="newVdr" zone="^" /> &nbsp;
+                    <t:submit value="${message:checkVdr}" t:id="checkVdr" zone="^" />
                 </fieldset>
 
-                <!-- 
-                <t:zone t:id="viewZone" id="viewZone">
-                -->
-                    <fieldset class="fieldset-border">
-                        <legend class="legend-border">${message:configviews}</legend>
+                <fieldset class="fieldset-border">
+                    <legend class="legend-border">${message:configviews}</legend>
 
-                        <table class="table table-sm table-striped table-bordered">
+                    <table class="table table-sm table-striped table-bordered">
+                        <tr>
+                            <th>${message:view_name}</th>
+                            <th>${message:view_tv}</th>
+                            <th>${message:view_channels}</th>
+                            <th>${message:view_timers}</th>
+                            <th>${message:view_recordings}</th>
+                            <th></th>
+                        </tr>
+
+                        <t:loop source="setup.availableViews" value="view" index="viewIndex" encoder="viewEncoder">
                             <tr>
-                                <th>${message:view_name}</th>
-                                <th>${message:view_tv}</th>
-                                <th>${message:view_channels}</th>
-                                <th>${message:view_timers}</th>
-                                <th>${message:view_recordings}</th>
-                                <th></th>
+                                <td>
+                                    <t:TextField t:id="viewName" value="view.name" size="20" />
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewHead" blankLabel="Select..." model="vdrNameModel" selected="view.head"
+                                            multiple="false" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewChannels" blankLabel="Select..." model="vdrNameModel" selected="view.channels"
+                                            multiple="true" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewTimers" blankLabel="Select..." model="vdrNameModel" selected="view.timer"
+                                            multiple="false" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="col-sm-36">
+                                        <etc:multiselect t:id="viewRecordings" blankLabel="Select..." model="vdrNameModel" selected="view.recordings"
+                                            multiple="true" blankOption="never" />
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <t:eventlink t:event="deleteView" class="caright" context="viewIndex" zone="^">${message:delete}
+                                    </t:eventlink>
+                                </td>
                             </tr>
+                        </t:loop>
+                    </table>
 
-                            <t:loop source="setup.availableViews" value="view" index="viewIndex" encoder="viewEncoder">
-                                <tr>
-                                    <td>
-                                        <t:TextField t:id="viewName" value="view.name" size="20" />
-                                    </td>
+                    <t:submit value="${message:newView}" t:id="newView" zone="^" />
+                </fieldset>
 
-                                    <td>
-                                        <span class="col-sm-36">
-                                            <etc:multiselect t:id="viewHead" blankLabel="Select..." model="vdrNameModel" selected="view.head"
-                                                multiple="false" blankOption="never" />
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="col-sm-36">
-                                            <etc:multiselect t:id="viewChannels" blankLabel="Select..." model="vdrNameModel" selected="view.channels"
-                                                multiple="true" blankOption="never" />
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="col-sm-36">
-                                            <etc:multiselect t:id="viewTimers" blankLabel="Select..." model="vdrNameModel" selected="view.timer"
-                                                multiple="false" blankOption="never" />
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="col-sm-36">
-                                            <etc:multiselect t:id="viewRecordings" blankLabel="Select..." model="vdrNameModel" selected="view.recordings"
-                                                multiple="true" blankOption="never" />
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <t:eventlink t:event="deleteView" class="caright" context="viewIndex" zone="^">${message:delete}</t:eventlink>
-                                    </td>
-                                </tr>
-                            </t:loop>
-                        </table>
-
-                        <t:submit value="${message:newView}" t:id="newView" zone="^" />
-                    </fieldset>
-                <!-- 
-                </t:zone>
-                -->
                 <t:submit value="${message:generateConfig}" t:id="generateConfig" />
             </t:if>
         </t:form>

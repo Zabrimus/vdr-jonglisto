@@ -273,8 +273,6 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
                 // put the channel into the parking group
                 if (ch.get(currentChannel) != null) {
                     result.get(parkingGroup).add(ch.get(currentChannel));
-                } else {
-                    System.err.println("CurrentChannel " + currentChannel + " -> " + ch.get(currentChannel));
                 }
             }
             

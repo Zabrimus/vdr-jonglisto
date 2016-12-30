@@ -13,6 +13,10 @@ public interface ConfigurationService {
 
     Configuration configuration = Configuration.getInstance();
 
+    public default boolean isSuccessfullyInitialized() {
+        return configuration.isSuccessfullyConfigured();
+    }
+    
     public void triggerInitialization();
 
     public void shutdown();

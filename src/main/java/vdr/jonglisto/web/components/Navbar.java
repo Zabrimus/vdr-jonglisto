@@ -49,17 +49,20 @@ public class Navbar extends BaseComponent {
 
     public Navbar() {
         pages = new ArrayList<NavPage>();
-        pages.add(new NavPage(messages.get("page_index"), "index"));
-        pages.add(new NavPage(messages.get("page_program_now"), "programTime"));
-        pages.add(new NavPage(messages.get("page_program_day"), "programDay"));
-        pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
-        pages.add(new NavPage(messages.get("page_timer"), "timer"));
-        pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
-        pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
-        pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
-        pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
-        pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
-        // pages.add(new NavPage(messages.get("page_setup"), "setup"));
+        
+        if (configuration.isSuccessfullyInitialized()) {                   
+            pages.add(new NavPage(messages.get("page_index"), "index"));
+            pages.add(new NavPage(messages.get("page_program_now"), "programTime"));
+            pages.add(new NavPage(messages.get("page_program_day"), "programDay"));
+            pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
+            pages.add(new NavPage(messages.get("page_timer"), "timer"));
+            pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
+            pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
+            pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
+            pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
+            pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
+            pages.add(new NavPage(messages.get("page_setup"), "setup"));
+        };
     }
 
     public List<NavPage> getPageNames() {
