@@ -1,4 +1,5 @@
-<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter">
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd" xmlns:p="tapestry:parameter"
+    xmlns:etc="tapestry-library:EddysonTapestryExtensions">
     <t:content>
         <t:zone t:id="searchTimerListZone" id="searchTimerListZone">
             <t:delegate to="activeBlock" />
@@ -119,7 +120,7 @@
                             <t:label for="timer_namingmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
                                 <t:select t:id="timer_namingmode" value="searchTimer.namingMode" label="message:timer_namingmode" blankOption="NEVER"
-                                    model="message:timer_namingmode_select" />                                
+                                    model="message:timer_namingmode_select" />
                             </div>
                         </div>
 
@@ -207,8 +208,8 @@
                         <div class="form-group row">
                             <t:label for="timer_searchmode" class="col-sm-5 col-form-label" />
                             <div class="col-sm-10">
-                                <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode"
-                                    model="message:timer_searchmode_select" blankOption="NEVER" validate="required" />
+                                <t:select t:id="timer_searchmode" value="searchTimer.searchmode" label="message:timer_searchmode" model="message:timer_searchmode_select"
+                                    blankOption="NEVER" validate="required" />
                             </div>
                         </div>
 
@@ -237,118 +238,111 @@
 
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">${message:extended_search_criteria}</legend>
+                        <legend class="legend-border">${message:extended_search_criteria}</legend>
 
-                        <span class="hideme">
-                            <div class="form-group row">
-                                <t:label for="timer_episode" class="col-sm-5 col-form-label" />
-                                <div class="col-sm-10">
-                                    <t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" />
-                                </div>
+                        <div class="form-group row">
+                            <t:label for="timer_episode" class="col-sm-5 col-form-label" />
+                            <div class="col-sm-10">
+                                <t:TextField t:id="timer_episode" value="searchTimer.episodename" label="message:timer_episode" size="20" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <t:label for="timer_season" class="col-sm-5 col-form-label" />
+                            <div class="col-sm-3">
+                                <t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" />
                             </div>
 
-                            <div class="form-group row">
-                                <t:label for="timer_season" class="col-sm-5 col-form-label" />
-                                <div class="col-sm-3">
-                                    <t:TextField t:id="timer_season" value="searchTimer.season" label="message:timer_season" size="6" />
-                                </div>
+                            <t:label for="timer_seasonpart" class="col-sm-2 col-form-label" />
+                            <div class="col-sm-3">
+                                <t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" size="6" />
+                            </div>
+                        </div>
 
-                                <t:label for="timer_seasonpart" class="col-sm-2 col-form-label" />
-                                <div class="col-sm-3">
-                                    <t:TextField t:id="timer_seasonpart" value="searchTimer.seasonpart" label="message:timer_seasonpart" size="6" />
+                        <div class="form-group row">
+                            <t:label for="timer_year" class="col-sm-5 col-form-label" />
+                            <div class="col-sm-3">
+                                <t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-5">${message:timer_starttime}:</label>
+                            <div class="col-sm-4">
+                                <t:TextField t:id="timer_starttime" value="searchTimer.starttime" size="5" validate="regexp" />
+                            </div>
+                            <label class="col-sm-1">${message:and}</label>
+                            <div class="col-sm-4">
+                                <t:TextField t:id="timer_endtime" value="searchTimer.endtime" size="5" validate="regexp" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-5">${message:days}:</label>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_mo" t:type="checkbox" value="searchTimer.monday" label="message:timer_date_mo" />&nbsp;
+                                        <t:label for="timer_day_mo" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_di" t:type="checkbox" value="searchTimer.thursday" label="message:timer_date_di" />&nbsp;
+                                        <t:label for="timer_day_di" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_mi" t:type="checkbox" value="searchTimer.wednesday" label="message:timer_date_mi" />&nbsp;
+                                        <t:label for="timer_day_mi" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_do" t:type="checkbox" value="searchTimer.tuesday" label="message:timer_date_do" />&nbsp;
+                                        <t:label for="timer_day_do" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_fr" t:type="checkbox" value="searchTimer.friday" label="message:timer_date_fr" />&nbsp;
+                                        <t:label for="timer_day_fr" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_sa" t:type="checkbox" value="searchTimer.saturday" label="message:timer_date_sa" />&nbsp;
+                                        <t:label for="timer_day_sa" />
+                                    </label>
+                                    <label class="form-check-label">
+                                        <input t:id="timer_day_so" t:type="checkbox" value="searchTimer.sunday" label="message:timer_date_so" />&nbsp;
+                                        <t:label for="timer_day_so" />
+                                    </label>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="form-group row">
-                                <t:label for="timer_year" class="col-sm-5 col-form-label" />
-                                <div class="col-sm-3">
-                                    <t:TextField t:id="timer_year" value="searchTimer.year" label="message:timer_year" size="4" />
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-sm-5">${message:select_category}:</label>
+                            <div class="col-sm-20">
+                                <span class="col-sm-36">
+                                    <etc:multiselect t:id="timer_category" blankLabel="Select..." model="categoryModel" selected="selectedCategories"
+                                        multiple="true" />
+                                </span>
                             </div>
+                        </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-5">${message:timer_starttime}:</label>
-                                <div class="col-sm-4">
-                                    <t:TextField t:id="timer_starttime" value="searchTimer.starttime" size="5" validate="regexp" />
-                                </div>
-                                <label class="col-sm-1">${message:and}</label>
-                                <div class="col-sm-4">
-                                    <t:TextField t:id="timer_endtime" value="searchTimer.endtime" size="5" validate="regexp" />
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-sm-5">${message:select_genre}:</label>
+                            <div class="col-sm-20">
+                                <span class="col-sm-36">
+                                    <etc:multiselect t:id="timer_genre" blankLabel="Select..." model="genreModel" selected="selectedGenres"
+                                        multiple="true" />
+                                </span>
                             </div>
+                        </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-5">${message:days}:</label>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_mo" t:type="checkbox" value="searchTimer.monday" label="message:timer_date_mo" />&nbsp;
-                                            <t:label for="timer_day_mo" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_di" t:type="checkbox" value="searchTimer.thursday" label="message:timer_date_di" />&nbsp;
-                                            <t:label for="timer_day_di" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_mi" t:type="checkbox" value="searchTimer.wednesday" label="message:timer_date_mi" />&nbsp;
-                                            <t:label for="timer_day_mi" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_do" t:type="checkbox" value="searchTimer.tuesday" label="message:timer_date_do" />&nbsp;
-                                            <t:label for="timer_day_do" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_fr" t:type="checkbox" value="searchTimer.friday" label="message:timer_date_fr" />&nbsp;
-                                            <t:label for="timer_day_fr" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_sa" t:type="checkbox" value="searchTimer.saturday" label="message:timer_date_sa" />&nbsp;
-                                            <t:label for="timer_day_sa" />
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input t:id="timer_day_so" t:type="checkbox" value="searchTimer.sunday" label="message:timer_date_so" />&nbsp;
-                                            <t:label for="timer_day_so" />
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p>TODO: Bevorzugtes Sendeformat HD,SD,3D</p>
-
-                        </span>
+                        <p>TODO: Bevorzugtes Sendeformat HD,SD,3D</p>
                     </fieldset>
 
                     <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">${message:select_channel}</legend>
-                        <span class="hideme">
-                            <div class="form-group row">
-                                <div class="col-sm-16">
-                                    <t:channelSelectPalette selectedChannels="selectedChannels" />
-                                </div>
+                        <legend class="legend-border">${message:select_channel}</legend>
+                        <div class="form-group row">
+                            <div class="col-sm-16">
+                                <t:channelSelectPalette selectedChannels="selectedChannels" />
                             </div>
-                        </span>
-                    </fieldset>
-
-                    <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">${message:select_category}</legend>
-                        <span class="hideme">
-                            <div class="form-group row">
-                                <div class="col-sm-16">
-                                    <t:Palette t:id="timer_category" t:model="categoryModel" t:selected="selectedCategories" t:encoder="categoryEncoder" />
-                                </div>
-                            </div>
-                        </span>
-                    </fieldset>
-
-                    <fieldset class="fieldset-border">
-                        <legend class="legend-border clickToHide">${message:select_genre}</legend>
-                        <span class="hideme">
-                            <div class="form-group row">
-                                <div class="col-sm-16">
-                                    <t:Palette t:id="timer_genre" t:model="genreModel" t:selected="selectedGenres" t:encoder="genreEncoder" />
-                                </div>
-                            </div>
-                        </span>
+                        </div>
                     </fieldset>
 
                     <div class="form-group row">

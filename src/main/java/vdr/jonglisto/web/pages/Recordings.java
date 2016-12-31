@@ -8,7 +8,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.model.VDRView;
 
-public class Recordings {
+public class Recordings extends BasePage {
 
     @Inject
     private ConfigurationService configuration;
@@ -26,6 +26,10 @@ public class Recordings {
             // deep jump into this page?
             return Index.class;
         }
+
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
 
         return null;
     }

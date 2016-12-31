@@ -10,7 +10,7 @@ import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria.What;
 
-public class ProgramDay {
+public class ProgramDay extends BasePage {
 
     @Inject
     private ConfigurationService configuration;
@@ -32,6 +32,10 @@ public class ProgramDay {
             // side jump into the page?
             return Index.class;
         }
+
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
 
         if (((reset != null) && reset) || (epgCriteria == null) || (epgCriteria.getWhat() != What.DAY)) {
             epgCriteria = new EpgSearchCriteria(What.DAY);

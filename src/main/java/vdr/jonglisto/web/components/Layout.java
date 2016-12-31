@@ -9,31 +9,24 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.LocalizationSetter;
 import org.apache.tapestry5.services.PersistentLocale;
-import org.tynamo.conversations.services.ConversationManager;
 
 import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.VDRView.Type;
 import vdr.jonglisto.web.pages.Index;
 
 @Import(module = "bootstrap/collapse", stylesheet = { "META-INF/assets/css/jonglisto.less" })
-@Meta("tapestry.persistence-strategy=conversation")
 public class Layout extends BaseComponent {
 
     enum Mode {
         VIEW, VDR;
     }
-
-    @Inject
-    private ConversationManager conversationManager;
 
     @Inject
     private PersistentLocale persistentLocaleService;
@@ -48,9 +41,6 @@ public class Layout extends BaseComponent {
     @Inject
     private LocalizationSetter localizationSetter;
     
-    @Persist("session")
-    private String conversationId;
-
     @Property
     @Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
     private String title;
@@ -74,10 +64,6 @@ public class Layout extends BaseComponent {
     private String language;
     
     public void setupRender() {
-        if (!conversationManager.isActiveConversation(conversationId)) {
-            conversationId = conversationManager.createConversation(componentResources.getPageName(), 60, true);
-        }
-        
         if (currentLocale.getLanguage().equals(new Locale("de").getLanguage())) {
             language="de";
         } else  if (currentLocale.getLanguage().equals(new Locale("en").getLanguage())) {

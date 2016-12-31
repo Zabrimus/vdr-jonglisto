@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SessionAttribute;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
@@ -21,7 +22,7 @@ import vdr.jonglisto.lib.model.VDRView.Type;
  * Start page of application VDR Jonglisto app.
  */
 @Import(library = { "webjars:jquery-ui:$version/jquery-ui.js" }, stylesheet = {"webjars:jquery-ui:$version/jquery-ui.css" })
-public class Index {
+public class Index extends BasePage {
 
     @Inject
     private Logger log;
@@ -48,7 +49,7 @@ public class Index {
     @Property
     private VDRView currentVdrView;
 
-    public Object onActivate() {
+    public Object onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
         if (!configuration.isSuccessfullyInitialized()) {
             return Setup.class;
         }
@@ -58,6 +59,10 @@ public class Index {
             currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == Type.View)
                     .findFirst().get();
         }         
+        
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
         
         return null;
     }

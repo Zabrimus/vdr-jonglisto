@@ -14,7 +14,7 @@ import vdr.jonglisto.lib.ConfigurationService;
 /*
  * Hacky page to bypass problems with ajax requests and StreamResponse as answer
  */
-public class StreamResponsePage {
+public class StreamResponsePage extends BasePage {
 
     @Inject
     private ConfigurationService configuration;

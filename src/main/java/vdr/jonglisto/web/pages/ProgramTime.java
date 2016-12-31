@@ -11,7 +11,7 @@ import vdr.jonglisto.lib.model.VDRView;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria.What;
 
-public class ProgramTime {
+public class ProgramTime extends BasePage {
 
     @Inject
     private ConfigurationService configuration;
@@ -36,6 +36,10 @@ public class ProgramTime {
             // deep jump into this page?
             return Index.class;
         }
+
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
 
         if (((reset != null) && reset) || (epgCriteria == null) || (epgCriteria.getWhat() != What.TIME)) {
             epgCriteria = new EpgSearchCriteria(What.TIME);

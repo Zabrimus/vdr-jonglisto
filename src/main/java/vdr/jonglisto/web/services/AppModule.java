@@ -88,6 +88,7 @@ public class AppModule {
     public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
         configuration.override(SymbolConstants.APPLICATION_VERSION, Constants.version);
         configuration.override(SymbolConstants.PRODUCTION_MODE, false);
+        // configuration.override(SymbolConstants.PRODUCTION_MODE, true);
     }
 
     public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration,
@@ -147,7 +148,7 @@ public class AppModule {
     @Contribute(SymbolProvider.class)
     @ApplicationDefaults
     public static void setupEnvironment(MappedConfiguration<String, Object> configuration) {
-        configuration.override(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
+        configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
         configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:jbootstrap");
         configuration.add(SymbolConstants.HMAC_PASSPHRASE, "random value!");
 
@@ -162,23 +163,13 @@ public class AppModule {
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
         configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
 
-        // configuration.add("tapestry.closure-compiler-level",
-        // "WHITESPACE_ONLY");
-        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--
-        // configuration.add("tapestry.closure-compiler-level",
-        // "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this!
+        // configuration.add("tapestry.closure-compiler-level", "WHITESPACE_ONLY");
+        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--        
+        // configuration.add("tapestry.closure-compiler-level", "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this!
 
         // INFO:
         // only in production 1 to 5 minutes
         // configuration.add(SymbolConstants.FILE_CHECK_INTERVAL, 60);
-
-        // INFO:
-        // conversation is the desired default strategy, but only if the
-        // conversation moderator works again for Tapestry 5.4.1
-        // otherwise some persistent page data will be deleted too often and too
-        // early
-        // configuration.add(SymbolConstants.PERSISTENCE_STRATEGY,
-        // "conversation");
     }
 
     public RequestFilter buildTimingFilter(final Logger log) {

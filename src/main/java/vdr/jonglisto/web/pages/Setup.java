@@ -43,7 +43,7 @@ import vdr.jonglisto.web.model.setup.JonglistoView;
  * Start page of application VDR Jonglisto app.
  */
 @Import(library = { "webjars:jquery-ui:$version/jquery-ui.js" }, stylesheet = {"webjars:jquery-ui:$version/jquery-ui.css" })
-public class Setup {
+public class Setup extends BasePage {
 
     @Inject
     private Logger log;
@@ -93,7 +93,11 @@ public class Setup {
     @Property
     private int vdrIndex;
     
-    public void onActivate() {
+    public void onActivate(@RequestParameter(value = "reset", allowBlank = true) Boolean reset) {
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
+
         if (setup == null) {
             readExistingSetup();
         }

@@ -141,8 +141,7 @@ public class SearchTimerView extends BaseComponent {
         vdrEncoder = new VDREncoder(v);
     }
 
-    public void afterRender() {
-        javaScriptSupport.require("hideme").with(".clickToHide");
+    public void afterRender() {        
     }
 
     public void onToggleSearchTimerActive(Long id) {
@@ -330,9 +329,5 @@ public class SearchTimerView extends BaseComponent {
         default:
             return viewBlock;
         }
-    }
-
-    public void onRenderZone() {
-        javaScriptSupport.require("hideme").with(".clickToHide");
     }
 }

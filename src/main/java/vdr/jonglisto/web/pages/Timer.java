@@ -8,7 +8,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import vdr.jonglisto.lib.ConfigurationService;
 import vdr.jonglisto.lib.model.VDRView;
 
-public class Timer {
+public class Timer extends BasePage {
 
     @Inject
     private ConfigurationService configuration;
@@ -35,6 +35,10 @@ public class Timer {
             // deep jump into this page?
             return Index.class;
         }
+
+        if ((reset != null) && reset) {
+            discardAllPagePersistent();
+        }       
 
         newTimerUseId = useid;
         this.channelName = channelName;
