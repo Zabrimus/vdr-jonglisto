@@ -6,7 +6,7 @@ import java.util.Map;
 import vdr.jonglisto.lib.model.SearchTimer;
 import vdr.jonglisto.lib.model.TimerEpg;
 
-public interface SearchTimerService {
+public interface EpgdSearchTimerService {
 
     public List<SearchTimer> getSearchTimers();
 

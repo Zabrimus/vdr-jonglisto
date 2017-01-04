@@ -157,4 +157,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         return configuration.getEpg2VdrScript();
     }
 
+    public boolean isUseEpgd() {
+        return configuration.isUseEpgd();
+    }
 }

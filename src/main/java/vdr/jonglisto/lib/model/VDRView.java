@@ -19,7 +19,8 @@ public class VDRView implements Comparable<VDRView> {
     private VDR timerVDR;
     private VDR headVDR;
     private List<VDR> recordingVdr = new ArrayList<>();
-
+    private VDR epgVDR;
+    
     private Type type;
 
     public VDRView(ConfigurationService config) {
@@ -60,6 +61,14 @@ public class VDRView implements Comparable<VDRView> {
         }
     }
 
+    public Optional<String> getEpgVdr() {
+        try {
+            return Optional.of(epgVDR.getUuid());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public void addChannelVdr(VDR v) {
         channelVdr.add(v);
     }
@@ -92,6 +101,10 @@ public class VDRView implements Comparable<VDRView> {
         this.recordingVdr = recordingVdr;
     }
 
+    public void setEpgVDR(VDR epgVdr) {
+        this.epgVDR = epgVdr;
+    }
+
     public Type getType() {
         return type;
     }
@@ -102,11 +115,13 @@ public class VDRView implements Comparable<VDRView> {
 
     @Override
     public String toString() {
-        return "VDRView [displayName=" + displayName + ", channelVdr=" + channelVdr + ", timerVDR=" + timerVDR
-                + ", recordingVdr=" + recordingVdr + "]";
+        return "VDRView [displayName=" + displayName + ", config=" + config + ", channelVdr=" + channelVdr
+                + ", timerVDR=" + timerVDR + ", headVDR=" + headVDR + ", recordingVdr=" + recordingVdr + ", epgVDR="
+                + epgVDR + ", type=" + type + "]";
     }
 
     public int compareTo(VDRView o) {
         return displayName.compareTo(o.getDisplayName());
     }
+
 }

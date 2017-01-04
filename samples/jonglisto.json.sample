@@ -6,6 +6,8 @@
   "remoteOsdSleepTime": "200",
   "remoteOsdIncSleepTime": "200",
 
+  "useEpgd" : "true",
+
   "epg2vdr": {
     "url": "jdbc:mysql://server:3307/epg2vdr",
     "username": "epg2vdr",
@@ -86,7 +88,8 @@
       "head" : "pivdr1",
       "channels": [ "pivdr1", "stream1", "stream2", "pivdr2" ],
       "timers" : "stream1",
-      "recordings" : [ "stream1", "pivdr1" ]
+      "recordings" : [ "stream1", "pivdr1" ],
+      "epg" : "stream1"
     },
 
     {
@@ -94,7 +97,8 @@
       "head" : "pivdr2",
       "channels": [ "pivdr2", "stream2", "stream1", "pivdr1" ],
       "timers" : "stream2",
-      "recordings" : [ "stream2", "pivdr2" ]
+      "recordings" : [ "stream2", "pivdr2" ],
+      "epg" : "stream1"
     }
   ], 
   

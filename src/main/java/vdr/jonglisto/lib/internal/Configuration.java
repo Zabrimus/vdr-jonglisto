@@ -108,7 +108,7 @@ public class Configuration {
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
     
     private int prodVersion = 1;
-    private String version = "0.0.5";
+    private String version = "0.0.6-snapshot";
     private boolean successfullyConfigured = true;
 
     private Logger log = LoggerFactory.getLogger(Configuration.class);
@@ -137,6 +137,8 @@ public class Configuration {
     private String svdrpScript;
     private String epg2vdrScript;
 
+    private boolean useEpgd;
+    
     private Configuration(String pathname) {
         initConfiguration(pathname);
     }
@@ -213,6 +215,10 @@ public class Configuration {
 
     public String getEpg2VdrScript() {
         return epg2vdrScript;
+    }
+
+    public boolean isUseEpgd() {
+        return useEpgd;
     }
 
     public void sendWol(String uuid) {
@@ -439,6 +445,8 @@ public class Configuration {
 
             svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
 
+            useEpgd = Boolean.valueOf((String) config.get("useEpgd"));
+            
             Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");
             svdrpScript = (String) scripts.get("svdrp");
             epg2vdrScript = (String) scripts.get("epg2vdr");
@@ -526,6 +534,10 @@ public class Configuration {
                 String head = (String) s.get("head");
                 view.setHeadVDR(configuredVdr.get(aliases.get(head)));
 
+                // add epg
+                String epg = (String) s.get("epg");
+                view.setEpgVDR(configuredVdr.get(aliases.get(epg)));
+
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });
@@ -549,6 +561,9 @@ public class Configuration {
 
                 // add head
                 view.setHeadVDR(s);
+                
+                // add epg
+                view.setEpgVDR(s);
 
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);

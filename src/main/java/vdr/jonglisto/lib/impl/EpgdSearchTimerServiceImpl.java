@@ -15,11 +15,11 @@ import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
 
-import vdr.jonglisto.lib.SearchTimerService;
+import vdr.jonglisto.lib.EpgdSearchTimerService;
 import vdr.jonglisto.lib.model.SearchTimer;
 import vdr.jonglisto.lib.model.TimerEpg;
 
-public class SearchTimerServiceImpl extends ServiceBase implements SearchTimerService {
+public class EpgdSearchTimerServiceImpl extends ServiceBase implements EpgdSearchTimerService {
 
     private Pattern epgsearchPattern = Pattern.compile(".*?<epgsearch>.*?<searchtimer>(.*?)</searchtimer>.*?");
     private Pattern epgdPattern = Pattern.compile(".*?<epgd>.*?<autotimerid>(.*?)</autotimerid>.*?");

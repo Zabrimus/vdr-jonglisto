@@ -15,7 +15,7 @@ import vdr.jonglisto.lib.EpgImageService;
 import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.model.EPGMedia.MediaType;
 
-public class EpgImageServiceImpl extends ServiceBase implements EpgImageService {
+public class EpgdImageServiceImpl extends ServiceBase implements EpgImageService {
 
     public List<String> getImageFilenames(Long useId) {
         Sql2o sql2o = configuration.getSql2oEpg2vdr();

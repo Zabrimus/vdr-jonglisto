@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import vdr.jonglisto.lib.Epg2VdrNashornService;
 import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.impl.Epg2VdrNashornServiceImpl;
-import vdr.jonglisto.lib.impl.EpgDataServiceImpl;
+import vdr.jonglisto.lib.impl.EpgdDataServiceImpl;
 import vdr.jonglisto.lib.internal.Configuration;
 import vdr.jonglisto.lib.model.osd.OsdItem;
 import vdr.jonglisto.lib.model.osd.TextOsd;
@@ -32,7 +32,7 @@ public class JonglistoOsdProvider implements OsdProvider {
 
     private static Configuration configuration = Configuration.getInstance();
     private static Epg2VdrNashornService epg2vdrScript = new Epg2VdrNashornServiceImpl();
-    private static EpgDataService epgDataService = new EpgDataServiceImpl();
+    private static EpgDataService epgDataService = new EpgdDataServiceImpl();
 
     private Type type;
 

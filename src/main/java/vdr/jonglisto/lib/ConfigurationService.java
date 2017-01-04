@@ -58,4 +58,6 @@ public interface ConfigurationService {
     public String getSvdrpScript();
 
     public String getEpg2VdrScript();
+    
+    public boolean isUseEpgd();
 }

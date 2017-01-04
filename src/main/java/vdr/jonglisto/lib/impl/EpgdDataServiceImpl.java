@@ -21,7 +21,7 @@ import vdr.jonglisto.lib.model.RecordingNamingMode;
 import vdr.jonglisto.lib.model.search.EpgSearchCriteria;
 import vdr.jonglisto.lib.util.JonglistoUtil;
 
-public class EpgDataServiceImpl extends ServiceBase implements EpgDataService {
+public class EpgdDataServiceImpl extends ServiceBase implements EpgDataService {
 
     private static String selectFromView = //
             "SELECT " + //
