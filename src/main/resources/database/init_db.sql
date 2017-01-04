@@ -77,15 +77,89 @@ create table if not exists
     			 		 name Varchar(200),
     			 		 group_id Integer
                  	     );;
-            
+                 	     
+create table if not exists 
+	users (	
+			id Integer, 
+			username varchar(20), 
+			password varchar(50), 
+			salt varchar(128), 
+			primary key(id), 
+			constraint c_username unique(username)
+		  );;                 	     
+          
+create table if not exists 
+	permissions 
+		(	
+			id Integer, 
+		   	permission varchar(100), 
+		   	message_key varchar(50), 
+			primary key(id), 
+			constraint c_permission unique(permission)			
+		);;                 	     
+
+create table if not exists 
+	user_permissions 
+		(	
+			id Integer,
+			ref_user_id Integer,
+		   	ref_permission_id Integer,
+		   	permission_add varchar(50),
+			primary key(id), 
+			constraint c_user_permission unique(ref_user_id, ref_permission_id),
+			foreign key (ref_user_id) references users(id) on delete cascade,
+			foreign key (ref_permission_id) references permissions(id) on delete cascade,
+		);;                 	     
+		
+create table if not exists 
+	roles 
+		(	
+			id Integer,
+			role varchar(50),
+			primary key(id), 
+			constraint c_role unique(role)
+		);;                 	     
+
+create table if not exists 
+	roles_permissions 
+		(	
+			id Integer,
+			ref_role_id Integer,
+			ref_permission_id Integer,
+			primary key(id), 
+			foreign key (ref_role_id) references roles(id) on delete cascade,
+			foreign key (ref_permission_id) references permissions(id) on delete cascade,
+		);;                 	     
+		
+create table if not exists 
+	user_roles 
+		(	
+			id Integer,
+			ref_role_id Integer,
+			ref_user_id Integer,
+			primary key(id), 
+			constraint c_user_role unique(ref_user_id, ref_role_id),
+			foreign key (ref_user_id) references users(id) on delete cascade,
+			foreign key (ref_role_id) references roles(id) on delete cascade,
+		);;                 	     
+		
+
 -- Sequences --------------------------------------------------------------------------------- 
 					  
 create sequence if not exists seq_recording as Integer start with 1 increment by 1;;
 create sequence if not exists seq_recording_mark as Integer start with 1 increment by 1;;
 create sequence if not exists seq_recording_sync as Integer start with 1 increment by 1;;
+create sequence if not exists seq_users as Integer start with 1 increment by 1;;
+create sequence if not exists seq_permissions as Integer start with 1 increment by 1;;
+create sequence if not exists seq_user_permissions as Integer start with 1 increment by 1;;
+create sequence if not exists seq_roles as Integer start with 1 increment by 1;;
+create sequence if not exists seq_user_roles as Integer start with 1 increment by 1;;
+create sequence if not exists seq_roles_permissions as Integer start with 1 increment by 1;;
 
 
 -- Procedure / Functions --------------------------------------------------------------------- 
+
+
 
 
 -- First data --------------------------------------------------------------------------------

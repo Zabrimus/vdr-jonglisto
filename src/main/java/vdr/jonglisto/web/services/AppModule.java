@@ -2,6 +2,9 @@ package vdr.jonglisto.web.services;
 
 import java.io.IOException;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -28,6 +31,9 @@ import org.apache.tapestry5.services.javascript.JavaScriptStack;
 import org.apache.tapestry5.services.javascript.StackExtension;
 import org.apache.tapestry5.services.pageload.PreloaderMode;
 import org.slf4j.Logger;
+import org.tynamo.security.SecuritySymbols;
+import org.tynamo.security.services.SecurityFilterChainFactory;
+import org.tynamo.security.services.impl.SecurityFilterChain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,6 +60,9 @@ import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
+import vdr.jonglisto.web.realm.JdbcSaltedRealm;
+import vdr.jonglisto.web.services.security.UserService;
+import vdr.jonglisto.web.services.security.impl.UserServiceImpl;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -74,6 +83,7 @@ public class AppModule {
         binder.bind(SvdrpNashornService.class, SvdrpNashornServiceImpl.class);
         binder.bind(Epg2VdrNashornService.class, Epg2VdrNashornServiceImpl.class);
         binder.bind(ChannelMapService.class, ChannelMapServiceImpl.class);
+        binder.bind(UserService.class, UserServiceImpl.class);
         binder.bind(ChannelEncoder.class);
         binder.bind(GlobalLogoFilename.class);
         binder.bind(GlobalValues.class);
@@ -100,6 +110,16 @@ public class AppModule {
 
     public static void contributeBindingSource(MappedConfiguration<String, BindingFactory> config) {
         config.addInstance("map", MapBindingFactory.class);
+    }
+
+    public static void contributeWebSecurityManager(Configuration<Realm> configuration, AuthorizingRealm realm) {
+        configuration.add(realm);
+    }    
+
+    public static void contributeSecurityConfiguration(Configuration<SecurityFilterChain> configuration,
+            SecurityFilterChainFactory factory) {
+        // configuration.add(factory.createChain("/signin").add(factory.anon()).build());
+        // configuration.add(factory.createChain("/").add(factory.authc()).build());
     }
 
     public static void contributeTypeCoercer(Configuration<CoercionTuple<?, ?>> configuration) {
@@ -163,9 +183,12 @@ public class AppModule {
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
         configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
 
-        // configuration.add("tapestry.closure-compiler-level", "WHITESPACE_ONLY");
-        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--        
-        // configuration.add("tapestry.closure-compiler-level", "ADVANCED_OPTIMIZATIONS"); // INFO: do not use this!
+        // configuration.add(SecuritySymbols.LOGIN_URL, "/signin");
+        // configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/signin");
+        // configuration.override(SecuritySymbols.UNAUTHORIZED_URL, "/blocked");
+        // configuration.override(SecuritySymbols.SUCCESS_URL, "/logged");
+
+        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--
 
         // INFO:
         // only in production 1 to 5 minutes
@@ -199,7 +222,17 @@ public class AppModule {
             }
         };
     }
-    
+
+    public AuthorizingRealm buildRealm(UserService userService, ConfigurationService configService) {
+        JdbcSaltedRealm realm = new JdbcSaltedRealm(userService, configService);
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-256");
+        matcher.setHashIterations(1024);
+        matcher.setStoredCredentialsHexEncoded(false);
+        realm.setCredentialsMatcher(matcher);
+
+        return realm;
+    }
+
     @Startup
     public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service,
             ComponentClassResolver componentClassResolver, ComponentSource componentSource) {
