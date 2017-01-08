@@ -29,6 +29,14 @@
                             <t:if test="hasEventId()" negate="true">
                                 ${timer.filename}
                             </t:if>
+                            
+                            <div class="caright">
+                                <t:if test="timerEpg">
+                                    <span class="btn btn-success btn-xs">
+                                        ${timerEpg?.method}:${timerEpg?.name}&nbsp;${timerEpg?.remoteId}
+                                    </span>
+                                </t:if>
+                            </div>                            
                         </p:filenameCell>
 
                         <p:actionCell>
@@ -217,7 +225,7 @@
                                     <div class="form-group">
                                         <t:label for="timer_titel" class="col-sm-9" />
                                         <div class="col-sm-27">
-                                            <t:TextField t:id="timer_titel" value="timer.filename" />
+                                            <t:TextField t:id="timer_titel" value="timer.filename" label="message:timer_filename"/>
                                         </div>
                                     </div>
 

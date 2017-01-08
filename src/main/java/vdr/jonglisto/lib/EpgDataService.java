@@ -31,4 +31,6 @@ public interface EpgDataService {
     public List<String> getCategories();
 
     public List<Map<String, Object>> selectGeneric(String sql);
+    
+    public void updateInternalEpgData(String vdrUuid);
 }

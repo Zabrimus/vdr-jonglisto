@@ -422,4 +422,9 @@ public class EpgdDataServiceImpl extends ServiceBase implements EpgDataService {
                     .asList();
         }
     }
+
+    @Override
+    public void updateInternalEpgData(String vdrUuid) {
+        // Nothing to do. All data are read directly from epgd database
+    }
 }

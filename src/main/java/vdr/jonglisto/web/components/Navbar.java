@@ -57,9 +57,17 @@ public class Navbar extends BaseComponent {
             pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
             pages.add(new NavPage(messages.get("page_timer"), "timer"));
             pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
-            pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
+            
+            if (configuration.isUseEpgd()) {
+                pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
+            }
+            
             pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
-            pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
+            
+            if (configuration.isUseEpgd()) {
+                pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
+            }
+            
             pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
             pages.add(new NavPage(messages.get("page_setup"), "setup"));
         };

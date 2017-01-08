@@ -143,6 +143,41 @@ create table if not exists
 			foreign key (ref_role_id) references roles(id) on delete cascade,
 		);;                 	     
 		
+create table if not exists
+    epg
+       (
+       	  useid Integer,
+		  epgid BigInt,
+	      title Varchar(200), 
+	 	  short_text Varchar(400),
+	 	  description Varchar(35000),
+		  start_time Integer,
+		  channel Varchar(50),
+		  channel_name Varchar(100),
+		  duration Integer,
+		  images Integer,
+		  timer_exists boolean,
+		  timer_active boolean,
+		  timer_id Varchar(100),
+	 	  parental_rating Integer,
+	 	  genre Varchar(100),
+	 	  category Varchar(100),
+	 	  country Varchar(50),
+	 	  year Varchar(10),
+	 	  actors Varchar(1000),
+	 	  flags Varchar(100),
+	 	  source Varchar(20),	 	  
+	 	  producer Varchar(500),
+	 	  camera Varchar(200),
+		  director Varchar(200),
+		  season Varchar(10),
+		  part Varchar(10),
+		  parts Varchar(10),
+		  epi_number Varchar(10),
+		  episode Varchar(500),
+		  shortname Varchar(200),
+		  screenplay Varchar(500)		  
+       );;
 
 -- Sequences --------------------------------------------------------------------------------- 
 					  
@@ -155,6 +190,7 @@ create sequence if not exists seq_user_permissions as Integer start with 1 incre
 create sequence if not exists seq_roles as Integer start with 1 increment by 1;;
 create sequence if not exists seq_user_roles as Integer start with 1 increment by 1;;
 create sequence if not exists seq_roles_permissions as Integer start with 1 increment by 1;;
+create sequence if not exists seq_epg as Integer start with 1 increment by 1;;
 
 
 -- Procedure / Functions --------------------------------------------------------------------- 

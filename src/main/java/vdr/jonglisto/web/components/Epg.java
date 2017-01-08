@@ -1,8 +1,11 @@
 package vdr.jonglisto.web.components;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.PageActivationContext;
@@ -67,6 +70,9 @@ public class Epg extends BaseComponent {
     private Set<MediaType> availableMediaTypes;
 
     @Property
+    private List<String> imageFilenames;
+    
+    @Property
     private String epgInfoModalId = "epgInfoModal";
 
     @Property
@@ -75,6 +81,9 @@ public class Epg extends BaseComponent {
     @Property
     private TimerEpg timerEpg;
 
+    @Property
+    private String line;
+    
     private Timer timer;
     
     // Trigger from Epg.tml to reload the epg data
@@ -82,14 +91,15 @@ public class Epg extends BaseComponent {
         if (epg == null) {
             if (recordingFlag) {
                 // special handling for recordings
-                // epg = epgDataService.getEpgDataForRecording(recFilename);
                 epg = epgDataService.getEpgDataForRecording(filename);
-                channelName = (String) epg.get("channelname");
+                channelName = (String) epg.get("channelname");                                
             } else {
                 // normal processing
                 epg = epgDataService.getEpgDataForUseId(savedUseId);
                 timerEpg = searchTimerService.getSearchTimerForEventId(savedUseId); 
             }
+            
+            imageFilenames = getInternalImageFilenames();
         }
     }
 
@@ -127,18 +137,6 @@ public class Epg extends BaseComponent {
         return false;
     }
 
-    public List<String> getImageFilenames() {
-        List<String> result;
-
-        if (recordingFlag) {
-            result = epgImageService.getImageFilenames(filename);
-        } else {
-            result = epgImageService.getImageFilenames(savedUseId);
-        }
-
-        return result;
-    }
-
     public boolean isMediaTypeAvailable(MediaType type) {
         return availableMediaTypes.contains(type);
     }
@@ -155,6 +153,32 @@ public class Epg extends BaseComponent {
         this.timer = timer;
     }
 
+    public List<String> getSplittedLd() {
+        String ld = (String)epg.get("longdescription");
+        
+        if (ld != null) {
+            return Arrays.stream(ld.split("\n")).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+    
+    public String getImageClass() {
+        if ((imageFilenames == null) || (imageFilenames.size() == 0)) {
+            return "col-md-1";
+        } else {
+            return "col-md-12";
+        }
+    }
+
+    public String getEpgInfoClass() {
+        if ((imageFilenames == null) || (imageFilenames.size() == 0)) {
+            return "col-md-35";
+        } else {
+            return "col-md-24";
+        }
+    }
+    
     public void showInfoZone() {
         visible = true;
 
@@ -198,4 +222,15 @@ public class Epg extends BaseComponent {
         };
     }
 
+    private List<String> getInternalImageFilenames() {
+        List<String> result;
+
+        if (recordingFlag) {
+            result = epgImageService.getImageFilenames(filename);
+        } else {
+            result = epgImageService.getImageFilenames(savedUseId);
+        }
+
+        return result;
+    }
 }

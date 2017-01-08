@@ -14,8 +14,6 @@ public class EpgDataServiceFacadeImpl extends ServiceBase implements EpgDataServ
     private EpgDataService service;
     
     public EpgDataServiceFacadeImpl() {
-        System.err.println("USE EPGD: " + configuration.isUseEpgd());
-        
         if (configuration.isUseEpgd()) {
             service = new EpgdDataServiceImpl();
         } else {
@@ -76,5 +74,10 @@ public class EpgDataServiceFacadeImpl extends ServiceBase implements EpgDataServ
     @Override
     public List<Map<String, Object>> selectGeneric(String sql) {
         return service.selectGeneric(sql);
+    }
+
+    @Override
+    public void updateInternalEpgData(String vdrUuid) {
+        service.updateInternalEpgData(vdrUuid);
     }
 }

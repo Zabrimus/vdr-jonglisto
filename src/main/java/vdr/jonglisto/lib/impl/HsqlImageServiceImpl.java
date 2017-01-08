@@ -1,5 +1,6 @@
 package vdr.jonglisto.lib.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -11,12 +12,12 @@ public class HsqlImageServiceImpl implements EpgImageService {
 
     @Override
     public List<String> getImageFilenames(Long useId) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<String> getImageFilenames(String filename) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -36,12 +37,11 @@ public class HsqlImageServiceImpl implements EpgImageService {
 
     @Override
     public Set<MediaType> getAvailableMediaTypes(Long useid, String filename) {
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
     public List<EPGMedia> getEpgMedia(Long useid, String filename, MediaType type) {
-        return null;
+        return Collections.emptyList();
     }
-
 }

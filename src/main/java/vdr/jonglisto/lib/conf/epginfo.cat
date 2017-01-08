@@ -1,0 +1,27 @@
+# Lines beginning with '#' are always comments and will be ignored
+#
+# Configuration of all possible epg infos which shall be automatically generated. 
+# This file is currently only used, when *not* using vdr-epg-daemon, e.g. xmltv
+#
+
+# Format:
+# <name> = <german>,<english>,<french>,....
+# The order of the different languages doesn't matter. Every language will be used to find the desired values.
+
+genre = Genre,genre
+category = Kategorie,category
+country = Land,country
+year = Jahr, year
+actors = Darsteller,actors
+flags = Flags,flags
+source = Quelle,source
+producer = Produzent,producer
+camera = Kamera,camera
+director = Regie,director
+season = Staffel,season
+part = Staffelfolge,part
+parts = Staffelfolgen,parts
+epi_number = Folge,episode number
+episode = Episode,episode
+shortname = Kurzname,short name
+screenplay = Drehbuch,screenplay

@@ -16,6 +16,7 @@ import org.apache.tapestry5.services.ajax.JavaScriptCallback;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import vdr.jonglisto.lib.model.Timer;
+import vdr.jonglisto.lib.model.TimerEpg;
 import vdr.jonglisto.lib.model.VDR;
 import vdr.jonglisto.lib.util.DateTimeUtil;
 import vdr.jonglisto.lib.util.Function;
@@ -48,7 +49,7 @@ public class TimerView extends BaseComponent {
     @Persist
     @Property
     private Timer timer;
-
+    
     @Property
     private boolean selectAllTimer;
 
@@ -105,6 +106,14 @@ public class TimerView extends BaseComponent {
         }
     }
 
+    public TimerEpg getTimerEpg() {
+        if ((timer != null) && (timer.getEventId() != null)) {
+            return searchTimerService.getSearchTimerForEventId(new Long(timer.getEventId()));
+        } else {
+            return null;
+        }
+    }
+    
     void onPrepareForSubmit() {
         timerToChange = new ArrayList<String>();
     }

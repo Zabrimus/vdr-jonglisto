@@ -106,7 +106,7 @@ public class Setup extends BasePage {
     public void afterRender() {
     }
 
-    public Object onSelectedFromTestDatabase() {
+    public Object onSelectedFromTestDatabase() {        
         try {
             String url = "jdbc:mysql://" + setup.getEpgdHost() + ":" + setup.getEpgdPort() + "/" + setup.getEpgdDatabase();
             
@@ -204,7 +204,9 @@ public class Setup extends BasePage {
             cfg.put("svdrpPort", "5000");
             cfg.put("remoteOsdSleepTime", "200");
             cfg.put("remoteOsdIncSleepTime", "200");
-     
+            cfg.put("useEpgd", String.valueOf(setup.isUseEpgd()));
+            cfg.put("epgVdr", setup.getEpgVdr());
+            
             // hsqldb configuration
             JSONObject hsql = new JSONObject();
             hsql.put("path", "/var/cache/jonglisto-db");
@@ -373,9 +375,12 @@ public class Setup extends BasePage {
                 if (sql2o == null) {
                     log.info("Database setup not valid or database not accesible");
                     // at least the database configuration must be correct...
-                    return;
                 }
             }            
+            
+            // epgd flag
+            setup.setUseEpgd(Boolean.valueOf((String)config.get("useEpgd")));
+            setup.setEpgVdr((String)config.get("epgVdr"));
             
             // Aliases configuration
             Map<String, String> aliases = (Map<String, String>) config.get("aliases");

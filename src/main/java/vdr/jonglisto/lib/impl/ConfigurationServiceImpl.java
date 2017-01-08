@@ -160,4 +160,8 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     public boolean isUseEpgd() {
         return configuration.isUseEpgd();
     }
+    
+    public String getEpgVdrUuuid() {
+        return configuration.getEpgVdrUuid();
+    }
 }

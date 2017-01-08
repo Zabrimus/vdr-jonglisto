@@ -55,13 +55,13 @@
                                         <t:tabGroup active="epgTab">
                                             <t:tab name="epg" label="EPG">
                                                 <div class="row col-md-36">
-                                                    <div class="col-md-12">
+                                                    <div class="${imageClass}">
                                                         <t:loop source="imageFilenames" value="filename">
                                                             <t:epgImage filename="${filename}" scraper="false" />
                                                         </t:loop>
                                                     </div>
 
-                                                    <div class="col-md-24">
+                                                    <div class="${epgInfoClass}">
                                                         <!-- Trigger the reload of EPG data. The TabGroup is otherwise empty -->
                                                         <t:trigger event="loadEpgData" />
 
@@ -126,7 +126,9 @@
 
                                                         <t:if test="${map:epg['longdescription']}">
                                                             <div class="row col-md-36 epg-data">
-                                                                ${map:epg['longdescription']}
+                                                                <t:loop source="splittedLd" value="line">
+                                                                    ${line}<br/>
+                                                                </t:loop>
                                                             </div>
                                                         </t:if>
 

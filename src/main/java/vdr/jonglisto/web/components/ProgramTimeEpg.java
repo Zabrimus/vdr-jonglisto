@@ -40,7 +40,7 @@ public class ProgramTimeEpg extends ProgramBaseEpg {
         if (epglayout.getChannels() != null) {
             epgSorter = new EpgSorter(epglayout.getChannels());
         }
-
+        
         epgData = epgSorter.sort(epgDataService.getEpgData(epglayout.getChannels(), epgCriteria));
 
         Set<String> genres = new HashSet<>();

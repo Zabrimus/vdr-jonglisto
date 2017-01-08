@@ -1,6 +1,9 @@
 package vdr.jonglisto.web.services;
 
 import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -72,6 +75,8 @@ public class AppModule {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
+    private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    
     public static void bind(ServiceBinder binder) {
         binder.bind(ConfigurationService.class, ConfigurationServiceImpl.class);
         binder.bind(VdrDataService.class, VdrDataServiceImpl.class);
@@ -233,7 +238,7 @@ public class AppModule {
     }
 
     @Startup
-    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service,
+    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service, EpgDataService epgService,
             ComponentClassResolver componentClassResolver, ComponentSource componentSource) {
 
         shutdownHub.addRegistryShutdownListener(new Runnable() {
@@ -245,6 +250,16 @@ public class AppModule {
 
         service.triggerInitialization();
 
+        if (!service.isUseEpgd() && (service.getEpgVdrUuuid() != null)) {
+            // Update database periodically (2 times a day)
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                @Override
+                public void run() {
+                    epgService.updateInternalEpgData(service.getEpgVdrUuuid());
+                }
+            }, 0, 12, TimeUnit.HOURS);
+        }
+        
         componentClassResolver.getPageNames().stream().forEach(s -> {
             // preload all pages
             componentSource.getPage(s);

@@ -11,9 +11,9 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 * recordings: where to get the recordings and do the desired work
 
 ### Requirements
-* a runnning vdr-epg-daemon, especially the mysql database
+* optional: a runnning vdr-epg-daemon, especially the mysql database  
 * vdr restfulapi plugin, at least version 0.2.6.5
-* optional remoteosd/svdrpservice plugin (See <http://vdr.schmirler.de/>) 
+* optional: remoteosd/svdrpservice plugin (See <http://vdr.schmirler.de/>) 
 * java 8
 
 ### Setup
@@ -79,6 +79,9 @@ There exist multiple possibilities to build and start the application.
 ### Configuration
 The main configuration file jonglisto.json must be copied to /etc/jonglisto. There exists a sample in the samples directory.
 
+* **useEpgd:** if "true" then use the configured epgd database, otherwise get all epg data via restfulapi from a configured VDR (see epgVdr)
+
+* **epgVdr:** If you don't want to use jonglisto with the epgd database, this value is needed. Here the alias VDR have to be configured, where EPG data will be read.
  
 * **useRecordingSyncMap:** use a feature in vdr restfulapi plugin to speed up the recording list. It is safe to set this value to "false". This feature really needs at least 0.2.6.5 of restfulapi plugin. 
 ```json

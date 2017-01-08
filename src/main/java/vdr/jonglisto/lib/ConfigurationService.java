@@ -60,4 +60,6 @@ public interface ConfigurationService {
     public String getEpg2VdrScript();
     
     public boolean isUseEpgd();
+    
+    public String getEpgVdrUuuid();
 }

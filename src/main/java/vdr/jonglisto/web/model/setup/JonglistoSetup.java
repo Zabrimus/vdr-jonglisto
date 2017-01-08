@@ -14,6 +14,9 @@ public class JonglistoSetup {
     private List<JonglistoVdr> availableVdr;
     private List<JonglistoView> availableViews;
 
+    private boolean useEpgd;
+    private String epgVdr;
+    
     public JonglistoSetup() {
         // set some default values
         epgdDatabase = "epg2vdr";
@@ -23,6 +26,7 @@ public class JonglistoSetup {
         epgdPassword = "epg";
 
         availableViews = new ArrayList<>();
+        epgVdr = "<set desired alias>";
     }
 
     public String getEpgdHost() {
@@ -63,6 +67,22 @@ public class JonglistoSetup {
 
     public void setEpgdDatabase(String epgdDatabase) {
         this.epgdDatabase = epgdDatabase;
+    }
+    
+    public boolean isUseEpgd() {
+        return useEpgd;
+    }
+
+    public void setUseEpgd(boolean useEpgd) {
+        this.useEpgd = useEpgd;
+    }
+    
+    public String getEpgVdr() {
+        return epgVdr;
+    }
+    
+    public void setEpgVdr(String epgVdr) {
+        this.epgVdr = epgVdr;
     }
 
     public List<JonglistoVdr> getAvailableVdr() {

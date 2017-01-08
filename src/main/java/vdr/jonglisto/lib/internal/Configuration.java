@@ -138,6 +138,7 @@ public class Configuration {
     private String epg2vdrScript;
 
     private boolean useEpgd;
+    private String epgVdrUuid;
     
     private Configuration(String pathname) {
         initConfiguration(pathname);
@@ -189,6 +190,10 @@ public class Configuration {
 
     public boolean isDeveloperMode() {
         return developerMode;
+    }
+    
+    public String getEpgVdrUuid() {
+        return epgVdrUuid;
     }
 
     public List<VDR> getSortedVdrList() {
@@ -534,14 +539,16 @@ public class Configuration {
                 String head = (String) s.get("head");
                 view.setHeadVDR(configuredVdr.get(aliases.get(head)));
 
-                // add epg
-                String epg = (String) s.get("epg");
-                view.setEpgVDR(configuredVdr.get(aliases.get(epg)));
-
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });
 
+            // add epg
+            String epg = (String)config.get("epgVdr");
+            if ((epg != null) && (!useEpgd)) {
+                epgVdrUuid = configuredVdr.get(aliases.get(epg)).getUuid();
+            }
+            
             configuredVdrView.values().stream().forEach(System.out::println);
 
             // add every VDR as it's own view
@@ -562,9 +569,6 @@ public class Configuration {
                 // add head
                 view.setHeadVDR(s);
                 
-                // add epg
-                view.setEpgVDR(s);
-
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });

@@ -81,9 +81,17 @@ public abstract class ProgramBaseEpg extends BaseComponent {
 
     public boolean isRunning() {
         if (epg != null) {
-            BigDecimal b = (BigDecimal) epg.get("proz");
-            if (b != null) {
-                return b.intValue() > 0;
+            Object o = epg.get("proz");
+            if (o instanceof BigDecimal) {
+                BigDecimal b = (BigDecimal) o;
+                if (b != null) {
+                    return b.intValue() > 0;
+                }
+            } else if (o instanceof Long) {
+                Long b = (Long) o;
+                if (b != null) {
+                    return b.intValue() > 0;
+                }
             }
         }
 

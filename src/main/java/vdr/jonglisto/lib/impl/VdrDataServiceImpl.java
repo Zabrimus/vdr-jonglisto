@@ -30,9 +30,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.exception.Http404Exception;
@@ -53,7 +50,6 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
 
     Logger log = LoggerFactory.getLogger(VdrDataService.class);
 
-    protected ObjectMapper mapper;
     protected Pattern eventIdPattern = Pattern.compile("<eventid>(.*)<\\/eventid>");
 
     public VdrDataServiceImpl() {
@@ -663,39 +659,13 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
      * private helper functions
      */
 
-    private <T> Optional<List<T>> getJsonList(String vdrUuid, String urlPart, String arrayName, String key,
-            Class<T> clazz) {
-        try {
-            JSONArray array = getJsonData(vdrUuid, urlPart).getJSONArray(arrayName);
-
-            if (key != null) {
-                return Optional.of(convertJSONArrayToList(array, key, clazz));
-            } else {
-                return Optional.of(convertJSONArrayToList(array, clazz));
-            }
-        } catch (Exception e) {
-            log.error("Fehler in getJsonList1: ", e);
-            return Optional.empty();
-        }
-    }
-
-    private <T> Optional<List<T>> getJsonList(String vdrUuid, String urlPart, String arrayName, Class<T> clazz) {
-        try {
-            JSONArray array = getJsonData(vdrUuid, urlPart).getJSONArray(arrayName);
-            return Optional.of(convertJSONArrayToList(array, clazz));
-        } catch (Exception e) {
-            log.error("Fehler in getJsonList2: ", e);
-            return Optional.empty();
-        }
-    }
-
     protected Timer enrichEventId(Timer timer) {
         if (timer.getEventId() == -1) {
             // try to find an eventid in epgsearch aux
             Matcher m = eventIdPattern.matcher(timer.getAux());
             if (m.find()) {
-                timer.setEventId(Integer.valueOf(m.group(1)));
-            } else {
+                timer.setEventId(Integer.valueOf(m.group(1)));            
+            } else  {
                 // try to find an event id in epg2vdr database
 
                 // TODO: implement this.
@@ -705,7 +675,6 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
                 // and cnt_starttime >= 1476064080 (timer.getStart())
                 // and cnt_starttime + cnt_duration <= 1476067800;
                 // (timer.getStop())
-
             }
         }
 
@@ -806,167 +775,6 @@ public class VdrDataServiceImpl extends ServiceBase implements VdrDataService {
             return Optional.of(vdrChannels.orElse(Collections.emptyList()).stream()
                     .filter(c -> channelMap.contains(c.getId())).collect(Collectors.toList()));
         }
-    }
-
-    /*
-     * conversion methods
-     */
-    @SuppressWarnings("unchecked")
-    protected <T> List<T> convertJSONArrayToList(JSONArray array, Class<T> clazz) {
-        List<T> result = new ArrayList<>();
-
-        array.forEach(s -> {
-            try {
-                if (clazz == String.class) {
-                    result.add((T) s);
-                } else {
-                    result.add(mapper.readValue(s.toString(), clazz));
-                }
-            } catch (Exception e) {
-                throw new NetworkException("unknown error; " + e.getMessage());
-            }
-        });
-
-        return result;
-    }
-
-    protected <T> List<T> convertJSONArrayToList(JSONArray array, String key, Class<T> clazz) {
-        List<T> result = new ArrayList<>();
-
-        array.forEach(s -> {
-            try {
-                result.add(mapper.readValue(s.toString(), clazz));
-            } catch (Exception e) {
-                throw new NetworkException("unknown error; " + e.getMessage());
-            }
-        });
-
-        return result;
-    }
-
-    /*
-     * low level rest api methods
-     */
-    private String getVdrRestUrl(String vdrUuid) {
-        VDR v = configuration.getVdr(vdrUuid);
-        return "http://" + v.getIp() + ":" + v.getRestfulApiPort() + "/";
-    }
-
-    protected JSONObject getJsonData(String vdrUuid, String path) {
-        JSONObject result;
-        HttpResponse<String> jsonResponse;
-
-        try {
-            String restUrl = getVdrRestUrl(vdrUuid) + path;
-
-            if (log.isDebugEnabled()) {
-                log.debug("GET: " + restUrl);
-            }
-
-            jsonResponse = Unirest.get(restUrl).asString();
-        } catch (UnirestException e) {
-            throw new NetworkException(e);
-        }
-
-        if ((jsonResponse != null) && (jsonResponse.getStatus() == 200)) {
-            result = new JSONObject(jsonResponse.getBody());
-        } else {
-            if (jsonResponse == null) {
-                throw new NetworkException("unknown error: Keine Antwort erhalten");
-            } else {
-                if (jsonResponse.getStatus() == 404) {
-                    throw new Http404Exception("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
-                            + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
-                } else {
-                    throw new NetworkException("unknown error, jsonResponse: " + jsonResponse.getHeaders() + ", "
-                            + jsonResponse.getBody() + ", Code: " + jsonResponse.getStatus());
-                }
-            }
-        }
-
-        return result;
-    }
-
-    protected String put(String vdrUuid, String path, String body) {
-        try {
-            String restUrl = getVdrRestUrl(vdrUuid) + path;
-
-            if (log.isDebugEnabled()) {
-                log.debug("PUT: " + restUrl + "\n" + body);
-            }
-
-            HttpResponse<String> result = Unirest.put(restUrl).body(body).asString();
-            if (result.getStatus() != 200) {
-                throw new NetworkException(
-                        "Put failed with code " + result.getStatus() + ", " + result.getStatusText());
-            }
-
-            return result.getBody();
-        } catch (UnirestException e) {
-            throw new NetworkException(e);
-        }
-    }
-
-    protected String delete(String vdrUuid, String path, String body) {
-        try {
-            String restUrl = getVdrRestUrl(vdrUuid) + path;
-
-            HttpResponse<String> result;
-
-            if (log.isDebugEnabled()) {
-                log.debug("DELETE: " + restUrl + "\n" + body);
-            }
-
-            if (body != null) {
-                result = Unirest.delete(restUrl).body(body).asString();
-            } else {
-                result = Unirest.delete(restUrl).asString();
-            }
-
-            if (result.getStatus() == 404) {
-                // recording not found, but we want to delete this
-                return result.getBody();
-            } else if (result.getStatus() != 200) {
-                throw new NetworkException(
-                        "Delete failed with code " + result.getStatus() + ", " + result.getStatusText());
-            }
-
-            return result.getBody();
-        } catch (UnirestException e) {
-            throw new NetworkException(e);
-        }
-    }
-
-    protected String post(String vdrUuid, String path, String body) {
-        String restUrl = getVdrRestUrl(vdrUuid) + path;
-
-        try {
-            HttpResponse<String> result;
-
-            if (log.isDebugEnabled()) {
-                log.debug("POST: " + restUrl + "\n" + body);
-            }
-
-            if (body != null) {
-                result = Unirest.post(restUrl).body(body).asString();
-            } else {
-                result = Unirest.post(restUrl).asString();
-            }
-
-            if (result.getStatus() != 200) {
-                throw new NetworkException(
-                        "Post failed with code " + result.getStatus() + ", " + result.getStatusText());
-            }
-
-            return result.getBody();
-        } catch (UnirestException e) {
-            throw new NetworkException(e);
-        }
-    }
-
-    protected <T> List<T> postAndGetList(String vdrUuid, String urlPart, String body, String name, Class<T> clazz) {
-        JSONArray array = new JSONObject(post(vdrUuid, urlPart, body)).getJSONArray(name);
-        return convertJSONArrayToList(array, clazz);
     }
 
 }
