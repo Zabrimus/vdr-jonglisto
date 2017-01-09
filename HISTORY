@@ -1,5 +1,6 @@
 0.0.6-snaphot:
 - able to use jonglisto without an running epgd daemon (restfulapi-only-mode)
+- security implemented (currently not finished!)
 
 0.0.5:
 - implemented wake-on-lan 

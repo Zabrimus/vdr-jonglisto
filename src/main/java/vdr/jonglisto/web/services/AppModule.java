@@ -124,10 +124,23 @@ public class AppModule {
         configuration.add(realm);
     }    
 
-    public static void contributeSecurityConfiguration(Configuration<SecurityFilterChain> configuration,
-            SecurityFilterChainFactory factory) {
-        // configuration.add(factory.createChain("/signin").add(factory.anon()).build());
-        // configuration.add(factory.createChain("/").add(factory.authc()).build());
+    public static void contributeSecurityConfiguration(Configuration<SecurityFilterChain> configuration, SecurityFilterChainFactory factory) {
+        // login page
+        configuration.add(factory.createChain("/signin").add(factory.anon()).build());
+        configuration.add(factory.createChain("/").add(factory.authc()).build());
+        
+        // permissions for all pages
+        configuration.add(factory.createChain("/channelconfig/**").add(factory.perms(), "page:channelconfig").build());
+        configuration.add(factory.createChain("/channelmap/**").add(factory.perms(), "page:channelmap").build());
+        configuration.add(factory.createChain("/index/**").add(factory.perms(), "page:index").build());
+        configuration.add(factory.createChain("/programchannel/**").add(factory.perms(), "page:programchannel").build());
+        configuration.add(factory.createChain("/programday/**").add(factory.perms(), "page:programday").build());
+        configuration.add(factory.createChain("/programtime/**").add(factory.perms(), "page:programtime").build());
+        configuration.add(factory.createChain("/recordings/**").add(factory.perms(), "page:recordings").build());
+        configuration.add(factory.createChain("/searchtimer/**").add(factory.perms(), "page:searchtimer").build());
+        configuration.add(factory.createChain("/setup/**").add(factory.perms(), "page:setup").build());
+        configuration.add(factory.createChain("/svdrpconsole/**").add(factory.perms(), "page:svdrpconsole").build());
+        configuration.add(factory.createChain("/timer/**").add(factory.perms(), "page:timer").build());        
     }
 
     public static void contributeTypeCoercer(Configuration<CoercionTuple<?, ?>> configuration) {
@@ -191,12 +204,7 @@ public class AppModule {
         configuration.add(SymbolConstants.GZIP_COMPRESSION_ENABLED, true);
         configuration.add(SymbolConstants.PRELOADER_MODE, PreloaderMode.ALWAYS);
 
-        // configuration.add(SecuritySymbols.LOGIN_URL, "/signin");
-        // configuration.add(SecuritySymbols.UNAUTHORIZED_URL, "/signin");
-        // configuration.override(SecuritySymbols.UNAUTHORIZED_URL, "/blocked");
-        // configuration.override(SecuritySymbols.SUCCESS_URL, "/logged");
-
-        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); // <--
+        configuration.add("tapestry.closure-compiler-level", "SIMPLE_OPTIMIZATIONS"); 
 
         // INFO:
         // only in production 1 to 5 minutes

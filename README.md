@@ -19,6 +19,10 @@ if you have e.g. 4 running VDR instances: 2 headless which do nothing more than 
 ### Setup
 If you first start the application without an valid configuration, you will be redirected to a setup page to create your first minimal configuration. The configuration file jonglisto.json can then be *downloaded*. There is no automatically installation. But this downloaded file is a good starting point for further configuration.
 
+### Login / Security
+While starting with a fresh internal database (e.g. the first start), an admin user (Login: admin, Password: jonglisto) is created. All pages and services are secured. 
+**Currently only the admin user is usable. Configuration pages are currently in the implementation phase.**  
+
 ### i18n
 It is possible to switch the application language. Currently english and german are supported. But the english version could be a little bit bumby.
 The language files could be found in directory src/main/webapp/WEB-INF. app.properties or app_de.properties.

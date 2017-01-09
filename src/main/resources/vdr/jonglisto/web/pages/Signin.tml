@@ -1,0 +1,21 @@
+<html t:type="layout" title="VDR disposer Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+	<div class="row">
+		<div class="col-md-1">
+		</div>
+		
+		<div class="col-md-3">
+			<t:form class="form-signin" role="form" autofocus="true">
+				<t:alerts />
+				<t:errors />
+
+				<h2 class="form-signin-heading">${message:login-required}</h2>
+				<t:textfield t:id="username" validate="required" tabindex="1" placeholder="${message:username}" required="true" autofocus="true" />
+				<t:passwordfield t:id="password" validate="required" tabindex="2" placeholder="${message:password}" required="true" />
+				<button class="btn btn-lg btn-primary btn-block" type="submit">${message:login}</button>
+			</t:form>
+		</div>
+		
+		<div class="col-md-8">		
+		</div>
+	</div>
+</html>

@@ -3,10 +3,12 @@ package vdr.jonglisto.web.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.shiro.subject.Subject;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentClassResolver;
+import org.tynamo.security.services.SecurityService;
 
 public class Navbar extends BaseComponent {
 
@@ -40,6 +42,9 @@ public class Navbar extends BaseComponent {
     private ComponentClassResolver classResolver;
 
     @Inject
+    private SecurityService securityService;
+
+    @Inject
     protected Messages messages;
 
     @Property
@@ -49,28 +54,29 @@ public class Navbar extends BaseComponent {
 
     public Navbar() {
         pages = new ArrayList<NavPage>();
-        
-        if (configuration.isSuccessfullyInitialized()) {                   
+
+        if (configuration.isSuccessfullyInitialized()) {
             pages.add(new NavPage(messages.get("page_index"), "index"));
             pages.add(new NavPage(messages.get("page_program_now"), "programTime"));
             pages.add(new NavPage(messages.get("page_program_day"), "programDay"));
             pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
             pages.add(new NavPage(messages.get("page_timer"), "timer"));
             pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
-            
+
             if (configuration.isUseEpgd()) {
                 pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
             }
-            
+
             pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
-            
+
             if (configuration.isUseEpgd()) {
                 pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
             }
-            
+
             pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
             pages.add(new NavPage(messages.get("page_setup"), "setup"));
-        };
+        }
+        ;
     }
 
     public List<NavPage> getPageNames() {
@@ -91,5 +97,15 @@ public class Navbar extends BaseComponent {
 
     public boolean isDeveloperMode() {
         return configuration.isDeveloperMode();
+    }
+
+    public Object onActionFromLogout() {
+        Subject currentUser = securityService.getSubject();
+
+        if (currentUser.isAuthenticated()) {
+            currentUser.logout();
+        }
+
+        return "Index";
     }
 }
