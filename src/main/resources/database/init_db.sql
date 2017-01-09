@@ -196,6 +196,12 @@ create sequence if not exists seq_epg as Integer start with 1 increment by 1;;
 -- Procedure / Functions --------------------------------------------------------------------- 
 
 
+-- roles and permissions
+
+merge into permissions as c 
+   using(values('**', 'admin_permission')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
 
 
 -- First data --------------------------------------------------------------------------------

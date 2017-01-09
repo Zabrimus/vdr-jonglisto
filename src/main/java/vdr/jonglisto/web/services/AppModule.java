@@ -6,6 +6,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.crypto.RandomNumberGenerator;
+import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.SymbolConstants;
@@ -62,6 +64,7 @@ import vdr.jonglisto.lib.model.EPGMedia;
 import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
+import vdr.jonglisto.web.model.User;
 import vdr.jonglisto.web.realm.JdbcSaltedRealm;
 import vdr.jonglisto.web.services.security.UserService;
 import vdr.jonglisto.web.services.security.impl.UserServiceImpl;
@@ -78,6 +81,7 @@ public class AppModule {
     private final static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     
     public static void bind(ServiceBinder binder) {
+        binder.bind(RandomNumberGenerator.class, SecureRandomNumberGenerator.class);
         binder.bind(ConfigurationService.class, ConfigurationServiceImpl.class);
         binder.bind(VdrDataService.class, VdrDataServiceImpl.class);
         binder.bind(EpgDataService.class, EpgDataServiceFacadeImpl.class);
@@ -238,7 +242,7 @@ public class AppModule {
     }
 
     @Startup
-    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service, EpgDataService epgService,
+    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service, EpgDataService epgService, UserService userService,
             ComponentClassResolver componentClassResolver, ComponentSource componentSource) {
 
         shutdownHub.addRegistryShutdownListener(new Runnable() {
@@ -258,6 +262,17 @@ public class AppModule {
                     epgService.updateInternalEpgData(service.getEpgVdrUuuid());
                 }
             }, 0, 12, TimeUnit.HOURS);
+        }
+        
+        // create default admin user, if he/she does not exists
+        if (!userService.existsUser("admin")) {
+            User user = new User();
+            user.setUsername("admin");
+            user.setPassword("jonglisto");
+            user = userService.createUser(user);
+                        
+            // set default permission. Permission to do everything
+            userService.addIndividualPermission(user.getId(), "*", null);
         }
         
         componentClassResolver.getPageNames().stream().forEach(s -> {

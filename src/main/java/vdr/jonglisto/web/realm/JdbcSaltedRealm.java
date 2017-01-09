@@ -35,22 +35,31 @@ public class JdbcSaltedRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         
         try (Connection con = configService.getSql2oHsqldb().open()) {
-            Set<String> permissions = con.createQuery("SELECT concat(ap.PERMISSION, casewhen(up.PERMISSION_ADD IS NOT NULL, concat(':', up.PERMISSION_ADD), '')) FROM users u, USER_PERMISSIONS up, AVAILABLE_PERMISSIONS ap WHERE u.USERNAME = :username AND up.USER_ID = u.ID AND ap.ID = up.PERMISSION_ID") //
+            // read individual and role permissions
+            String sql = "SELECT CONCAT(p.PERMISSION, casewhen( up.PERMISSION_ADD IS NOT NULL, CONCAT( ':', up.PERMISSION_ADD ), '' )) " + //
+                          "FROM users u, user_permissions up, permissions p " + //
+                          "WHERE  u.USERNAME = :username " + //
+                          "AND   up.REF_USER_ID = u.ID " + //
+                          "AND   up.REF_PERMISSION_ID = p.ID " + //
+                          "UNION " + //
+                          "SELECT p.PERMISSION " + //
+                          "FROM users u, ROLES r, USER_ROLES ur, ROLES_PERMISSIONS rp, PERMISSIONS p " + //
+                          "WHERE u.username = :username " + //
+                          "AND   ur.REF_ROLE_ID = r.ID " + //
+                          "AND   ur.REF_USER_ID = u.id " + //
+                          "AND   rp.REF_PERMISSION_ID = p.ID " + //
+                          "AND   rp.REF_ROLE_ID = r.ID";
+            
+            Set<String> permissions = con.createQuery(sql) //
                                         .addParameter("username", principals.getPrimaryPrincipal()) //
                                         .executeAndFetch(String.class) //
                                         .stream() //
                                         .collect(Collectors.toSet());
-            
+
             info.setStringPermissions(permissions);
-            
-            
-            // info.setRoles(roles);
         }
         
         return info;
-
-        
-        // return new SimpleAuthorizationInfo(userService.getRoleNames(principals.getPrimaryPrincipal()));
     }
 
     @Override
