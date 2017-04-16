@@ -1,0 +1,244 @@
+<html t:type="layout" title="VDR Jonglisto Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+    <t:zone t:id="epgListZone" id="epgListZone">
+        <div>
+            <t:eventlink t:event="addUser" class="btn btn-success btn-xs" zone="^">Neuen Benutzer anlegen</t:eventlink>
+        </div>
+
+        <t:loop source="users" value="user">
+            <div class="userinfo">
+                <table class="status">
+                    <thead>
+                        <tr>
+                            <th>
+                                ${user.username}
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <t:eventlink t:event="changePassword" t:context="user.id" class="btn btn-success btn-xs" zone="^">Passwort ändern
+                                </t:eventlink>&nbsp;
+                                <t:if test="notAdmin">
+                                    <t:eventlink t:event="deleteUser" t:context="user.id" class="btn btn-success btn-xs" zone="^">Benutzer löschen
+                                    </t:eventlink>&nbsp;
+                                    <t:eventlink t:event="changePermission" t:context="user.id" class="btn btn-success btn-xs" zone="^">Berechtigungen
+                                        ändern
+                                    </t:eventlink>
+                                </t:if>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="accordion">
+                                    <h3>Berechtigung für Seiten</h3>
+                                    <div>
+                                        <table>
+                                            <t:loop source="allPagePermissions" value="perm">
+                                                <tr>
+                                                    <td>${permmessage}</td>
+                                                    <td>
+                                                        <t:if test="notAdmin">
+                                                            <t:eventlink t:event="deletePermissionPage" t:context="perm" class="btn btn-success btn-xs"
+                                                                zone="^">löschen</t:eventlink>
+                                                        </t:if>
+                                                    </td>
+                                                </tr>
+                                            </t:loop>
+                                        </table>
+                                    </div>
+
+                                    <p>Berechtigung für Sichten/VDR</p>
+                                    <div>
+                                        <table>
+                                            <t:loop source="allViewPermissions" value="viewPerm">
+                                                <tr>
+                                                    <td>${ViewPermMessage}: ${viewPerm.part}</td>
+                                                    <td>
+                                                        <t:if test="notAdmin">
+                                                            <t:eventlink t:event="deletePermissionView" t:context="viewPerm.id" class="btn btn-success btn-xs"
+                                                                zone="^">löschen</t:eventlink>
+                                                        </t:if>
+                                                    </td>
+                                                </tr>
+                                            </t:loop>
+                                        </table>
+                                    </div>
+
+                                    <p>Berechtigung für Kanalgruppen</p>
+                                    <div>
+                                        <table>
+                                            <tr>
+                                                <t:loop source="allChannelGroupPermissions" value="viewPerm">
+                                                    <tr>
+                                                        <td>${ViewPermMessage}: ${viewPerm.part}</td>
+                                                        <td>
+                                                            <t:if test="notAdmin">
+                                                                <t:eventlink t:event="deletePermissionChannelGroup" t:context="viewPerm.id"
+                                                                    class="btn btn-success btn-xs" zone="^">löschen</t:eventlink>
+                                                            </t:if>
+                                                        </td>
+                                                    </tr>
+                                                </t:loop>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t:loop>
+    </t:zone>
+
+    <t:zone t:id="passwordChangeZone" id="passwordChangeZone">
+        <div class="modal fade" tabindex="-1" role="dialog" id="changePassword" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                        </button>
+                        <t:form class="form-horizontal" t:id="passwordChangeForm" t:zone="^">
+                            <div>
+                                <h3>${message:change_password} for '${user.username}'</h3>
+
+                                <t:errors />
+
+                                <div class="form-group">
+                                    <t:label for="newPassword" class="col-sm-9" />
+                                    <div class="col-sm-12">
+                                        <t:TextField t:id="newPassword" value="user.password" validate="required" label="message:new_password" size="20" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <t:label for="newPasswordRepeat" class="col-sm-9" />
+                                    <div class="col-sm-12">
+                                        <t:TextField t:id="newPasswordRepeat" value="user.passwordRepeat" validate="required" label="message:new_password_repeat"
+                                            size="20" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-27 col-sm-offset-9">
+                                        <t:submit value="${message:change_password}" zone="^" />&nbsp;
+                                        <t:eventlink t:event="cancelChangePassword" class="btn btn-default" zone="^">${message:cancel}</t:eventlink>
+                                    </div>
+                                </div>
+                            </div>
+                        </t:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t:zone>
+
+    <t:zone t:id="newUserZone" id="newUserZone">
+        <div class="modal fade" tabindex="-1" role="dialog" id="newUser" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                        </button>
+                        <t:form class="form-horizontal" t:id="newUserForm" t:zone="^">
+                            <div>
+                                <h3>${message:new_user}</h3>
+
+                                <t:errors />
+
+                                <div class="form-group">
+                                    <t:label for="newUsername" class="col-sm-9" />
+                                    <div class="col-sm-12">
+                                        <t:TextField t:id="newUsername" value="user.username" validate="required" label="message:new_username" size="20" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <t:label for="newPassword" class="col-sm-9" />
+                                    <div class="col-sm-12">
+                                        <t:TextField t:id="password" value="user.password" validate="required" label="message:new_password" size="20" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <t:label for="newPasswordRepeat" class="col-sm-9" />
+                                    <div class="col-sm-12">
+                                        <t:TextField t:id="passwordRepeat" value="user.passwordRepeat" validate="required" label="message:new_password_repeat"
+                                            size="20" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-27 col-sm-offset-9">
+                                        <t:submit value="${message:create_user}" zone="^" />&nbsp;
+                                        <t:eventlink t:event="cancelNewUser" class="btn btn-default" zone="^">${message:cancel}</t:eventlink>
+                                    </div>
+                                </div>
+                            </div>
+                        </t:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t:zone>
+
+    <t:zone t:id="permissionZone" id="permissionZone">
+        <div class="modal fade" tabindex="-1" role="dialog" id="editPermissions" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                        </button>
+                        <t:form class="form-horizontal" t:id="permissionForm" t:zone="^">
+                            <div>
+                                <h3>${message:change_permissions} for '${user.username}'</h3>
+
+                                <t:errors />
+
+                                <div class="form-group">
+                                    <div class="col-sm-12">
+                                        Seiten:
+                                        <ul>
+                                            <t:loop source="allAvailablePagePermissions" value="perm">
+                                                <li>${permMessage}</li>
+                                            </t:loop>
+                                        </ul>                                        
+                                    </div>
+                                    
+                                    <div class="col-sm-12">
+                                        Views/VDR:
+                                        <ul>
+                                            <t:loop source="allAvailableViewPermissions" value="viewPerm">
+                                                <li>${viewPerm.part}</li>
+                                            </t:loop>
+                                        </ul>                                        
+                                    </div>
+
+                                    <div class="col-sm-12">
+                                        Kanalgruppen:
+                                        <ul>
+                                            <t:loop source="allAvailableChannelGroupPermissions" value="viewPerm">
+                                                <li>${viewPerm.part}</li>
+                                            </t:loop>
+                                        </ul>                                        
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-27 col-sm-offset-9">
+                                        <t:submit value="${message:changePermission}" zone="^" />&nbsp;
+                                        <t:eventlink t:event="cancelPermission" class="btn btn-default" zone="^">${message:cancel}</t:eventlink>
+                                    </div>
+                                </div>
+                            </div>
+                        </t:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t:zone>
+
+</html>

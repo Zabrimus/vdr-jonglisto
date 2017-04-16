@@ -16,7 +16,7 @@ import org.apache.shiro.util.SimpleByteSource;
 import org.sql2o.Connection;
 
 import vdr.jonglisto.lib.ConfigurationService;
-import vdr.jonglisto.web.services.security.UserService;
+import vdr.jonglisto.lib.UserService;
 
 public class JdbcSaltedRealm extends AuthorizingRealm {
 
@@ -36,7 +36,7 @@ public class JdbcSaltedRealm extends AuthorizingRealm {
         
         try (Connection con = configService.getSql2oHsqldb().open()) {
             // read individual and role permissions
-            String sql = "SELECT CONCAT(p.PERMISSION, casewhen( up.PERMISSION_ADD IS NOT NULL, CONCAT( ':', up.PERMISSION_ADD ), '' )) " + //
+            String sql = "SELECT p.PERMISSION " + //
                           "FROM users u, user_permissions up, permissions p " + //
                           "WHERE  u.USERNAME = :username " + //
                           "AND   up.REF_USER_ID = u.ID " + //

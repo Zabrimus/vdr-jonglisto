@@ -72,29 +72,51 @@ public class Layout extends BaseComponent {
     }
 
     public String getClassForView() {
+        if (currentVdrView == null) {
+            // could happen in rare case. e.g. after a server restart
+            return null;
+        }
+        
         return currentVdrView.getDisplayName().equals(view.getDisplayName()) ? "active" : null;
     }
 
     public List<VDRView> getViews() {
         if (configuration.isSuccessfullyInitialized()) {
+            List<VDRView> permViews = Collections.emptyList();
+            
             if (type == null) {
                 // set default type and view
                 type = Type.View;
-                currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type)
-                        .sorted().findFirst().get();
+                permViews = getPermittedViews(true);
+
+                if (permViews.isEmpty()) {
+                    type = Type.VDR;
+                    permViews = getPermittedViews(true);
+                }
+
+                if (!permViews.isEmpty()) {
+                    permViews.get(0);
+                }
+            } else {
+                permViews = getPermittedViews(true);
             }
-    
-            return configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).sorted()
-                    .collect(Collectors.toList());
+
+            return permViews;
         } else {
             return Collections.emptyList();
         }
     }
 
     public void onSelectView(String displayName) {
-        currentVdrView = configuration.getConfiguredViews().values().stream()
-                .filter(s -> s.getDisplayName().equals(displayName)).findFirst().get();
-        type = currentVdrView.getType();
+        if (securityService.hasPermission("view:vdr:" + displayName)) {
+            currentVdrView = getPermittedViews(false) //
+                                .stream() //
+                                .filter(s -> s.getDisplayName().equals(displayName)) //
+                                .findFirst() //
+                                .get();
+            
+            type = currentVdrView.getType();
+        }
     }
 
     public Object onToggleViewType() {
@@ -102,13 +124,30 @@ public class Layout extends BaseComponent {
             return null;
         }
         
+        List<VDRView> v;
+        
         if (type == Type.VDR) {
             type = Type.View;
+            v = getPermittedViews(true);
+            if (v.size() == 0) {
+                // don't toggle the view, because there is nothing to view
+                type = Type.VDR;                
+            } else {
+                currentVdrView = v.get(0);
+            }
         } else {
             type = Type.VDR;
+            v = getPermittedViews(true);
+            if (v.size() == 0) {
+                // don't toggle the view, because there is nothing to view
+                type = Type.View;                
+            } else {
+                currentVdrView = v.get(0);
+            }
         }
-
-        currentVdrView = configuration.getConfiguredViews().values().stream().filter(s -> s.getType() == type).findFirst().get();
+        
+        // currentVdrView = getPermittedViews(true).get(0);
+        
         return Index.class;
     }
 
@@ -118,17 +157,16 @@ public class Layout extends BaseComponent {
     
     public Object onValueChangedFromLanguage(String selectedLanguage) {
         localizationSetter.setLocaleFromLocaleName(selectedLanguage);
-        /*
-        switch (selectedLanguage) {
-        case "de":
-            persistentLocaleService.set(Locale.GERMAN);
-            break;
-            
-        case "en":
-            persistentLocaleService.set(Locale.ENGLISH);
-            break;
-        }
-        */
         return componentResources.getPage();
+    }
+    
+    private List<VDRView> getPermittedViews(boolean withType) {
+        return configuration.getConfiguredViews() //
+            .values() //
+            .stream() //
+            .filter(s -> securityService.hasPermission("view:vdr:" + s.getDisplayName())) //
+            .filter(s -> (withType && s.getType() == type) || !withType) //
+            .sorted() //
+            .collect(Collectors.toList());
     }
 }

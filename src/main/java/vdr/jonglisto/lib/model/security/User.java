@@ -1,4 +1,4 @@
-package vdr.jonglisto.web.model;
+package vdr.jonglisto.lib.model.security;
 
 public class User {
 

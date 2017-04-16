@@ -1,9 +1,11 @@
-package vdr.jonglisto.web.services.security;
+package vdr.jonglisto.lib;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import vdr.jonglisto.web.model.User;
+import vdr.jonglisto.lib.model.security.Permission;
+import vdr.jonglisto.lib.model.security.User;
 
 public interface UserService {
 
@@ -32,8 +34,20 @@ public interface UserService {
     public void addUserToRoles(int id, Set<String> roles);
     
     public void removeUserFromRoles(int id, Set<String> roles);
+
+    public void addIndividualPermission(String username, String permission, String messageKey);
     
-    public void addIndividualPermission(int id, String permission, String permissionAdd);
+    public void addIndividualPermission(int id, String permission, String messageKey);
     
     public void removeIndividualPersmission(int id, String permission);
+
+    public List<User> getAllUsers();
+    
+    public List<Permission> getAllPagePermissions();
+
+    public List<Permission> getAllViewPermissions();
+    
+    public List<Permission> getAllChannelGroupPermissions();
+    
+    void addPermission(String permission, String messageKey);
 }

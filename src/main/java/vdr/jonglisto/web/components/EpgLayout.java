@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tapestry5.SelectModel;
@@ -89,7 +90,10 @@ public class EpgLayout extends BaseComponent {
         if (epgCriteria.isReset() || channel.isPresent()) {
             epgCriteria.setReset(false);
 
-            groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList());
+            groups = dataService.getGroups(getChannelUuid()).orElse(Collections.emptyList()) //
+                        .stream() //
+                        .filter(s -> securityService.hasPermission("channel:group:" + s)) //
+                        .collect(Collectors.toList());
 
             if (channel.isPresent()) {
                 epgCriteria.setChannelGroup(channel.get().getGroup());
@@ -125,6 +129,11 @@ public class EpgLayout extends BaseComponent {
     }
 
     public void onValueChangedFromGroup(String selectedGroup) {
+        if (!securityService.hasPermission("channel:group:" + selectedGroup)) {
+            // do nothing
+            return;
+        }
+        
         epgCriteria.setChannelGroup(selectedGroup);
 
         // reset category and genre
@@ -135,7 +144,10 @@ public class EpgLayout extends BaseComponent {
             channels = dataService.getChannelsInGroup(getChannelUuid(), selectedGroup, true)
                     .orElse(Collections.emptyList());
         } else {
-            channels = dataService.getChannels(getChannelUuid(), true).orElse(Collections.emptyList());
+            channels = dataService.getChannels(getChannelUuid(), true).orElse(Collections.emptyList()) //
+                        .stream() //
+                        .filter(s -> securityService.hasPermission("channel:group:" + s.getGroup())) //
+                        .collect(Collectors.toList());                    
         }
 
         epgCriteria.setChannel(channels.get(0));

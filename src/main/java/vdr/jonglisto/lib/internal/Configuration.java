@@ -106,7 +106,7 @@ public class Configuration {
     }
 
     private static Configuration instance = new Configuration("/etc/jonglisto/jonglisto.json");
-    
+
     private int prodVersion = 1;
     private String version = "0.0.6-snapshot";
     private boolean successfullyConfigured = true;
@@ -139,7 +139,7 @@ public class Configuration {
 
     private boolean useEpgd;
     private String epgVdrUuid;
-    
+
     private Configuration(String pathname) {
         initConfiguration(pathname);
     }
@@ -151,7 +151,7 @@ public class Configuration {
     public String getVersion() {
         return version;
     }
-    
+
     public boolean isSuccessfullyConfigured() {
         return successfullyConfigured;
     }
@@ -191,7 +191,7 @@ public class Configuration {
     public boolean isDeveloperMode() {
         return developerMode;
     }
-    
+
     public String getEpgVdrUuid() {
         return epgVdrUuid;
     }
@@ -451,7 +451,7 @@ public class Configuration {
             svdrpPort = Integer.valueOf((String) config.get("svdrpPort"));
 
             useEpgd = Boolean.valueOf((String) config.get("useEpgd"));
-            
+
             Map<String, Object> scripts = (Map<String, Object>) config.get("NashornScripts");
             svdrpScript = (String) scripts.get("svdrp");
             epg2vdrScript = (String) scripts.get("epg2vdr");
@@ -544,11 +544,11 @@ public class Configuration {
             });
 
             // add epg
-            String epg = (String)config.get("epgVdr");
+            String epg = (String) config.get("epgVdr");
             if ((epg != null) && (!useEpgd)) {
                 epgVdrUuid = configuredVdr.get(aliases.get(epg)).getUuid();
             }
-            
+
             configuredVdrView.values().stream().forEach(System.out::println);
 
             // add every VDR as it's own view
@@ -568,10 +568,26 @@ public class Configuration {
 
                 // add head
                 view.setHeadVDR(s);
-                
+
                 // add result
                 configuredVdrView.put(view.getDisplayName(), view);
             });
+
+            // add permission for every view
+            try (Connection con = getSql2oHsqldb().beginTransaction()) {
+                configuredVdrView.values().stream() //
+                        .forEach(s -> {
+                            con.createQuery("merge into permissions as c " + //
+                            "using(values(:permission, :messagekey)) " + //
+                            "as vals(permission, message_key) on c.permission = vals.permission " + //
+                            "when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key")
+                                    .addParameter("permission", "view:vdr:" + s.getDisplayName()) //
+                                    .addParameter("messagekey", "perm_view_vdr") //
+                                    .executeUpdate();
+                        });  
+                
+                con.commit();
+            }
 
             // start SVDRP server
             startSvdrpServer();

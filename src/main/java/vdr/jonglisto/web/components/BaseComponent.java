@@ -8,6 +8,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.URLEncoder;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.tynamo.security.services.SecurityService;
 
 import vdr.jonglisto.lib.CommandService;
 import vdr.jonglisto.lib.ConfigurationService;
@@ -22,6 +23,9 @@ public class BaseComponent {
     @SessionAttribute
     @Property
     protected VDRView currentVdrView;
+
+    @Inject
+    protected SecurityService securityService;
 
     @Inject
     protected AjaxResponseRenderer ajaxResponseRenderer;

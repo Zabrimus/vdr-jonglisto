@@ -3,6 +3,7 @@ package vdr.jonglisto.web.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.subject.Subject;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
@@ -56,27 +57,62 @@ public class Navbar extends BaseComponent {
         pages = new ArrayList<NavPage>();
 
         if (configuration.isSuccessfullyInitialized()) {
-            pages.add(new NavPage(messages.get("page_index"), "index"));
-            pages.add(new NavPage(messages.get("page_program_now"), "programTime"));
-            pages.add(new NavPage(messages.get("page_program_day"), "programDay"));
-            pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
-            pages.add(new NavPage(messages.get("page_timer"), "timer"));
-            pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
+            // smoke test
+            try {
+                securityService.isGuest();
+            } catch (UnavailableSecurityManagerException e) {
+                // do nothing, because this could happen at startup
+                return;
+            }                
+            
+            if (securityService.hasPermission("page:index")) {
+                pages.add(new NavPage(messages.get("page_index"), "index"));
+            }
+            
+            if (securityService.hasPermission("page:programtime")) {
+                pages.add(new NavPage(messages.get("page_program_now"), "programTime"));
+            }
+            
+            if (securityService.hasPermission("page:programday")) {
+                pages.add(new NavPage(messages.get("page_program_day"), "programDay"));
+            }
+            
+            if (securityService.hasPermission("page:programchannel")) {
+                pages.add(new NavPage(messages.get("page_program_channel"), "programChannel"));
+            }
+            
+            if (securityService.hasPermission("page:timer")) {
+                pages.add(new NavPage(messages.get("page_timer"), "timer"));
+            }
+            
+            if (securityService.hasPermission("page:recordings")) {
+                pages.add(new NavPage(messages.get("page_recordings"), "recordings"));
+            }
 
-            if (configuration.isUseEpgd()) {
+            if (securityService.hasPermission("page:searchtimer") && configuration.isUseEpgd()) {
                 pages.add(new NavPage(messages.get("page_search_timer"), "searchTimer"));
             }
 
-            pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
+            if (securityService.hasPermission("page:svdrpconsole")) {
+                pages.add(new NavPage(messages.get("page_svdrp_console"), "svdrpConsole"));
+            }
 
-            if (configuration.isUseEpgd()) {
+            if (securityService.hasPermission("page:channelmap") && configuration.isUseEpgd()) {
                 pages.add(new NavPage(messages.get("page_channelmap"), "channelMap"));
             }
 
-            pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
-            pages.add(new NavPage(messages.get("page_setup"), "setup"));
-        }
-        ;
+            if (securityService.hasPermission("page:channelconfig")) {
+                pages.add(new NavPage(messages.get("page_channelconfig"), "channelConfig"));
+            }
+            
+            if (securityService.hasPermission("page:setup")) {
+                pages.add(new NavPage(messages.get("page_setup"), "setup"));
+            }
+            
+            if (securityService.hasPermission("page:useradmin")) {
+                pages.add(new NavPage(messages.get("page_useradmin"), "userAdmin"));
+            }
+        }        
     }
 
     public List<NavPage> getPageNames() {

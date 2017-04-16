@@ -19,20 +19,22 @@
                 </li>
             </ul>
 
-            <t:if test="developerMode">
-                <br />
-                <br />
-                <br />
-                <ul class="nav nav-stacked nav-pills">
-                    <li>${message:developer_pages}</li>
-                    <li>
-                        <t:pageLink page="t5dashboard">Dashboard</t:pageLink>
-                    </li>
-                    <li>
-                        <t:pageLink page="ExceptionReport">Exception</t:pageLink>
-                    </li>
-                </ul>
-            </t:if>
+            <t:security.hasPermission permission="page:developer">
+                <t:if test="developerMode">
+                    <br />
+                    <br />
+                    <br />
+                    <ul class="nav nav-stacked nav-pills">
+                        <li>${message:developer_pages}</li>
+                        <li>
+                            <t:pageLink page="t5dashboard">Dashboard</t:pageLink>
+                        </li>
+                        <li>
+                            <t:pageLink page="ExceptionReport">Exception</t:pageLink>
+                        </li>
+                    </ul>
+                </t:if>
+            </t:security.hasPermission>
         </t:security.Authenticated>
     </t:content>
 </html>

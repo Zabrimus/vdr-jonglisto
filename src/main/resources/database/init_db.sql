@@ -92,7 +92,7 @@ create table if not exists
 	permissions 
 		(	
 			id Integer, 
-		   	permission varchar(100), 
+		   	permission varchar(200), 
 		   	message_key varchar(50), 
 			primary key(id), 
 			constraint c_permission unique(permission)			
@@ -104,7 +104,6 @@ create table if not exists
 			id Integer,
 			ref_user_id Integer,
 		   	ref_permission_id Integer,
-		   	permission_add varchar(50),
 			primary key(id), 
 			constraint c_user_permission unique(ref_user_id, ref_permission_id),
 			foreign key (ref_user_id) references users(id) on delete cascade,
@@ -200,6 +199,71 @@ create sequence if not exists seq_epg as Integer start with 1 increment by 1;;
 
 merge into permissions as c 
    using(values('*', 'admin_permission')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:channelconfig', 'perm_page_channelconfig')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:channelmap', 'perm_page_channelmap')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:index', 'perm_page_index')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:programchannel', 'perm_page_programchannel')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:programday', 'perm_page_programday')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:programtime', 'perm_page_programtime')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:recordings', 'perm_page_recordings')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:searchtimer', 'perm_page_searchtimer')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:setup', 'perm_page_setup')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:svdrpconsole', 'perm_page_svdrpconsole')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:timer', 'perm_page_timer')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:developer', 'perm_page_developer')) 
+   as vals(permission, message_key) on c.permission = vals.permission
+when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
+
+merge into permissions as c 
+   using(values('page:useradmin', 'perm_page_useradmin')) 
    as vals(permission, message_key) on c.permission = vals.permission
 when not matched then insert values (next value for seq_permissions), vals.permission, vals.message_key;;
 

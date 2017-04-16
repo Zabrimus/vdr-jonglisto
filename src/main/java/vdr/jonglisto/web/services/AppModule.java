@@ -49,6 +49,7 @@ import vdr.jonglisto.lib.EpgDataService;
 import vdr.jonglisto.lib.EpgImageService;
 import vdr.jonglisto.lib.EpgdSearchTimerService;
 import vdr.jonglisto.lib.SvdrpNashornService;
+import vdr.jonglisto.lib.UserService;
 import vdr.jonglisto.lib.VdrDataService;
 import vdr.jonglisto.lib.impl.ChannelMapServiceImpl;
 import vdr.jonglisto.lib.impl.CommandServiceImpl;
@@ -58,16 +59,15 @@ import vdr.jonglisto.lib.impl.EpgDataServiceFacadeImpl;
 import vdr.jonglisto.lib.impl.EpgImageServiceFacadeImpl;
 import vdr.jonglisto.lib.impl.EpgdSearchTimerServiceImpl;
 import vdr.jonglisto.lib.impl.SvdrpNashornServiceImpl;
+import vdr.jonglisto.lib.impl.UserServiceImpl;
 import vdr.jonglisto.lib.impl.VdrDataServiceImpl;
 import vdr.jonglisto.lib.model.Channel;
 import vdr.jonglisto.lib.model.EPGMedia;
+import vdr.jonglisto.lib.model.security.User;
 import vdr.jonglisto.lib.util.Constants;
 import vdr.jonglisto.web.binding.MapBindingFactory;
 import vdr.jonglisto.web.encoder.ChannelEncoder;
-import vdr.jonglisto.web.model.User;
 import vdr.jonglisto.web.realm.JdbcSaltedRealm;
-import vdr.jonglisto.web.services.security.UserService;
-import vdr.jonglisto.web.services.security.impl.UserServiceImpl;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
@@ -141,6 +141,7 @@ public class AppModule {
         configuration.add(factory.createChain("/setup/**").add(factory.perms(), "page:setup").build());
         configuration.add(factory.createChain("/svdrpconsole/**").add(factory.perms(), "page:svdrpconsole").build());
         configuration.add(factory.createChain("/timer/**").add(factory.perms(), "page:timer").build());        
+        configuration.add(factory.createChain("/useradmin/**").add(factory.perms(), "page:useradmin").build());
     }
 
     public static void contributeTypeCoercer(Configuration<CoercionTuple<?, ?>> configuration) {
@@ -191,7 +192,7 @@ public class AppModule {
     public static void setupEnvironment(MappedConfiguration<String, Object> configuration) {
         configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
         configuration.add(SymbolConstants.BOOTSTRAP_ROOT, "context:jbootstrap");
-        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "random value!");
+        configuration.add(SymbolConstants.HMAC_PASSPHRASE, new SecureRandomNumberGenerator().getSecureRandom().toString());
 
         configuration.add(SymbolConstants.MINIFICATION_ENABLED, true);
         configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
@@ -250,7 +251,7 @@ public class AppModule {
     }
 
     @Startup
-    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service, EpgDataService epgService, UserService userService,
+    public static void initApplication(RegistryShutdownHub shutdownHub, ConfigurationService service, EpgDataService epgService, UserService userService, VdrDataService vdrService,
             ComponentClassResolver componentClassResolver, ComponentSource componentSource) {
 
         shutdownHub.addRegistryShutdownListener(new Runnable() {
@@ -272,16 +273,34 @@ public class AppModule {
             }, 0, 12, TimeUnit.HOURS);
         }
         
-        // create default admin user, if he/she does not exists
+        // create default admin user, if he does not exists
+        User user = new User();
         if (!userService.existsUser("admin")) {
-            User user = new User();
             user.setUsername("admin");
             user.setPassword("jonglisto");
             user = userService.createUser(user);
-                        
-            // set default permission. Permission to do everything
-            userService.addIndividualPermission(user.getId(), "*", null);
         }
+                        
+        // set default permission. Permission to do everything
+        userService.addIndividualPermission("admin", "*", "admin_permission");
+        
+        // get all channel groups and update the permission
+        service.getConfiguredViews().values() //
+            .stream() //
+            .forEach(v -> {
+                System.err.println("Check View: " + v.getDisplayName());
+                try {
+                    vdrService.getGroups(v.getChannelVdr().get()).get() //
+                        .stream() //
+                        .forEach(g -> {
+                            System.err.println("Check Group: " + g);
+                            userService.addPermission("channel:group:" + g, "perm_channel_group");
+                        });
+                } catch (Exception e) {
+                    System.err.println(e);
+                    // do nothing
+                }
+            });
         
         componentClassResolver.getPageNames().stream().forEach(s -> {
             // preload all pages
