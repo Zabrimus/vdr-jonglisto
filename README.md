@@ -1,4 +1,4 @@
-This repository is outdated. 
+# This repository is outdated. 
 A complete new implementation can be found in 
 https://github.com/Zabrimus/jonglisto-ng
 
