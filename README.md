@@ -1,3 +1,9 @@
+This repository is outdated. 
+A complete new implementation can be found in 
+https://github.com/Zabrimus/jonglisto-ng
+
+
+
 # Welcome to vdr-jonglisto. A web frontend for multiple VDR instances.
 
 My plan is to replace vdradmin-am with this new application. Currently you can see and search EPG data, see and edit timers and see, rename and move recordings.
